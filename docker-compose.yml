@@ -1,0 +1,118 @@
+# =====================================================
+# SISTEMA ERP - FilhoDoGuerreiro
+# Desenvolvido por: LosAngelo Pacífico (CEO)
+# =====================================================
+
+name: erpOraqui
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: erg_filho_do_guerreiro_postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: erg_fg
+      POSTGRES_PASSWORD: fg2026
+      POSTGRES_DB: erp_filho_do_guerreiro
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - erg_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U erg_fg']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: erg_filho_do_guerreiro_redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - erg_network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: erg_filho_do_guerreiro_rabbitmq
+    restart: unless-stopped
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: erg_fg
+      RABBITMQ_DEFAULT_PASS: fg2026
+      RABBITMQ_DEFAULT_VHOST: erg_fg
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - erg_network
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: erg_filho_do_guerreiro_api
+    restart: unless-stopped
+    ports:
+      - '3002:3002'
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      DATABASE_URL: postgresql://erg_fg:fg2026@postgres:5432/erp_filho_do_guerreiro?schema=public
+      JWT_SECRET: filhodoguerreiro-jwt-secret-change-in-production
+      JWT_EXPIRES_IN: 15m
+      JWT_REFRESH_SECRET: filhodoguerreiro-refresh-secret-change-in-production
+      JWT_REFRESH_EXPIRES_IN: 7d
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - erg_network
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: erg_filho_do_guerreiro_web
+    restart: unless-stopped
+    ports:
+      - '3003:80'
+    depends_on:
+      - api
+    networks:
+      - erg_network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+
+networks:
+  erg_network:
+    driver: bridge

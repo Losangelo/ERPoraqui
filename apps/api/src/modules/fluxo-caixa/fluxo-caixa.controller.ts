@@ -1,0 +1,162 @@
+import { Response } from 'express';
+import { FluxoCaixaService } from './fluxo-caixa.service';
+import { FluxoCaixaSchema, FluxoCaixaFiltroSchema } from './dto/fluxo-caixa.dto';
+import { AuthRequest } from '@/shared/middleware/auth.middleware';
+
+export class FluxoCaixaController {
+  constructor(private readonly service: FluxoCaixaService) {}
+
+  criar = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+
+      const dados = FluxoCaixaSchema.parse(req.body);
+      const resultado = await this.service.criar(empresaId, dados);
+
+      return res.status(201).json({
+        success: true,
+        data: resultado,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: error.message || 'Erro ao criar movimentação',
+        },
+      });
+    }
+  };
+
+  listar = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+
+      const filtros = FluxoCaixaFiltroSchema.parse({
+        ...req.query,
+        pagina: req.query.pagina ? Number(req.query.pagina) : 1,
+        limite: req.query.limite ? Number(req.query.limite) : 20,
+      });
+
+      const resultado = await this.service.listar(empresaId, filtros);
+
+      return res.json({
+        success: true,
+        data: resultado.dados,
+        meta: resultado.meta,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: error.message || 'Erro ao listar movimentações',
+        },
+      });
+    }
+  };
+
+  buscarPorId = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+
+      const { id } = req.params;
+      const resultado = await this.service.buscarPorId(id, empresaId);
+
+      return res.json({
+        success: true,
+        data: resultado,
+      });
+    } catch (error: any) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'NOT_FOUND',
+          message: error.message || 'Movimentação não encontrada',
+        },
+      });
+    }
+  };
+
+  saldoAtual = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+
+      const resultado = await this.service.saldoAtual(empresaId);
+
+      return res.json({
+        success: true,
+        data: resultado,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'ERROR',
+          message: error.message || 'Erro ao calcular saldo',
+        },
+      });
+    }
+  };
+
+  resumoDiario = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+
+      const { data } = req.params;
+      const resultado = await this.service.resumoDiario(empresaId, data);
+
+      return res.json({
+        success: true,
+        data: resultado,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'ERROR',
+          message: error.message || 'Erro ao gerar resumo',
+        },
+      });
+    }
+  };
+
+  categorias = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+
+      const resultado = await this.service.listarCategorias(empresaId);
+
+      return res.json({
+        success: true,
+        data: resultado,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'ERROR',
+          message: error.message || 'Erro ao listar categorias',
+        },
+      });
+    }
+  };
+}

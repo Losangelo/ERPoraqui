@@ -1,0 +1,2426 @@
+// =====================================================
+// SISTEMA ERP - FilhoDoGuerreiro
+// Desenvolvido por: LosAngelo Pacífico (CEO)
+// Banco: erp_filho_do_guerreiro
+// =====================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================
+// USUÁRIOS E AUTENTICAÇÃO
+// =====================================================
+
+model Usuario {
+  id              String        @id @default(cuid()) @map("_id")
+  empresaId       String
+  email           String        @unique
+  nome            String
+  senha           String
+  perfil          PerfilUsuario @default(USUARIO)
+  ativo           Boolean       @default(true)
+  ultimoAcesso    DateTime?
+  dataCriacao     DateTime      @default(now())
+  dataAtualizacao DateTime      @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("usuarios")
+}
+
+enum PerfilUsuario {
+  ADMINISTRADOR
+  GERENTE
+  USUARIO
+  VISUALIZADOR
+}
+
+// =====================================================
+// EMPRESAS E FILIAIS (Multi-Tenant)
+// =====================================================
+
+model Empresa {
+  id                 String           @id @default(cuid()) @map("_id")
+  razaoSocial        String
+  nomeFantasia       String?
+  cnpj               String           @unique
+  inscricaoEstadual  String?
+  inscricaoMunicipal String?
+  telefone           String?
+  email              String?
+  site               String?
+  logo               String?
+  endereco           Json?
+  regimeTributario   RegimeTributario @default(SIMPLES_NACIONAL)
+  ativo              Boolean          @default(true)
+  dataCriacao        DateTime         @default(now())
+  dataAtualizacao    DateTime         @updatedAt
+
+  filiais              Filial[]
+  clientes             Cliente[]
+  fornecedores         Fornecedor[]
+  transportadoras      Transportadora[]
+  vendedores           Vendedor[]
+  produtos             Produto[]
+  pedidosVenda         PedidoVenda[]
+  orcamentos           Orcamento[]
+  pedidosCompra        PedidoCompra[]
+  cotacoesCompra       CotacaoCompra[]
+  entradasMercadoria   EntradaMercadoria[]
+  movimentacoesEstoque MovimentacaoEstoque[]
+  parametros           ParametroSistema[]
+  contasReceber        ContaReceber[]
+  contasPagar          ContaPagar[]
+  fluxoCaixa           FluxoCaixa[]
+  cheques              Cheque[]
+  centrosCusto         CentroCusto[]
+  categorias           Categoria[]
+  unidadesMedida       UnidadeMedida[]
+  usuarios             Usuario[]
+  boletos              Boleto[]
+  remessasBoleto       RemessaBoleto[]
+  vendasPDV            VendaPDV[]
+  operadoresPDV        OperadorPDV[]
+  caixas               Caixa[]
+  notasFiscais         NotaFiscal[]
+  configuracoesNF      ConfiguracaoNF?
+  spedFiscais          SpedFiscal[]
+  spedContribuicoes    SpedContribuicoes[]
+  inventarios          Inventario[]
+  contasBancarias      ContaBancaria[]
+  planoContas          PlanoConta[]
+  lancamentosContabeis LancamentoContabil[]
+  notasServico         NotaServico[]
+  licencas             Licenca[]
+  produtoVariacoes     ProdutoVariacao[]
+  produtoLotes         ProdutoLote[]
+  tabelasPreco         TabelaPreco[]
+
+  // Multi-empresa (grupo econômico - empresas vinculadas à mesma licença)
+  matrizId           String?
+  matriz             Empresa?  @relation("EmpresasGrupo", fields: [matrizId], references: [id])
+  empresasVinculadas Empresa[] @relation("EmpresasGrupo")
+
+  @@map("empresas")
+}
+
+model Filial {
+  id                 String   @id @default(cuid()) @map("_id")
+  empresaId          String
+  razaoSocial        String
+  nomeFantasia       String?
+  cnpj               String   @unique
+  inscricaoEstadual  String?
+  inscricaoMunicipal String?
+  telefone           String?
+  email              String?
+  endereco           Json?
+  filialMatriz       Boolean  @default(false)
+  numeroNF           Int      @default(1)
+  serieNF            String   @default("1")
+  ativo              Boolean  @default(true)
+  dataCriacao        DateTime @default(now())
+  dataAtualizacao    DateTime @updatedAt
+
+  empresa      Empresa       @relation(fields: [empresaId], references: [id])
+  pedidosVenda PedidoVenda[]
+  orcamentos   Orcamento[]
+  vendasPDV    VendaPDV[]
+  caixas       Caixa[]
+  notasFiscais NotaFiscal[]
+  inventarios  Inventario[]
+  notasServico NotaServico[]
+
+  @@map("filiais")
+}
+
+enum RegimeTributario {
+  SIMPLES_NACIONAL
+  LUCRO_PRESUMIDO
+  LUCRO_REAL
+  ISENTO
+}
+
+// =====================================================
+// ENDEREÇO (Tipo Embutido) - Removido para PostgreSQL
+// =====================================================
+
+// =====================================================
+// CLIENTES
+// =====================================================
+
+model Cliente {
+  id                 String     @id @default(cuid()) @map("_id")
+  empresaId          String
+  nome               String
+  tipoPessoa         TipoPessoa
+  documento          String
+  inscricaoEstadual  String?
+  inscricaoMunicipal String?
+  telefone           String?
+  telefoneCelular    String?
+  email              String?
+  endereco           Json?
+  dataNascimento     DateTime?
+  limiteCredito      Float      @default(0)
+  ativo              Boolean    @default(true)
+  dataCriacao        DateTime   @default(now())
+  dataAtualizacao    DateTime   @updatedAt
+
+  empresa       Empresa        @relation(fields: [empresaId], references: [id])
+  pedidosVenda  PedidoVenda[]
+  orcamentos    Orcamento[]
+  contasReceber ContaReceber[]
+  vendasPDV     VendaPDV[]
+  notasFiscais  NotaFiscal[]
+  notasServico  NotaServico[]
+  cheques        Cheque[]
+
+  @@map("clientes")
+}
+
+enum TipoPessoa {
+  FISICA
+  JURIDICA
+}
+
+// =====================================================
+// FORNECEDORES
+// =====================================================
+
+model Fornecedor {
+  id                 String     @id @default(cuid()) @map("_id")
+  empresaId          String
+  nome               String
+  tipoPessoa         TipoPessoa
+  documento          String
+  inscricaoEstadual  String?
+  inscricaoMunicipal String?
+  telefone           String?
+  telefoneCelular    String?
+  email              String?
+  endereco           Json?
+  ativo              Boolean    @default(true)
+  dataCriacao        DateTime   @default(now())
+  dataAtualizacao    DateTime   @updatedAt
+
+  empresa          Empresa           @relation(fields: [empresaId], references: [id])
+  pedidosCompra    PedidoCompra[]
+  respostasCotacao RespostaCotacao[]
+  contasPagar      ContaPagar[]
+  notasFiscais     NotaFiscal[]
+  cheques           Cheque[]
+
+  @@map("fornecedores")
+}
+
+// =====================================================
+// TRANSPORTADORAS
+// =====================================================
+
+model Transportadora {
+  id                 String     @id @default(cuid()) @map("_id")
+  empresaId          String
+  nome               String
+  tipoPessoa         TipoPessoa
+  documento          String
+  inscricaoEstadual  String?
+  inscricaoMunicipal String?
+  telefone           String?
+  telefoneCelular    String?
+  email              String?
+  endereco           Json?
+  ativo              Boolean    @default(true)
+  dataCriacao        DateTime   @default(now())
+  dataAtualizacao    DateTime   @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("transportadoras")
+}
+
+// =====================================================
+// VENDEDORES
+// =====================================================
+
+model Vendedor {
+  id                String     @id @default(cuid()) @map("_id")
+  empresaId         String
+  nome              String
+  tipoPessoa        TipoPessoa
+  documento         String
+  inscricaoEstadual String?
+  telefone          String?
+  telefoneCelular   String?
+  email             String?
+  comissao          Float      @default(0)
+  ativo             Boolean    @default(true)
+  dataCriacao       DateTime   @default(now())
+  dataAtualizacao   DateTime   @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("vendedores")
+}
+
+// =====================================================
+// PRODUTOS
+// =====================================================
+
+model Produto {
+  id                 String           @id @default(cuid()) @map("_id")
+  empresaId          String
+  codigoInterno      String
+  codigoBarras       String?
+  gtin               String?
+  nome               String
+  descricao          String?
+  descricaoDetalhada String?
+  categoriaId        String?
+  unidadeMedidaId    String?
+  precoVenda         Float
+  precoCusto         Float            @default(0)
+  precoMinimo        Float            @default(0)
+  quantidadeEstoque  Float            @default(0)
+  estoqueMinimo      Float            @default(0)
+  estoqueMaximo      Float            @default(0)
+  pesoBruto          Float?
+  pesoLiquido        Float?
+  volume             Float?
+  ncm                String?
+  cest               String?
+  origenMercadoria   OrigemMercadoria @default(NACIONAL)
+  ativo              Boolean          @default(true)
+  dataCriacao        DateTime         @default(now())
+  dataAtualizacao    DateTime         @updatedAt
+
+  empresa              Empresa               @relation(fields: [empresaId], references: [id])
+  categoria            Categoria?            @relation(fields: [categoriaId], references: [id])
+  unidadeMedida        UnidadeMedida?        @relation(fields: [unidadeMedidaId], references: [id])
+  itensPedidoVenda     ItemPedidoVenda[]
+  itensPedidoCompra    ItemPedidoCompra[]
+  itensCotacaoCompra   ItemCotacaoCompra[]
+  itensEntrada         ItemEntrada[]
+  itensOrcamento       ItemOrcamento[]
+  itensVendaPDV        ItemVendaPDV[]
+  itensNotaFiscal      ItemNotaFiscal[]
+  itensInventario      ItemInventario[]
+  movimentacoesEstoque MovimentacaoEstoque[]
+  variacoes            ProdutoVariacao[]
+  lotes                ProdutoLote[]
+  tabelasPreco         TabelaPrecoItem[]
+
+  @@unique([empresaId, codigoInterno])
+  @@map("produtos")
+}
+
+model ProdutoVariacao {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  produtoId       String
+  sku             String
+  nome            String
+  valor           String
+  precoAdicional  Float    @default(0)
+  estoque         Float    @default(0)
+  codigoBarras    String?
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  produto Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, produtoId, sku])
+  @@map("produto_variacoes")
+}
+
+model ProdutoLote {
+  id                 String    @id @default(cuid()) @map("_id")
+  empresaId          String
+  produtoId          String
+  codigoLote         String
+  dataFabricacao     DateTime?
+  dataValidade       DateTime?
+  quantidade         Float     @default(0)
+  quantidadeOriginal Float     @default(0)
+  custoUnitario      Float     @default(0)
+  ativo              Boolean   @default(true)
+  dataCriacao        DateTime  @default(now())
+  dataAtualizacao    DateTime  @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  produto Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, produtoId, codigoLote])
+  @@map("produto_lotes")
+}
+
+model TabelaPreco {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  nome            String
+  descricao       String?
+  tipo            String   @default("VISTA")
+  markupBase      Float    @default(0)
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa           @relation(fields: [empresaId], references: [id])
+  itens   TabelaPrecoItem[]
+
+  @@unique([empresaId, nome])
+  @@map("tabelas_preco")
+}
+
+model TabelaPrecoItem {
+  id              String   @id @default(cuid()) @map("_id")
+  tabelaPrecoId   String
+  produtoId       String
+  precoVenda      Float
+  precoMinimo     Float    @default(0)
+  descontoMaximo  Float    @default(0)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  tabelaPreco TabelaPreco @relation(fields: [tabelaPrecoId], references: [id], onDelete: Cascade)
+  produto     Produto     @relation(fields: [produtoId], references: [id])
+
+  @@unique([tabelaPrecoId, produtoId])
+  @@map("tabelas_preco_itens")
+}
+
+enum OrigemMercadoria {
+  NACIONAL
+  ESTRANGEIRA_IMPORTACAO_DIRETA
+  ESTRANGEIRA_NACIONALIZADA
+}
+
+model Categoria {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  nome            String
+  descricao       String?
+  categoriaPaiId  String?
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa       Empresa     @relation(fields: [empresaId], references: [id])
+  categoriaPai  Categoria?  @relation("CategoriaSubcategorias", fields: [categoriaPaiId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subcategorias Categoria[] @relation("CategoriaSubcategorias")
+  produtos      Produto[]
+
+  @@map("categorias")
+}
+
+model UnidadeMedida {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  simbolo         String
+  descricao       String
+  fracionada      Boolean  @default(false)
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa  Empresa   @relation(fields: [empresaId], references: [id])
+  produtos Produto[]
+
+  @@unique([empresaId, simbolo])
+  @@map("unidades_medida")
+}
+
+// =====================================================
+// PEDIDOS DE VENDA
+// =====================================================
+
+model PedidoVenda {
+  id                    String         @id @default(cuid()) @map("_id")
+  empresaId             String
+  filialId              String
+  clienteId             String
+  numeroPedido          String
+  serie                 String         @default("1")
+  tipoOperacao          TipoOperacao   @default(VENDA)
+  situacao              SituacaoPedido @default(EM_ABERTO)
+  dataEmissao           DateTime?
+  dataEntrega           DateTime?
+  valorTotal            Float
+  valorDesconto         Float          @default(0)
+  valorFrete            Float          @default(0)
+  valorOutrosAcrescimos Float          @default(0)
+  observacoes           String?
+  observacoesInternas   String?
+
+  // Condições de pagamento
+  condicaoPagamento   String? // A_VISTA, A_PRAZO, PARCELADO
+  quantidadeParcelas  Int?    @default(1)
+  intervaloParcelas   Int?    @default(30) // dias entre parcelas
+  primeiraParcelaDias Int?    @default(0) // dias para primeira parcela
+
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa       Empresa           @relation(fields: [empresaId], references: [id])
+  filial        Filial            @relation(fields: [filialId], references: [id])
+  cliente       Cliente           @relation(fields: [clienteId], references: [id])
+  itens         ItemPedidoVenda[]
+  contasReceber ContaReceber[]
+  orcamento     Orcamento?
+  notaFiscal    NotaFiscal?
+
+  @@unique([empresaId, numeroPedido, serie])
+  @@map("pedidos_venda")
+}
+
+model ItemPedidoVenda {
+  id            String   @id @default(cuid()) @map("_id")
+  pedidoVendaId String
+  produtoId     String
+  numeroItem    Int
+  quantidade    Float
+  unidadeMedida String
+  valorUnitario Float
+  valorTotal    Float
+  valorDesconto Float    @default(0)
+  dataCriacao   DateTime @default(now())
+
+  pedidoVenda PedidoVenda @relation(fields: [pedidoVendaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  produto     Produto     @relation(fields: [produtoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("itens_pedido_venda")
+}
+
+enum TipoOperacao {
+  VENDA
+  DEVOLUCAO
+  CONSIGNACAO
+  REMESSA
+}
+
+enum SituacaoPedido {
+  EM_ABERTO
+  CONFIRMADO
+  EM_PRODUCAO
+  ENVIADO
+  ENTREGUE
+  CANCELADO
+}
+
+// =====================================================
+// ORÇAMENTOS DE VENDA
+// =====================================================
+
+model Orcamento {
+  id                    String            @id @default(cuid()) @map("_id")
+  empresaId             String
+  filialId              String
+  clienteId             String
+  numeroOrcamento       String
+  serie                 String            @default("1")
+  dataValidade          DateTime
+  dataEmissao           DateTime?
+  valorTotal            Float
+  valorDesconto         Float             @default(0)
+  valorFrete            Float             @default(0)
+  valorOutrosAcrescimos Float             @default(0)
+  observacoes           String?
+  observacoesInternas   String?
+  situacao              SituacaoOrcamento @default(ABERTO)
+  pedidoVendaId         String?           @unique
+  dataCriacao           DateTime          @default(now())
+  dataAtualizacao       DateTime          @updatedAt
+
+  empresa     Empresa         @relation(fields: [empresaId], references: [id])
+  filial      Filial          @relation(fields: [filialId], references: [id])
+  cliente     Cliente         @relation(fields: [clienteId], references: [id])
+  pedidoVenda PedidoVenda?    @relation(fields: [pedidoVendaId], references: [id])
+  itens       ItemOrcamento[]
+
+  @@unique([empresaId, numeroOrcamento, serie])
+  @@map("orcamentos")
+}
+
+model ItemOrcamento {
+  id            String   @id @default(cuid()) @map("_id")
+  orcamentoId   String
+  produtoId     String
+  numeroItem    Int
+  quantidade    Float
+  unidadeMedida String
+  valorUnitario Float
+  valorTotal    Float
+  valorDesconto Float    @default(0)
+  dataCriacao   DateTime @default(now())
+
+  orcamento Orcamento @relation(fields: [orcamentoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  produto   Produto   @relation(fields: [produtoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("itens_orcamento")
+}
+
+enum SituacaoOrcamento {
+  ABERTO
+  APROVADO
+  REPROVADO
+  EXPIRADO
+  CONVERTIDO
+  CANCELADO
+}
+
+// =====================================================
+// PEDIDOS DE COMPRA
+// =====================================================
+
+model PedidoCompra {
+  id            String         @id @default(cuid()) @map("_id")
+  empresaId     String
+  fornecedorId  String
+  numeroPedido  String
+  serie         String         @default("1")
+  tipoOperacao  TipoOperacao   @default(VENDA)
+  situacao      SituacaoPedido @default(EM_ABERTO)
+  dataEmissao   DateTime?
+  dataEntrega   DateTime?
+  valorTotal    Float
+  valorDesconto Float          @default(0)
+  valorFrete    Float          @default(0)
+  observacoes   String?
+
+  // Condições de pagamento
+  condicaoPagamento   String? // A_VISTA, A_PRAZO, PARCELADO
+  quantidadeParcelas  Int?    @default(1)
+  intervaloParcelas   Int?    @default(30) // dias entre parcelas
+  primeiraParcelaDias Int?    @default(0) // dias para primeira parcela
+
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa     Empresa             @relation(fields: [empresaId], references: [id])
+  fornecedor  Fornecedor          @relation(fields: [fornecedorId], references: [id])
+  itens       ItemPedidoCompra[]
+  entradas    EntradaMercadoria[]
+  contasPagar ContaPagar[]
+
+  @@unique([empresaId, numeroPedido, serie])
+  @@map("pedidos_compra")
+}
+
+model ItemPedidoCompra {
+  id                 String   @id @default(cuid()) @map("_id")
+  pedidoCompraId     String
+  produtoId          String
+  numeroItem         Int
+  quantidade         Float
+  quantidadeRecebida Float    @default(0)
+  unidadeMedida      String
+  valorUnitario      Float
+  valorTotal         Float
+  valorDesconto      Float    @default(0)
+  dataCriacao        DateTime @default(now())
+
+  pedidoCompra PedidoCompra @relation(fields: [pedidoCompraId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  produto      Produto      @relation(fields: [produtoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("itens_pedido_compra")
+}
+
+// =====================================================
+// COTAÇÃO DE COMPRAS
+// =====================================================
+
+model CotacaoCompra {
+  id              String          @id @default(cuid()) @map("_id")
+  empresaId       String
+  numeroCotacao   String
+  serie           String          @default("1")
+  situacao        SituacaoCotacao @default(ABERTA)
+  dataAbertura    DateTime        @default(now())
+  dataValidade    DateTime?
+  observacoes     String?
+  dataCriacao     DateTime        @default(now())
+  dataAtualizacao DateTime        @updatedAt
+
+  empresa   Empresa             @relation(fields: [empresaId], references: [id])
+  itens     ItemCotacaoCompra[]
+  respostas RespostaCotacao[]
+
+  @@unique([empresaId, numeroCotacao, serie])
+  @@map("cotacoes_compra")
+}
+
+model ItemCotacaoCompra {
+  id              String   @id @default(cuid()) @map("_id")
+  cotacaoCompraId String
+  produtoId       String
+  quantidade      Float
+  unidadeMedida   String
+  observacoes     String?
+  dataCriacao     DateTime @default(now())
+
+  cotacaoCompra CotacaoCompra @relation(fields: [cotacaoCompraId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  produto       Produto       @relation(fields: [produtoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("itens_cotacao_compra")
+}
+
+model RespostaCotacao {
+  id              String          @id @default(cuid()) @map("_id")
+  cotacaoCompraId String
+  fornecedorId    String
+  valorTotal      Float
+  valorFrete      Float           @default(0)
+  valorDesconto   Float           @default(0)
+  prazoEntrega    String?
+  situacao        SituacaoCotacao @default(ENVIADA)
+  dataResposta    DateTime        @default(now())
+  dataCriacao     DateTime        @default(now())
+  dataAtualizacao DateTime        @updatedAt
+
+  cotacaoCompra CotacaoCompra @relation(fields: [cotacaoCompraId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  fornecedor    Fornecedor    @relation(fields: [fornecedorId], references: [id])
+
+  @@map("respostas_cotacao")
+}
+
+enum SituacaoCotacao {
+  ABERTA
+  ENVIADA
+  RESPONDIDA
+  APROVADA
+  REPROVADA
+  CANCELADA
+}
+
+// =====================================================
+// ENTRADA DE MERCADORIAS
+// =====================================================
+
+model EntradaMercadoria {
+  id              String          @id @default(cuid()) @map("_id")
+  empresaId       String
+  pedidoCompraId  String
+  numeroNota      String
+  serieNota       String          @default("1")
+  dataEmissao     DateTime?
+  dataEntrada     DateTime        @default(now())
+  valorTotal      Float
+  valorFrete      Float           @default(0)
+  valorDesconto   Float           @default(0)
+  observacoes     String?
+  situacao        SituacaoEntrada @default(PENDENTE)
+  dataCriacao     DateTime        @default(now())
+  dataAtualizacao DateTime        @updatedAt
+
+  empresa      Empresa       @relation(fields: [empresaId], references: [id])
+  pedidoCompra PedidoCompra  @relation(fields: [pedidoCompraId], references: [id])
+  itens        ItemEntrada[]
+
+  @@unique([empresaId, numeroNota, serieNota])
+  @@map("entradas_mercadoria")
+}
+
+model ItemEntrada {
+  id                  String   @id @default(cuid()) @map("_id")
+  entradaMercadoriaId String
+  produtoId           String
+  quantidade          Float
+  quantidadeRecebida  Float    @default(0)
+  unidadeMedida       String
+  valorUnitario       Float
+  valorTotal          Float
+  valorDesconto       Float    @default(0)
+  dataCriacao         DateTime @default(now())
+
+  entradaMercadoria EntradaMercadoria @relation(fields: [entradaMercadoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  produto           Produto           @relation(fields: [produtoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("itens_entrada")
+}
+
+enum SituacaoEntrada {
+  PENDENTE
+  EM_RECEBIMENTO
+  RECEBIDO
+  CANCELADO
+}
+
+// =====================================================
+// PARAMETRIZAÇÃO DO SISTEMA
+// =====================================================
+
+model ParametroSistema {
+  id              String        @id @default(cuid()) @map("_id")
+  empresaId       String
+  chave           String
+  valor           String
+  descricao       String?
+  tipo            TipoParametro @default(TEXTO)
+  modulo          ModuloSistema
+  ativo           Boolean       @default(true)
+  dataCriacao     DateTime      @default(now())
+  dataAtualizacao DateTime      @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@unique([empresaId, chave])
+  @@map("parametros_sistema")
+}
+
+enum TipoParametro {
+  TEXTO
+  NUMERO
+  BOOLEANO
+  DATA
+  JSON
+}
+
+enum ModuloSistema {
+  GERAL
+  CADASTROS
+  VENDAS
+  COMPRAS
+  ESTOQUE
+  FINANCEIRO
+  FISCAL
+  NF_E
+  RELATORIOS
+}
+
+// =====================================================
+// MOVIMENTAÇÕES INTERNAS DE ESTOQUE
+// =====================================================
+
+model MovimentacaoEstoque {
+  id                 String           @id @default(cuid()) @map("_id")
+  empresaId          String
+  produtoId          String
+  tipoMovimentacao   TipoMovimentacao
+  quantidade         Float
+  quantidadeAnterior Float
+  quantidadeNova     Float
+  motivo             String?
+  dataMovimentacao   DateTime         @default(now())
+  dataCriacao        DateTime         @default(now())
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  produto Produto @relation(fields: [produtoId], references: [id])
+
+  @@map("movimentacoes_estoque")
+}
+
+enum TipoMovimentacao {
+  ENTRADA
+  SAIDA
+  TRANSFERENCIA
+  AJUSTE
+  DEVOLUCAO
+}
+
+// =====================================================
+// CONTAS A RECEBER
+// =====================================================
+
+model ContaReceber {
+  id              String          @id @default(cuid()) @map("_id")
+  empresaId       String
+  clienteId       String
+  pedidoVendaId   String?
+  numeroDocumento String
+  numeroParcela   Int             @default(1)
+  totalParcelas   Int             @default(1)
+  dataVencimento  DateTime
+  dataEmissao     DateTime        @default(now())
+  valorOriginal   Float
+  valorRecebido   Float           @default(0)
+  valorDesconto   Float           @default(0)
+  valorJuros      Float           @default(0)
+  valorMulta      Float           @default(0)
+  situacao        SituacaoConta   @default(ABERTA)
+  formaPagamento  FormaPagamento?
+  dataRecebimento DateTime?
+  centroCustoId   String?
+  observacoes     String?
+  dataCriacao     DateTime        @default(now())
+  dataAtualizacao DateTime        @updatedAt
+
+  empresa     Empresa      @relation(fields: [empresaId], references: [id])
+  cliente     Cliente      @relation(fields: [clienteId], references: [id])
+  pedidoVenda PedidoVenda? @relation(fields: [pedidoVendaId], references: [id])
+  centroCusto CentroCusto? @relation(fields: [centroCustoId], references: [id])
+  boletos     Boleto[]
+
+  @@unique([empresaId, numeroDocumento, numeroParcela])
+  @@map("contas_receber")
+}
+
+// =====================================================
+// BOLETOS
+// =====================================================
+
+model Boleto {
+  id              String         @id @default(cuid()) @map("_id")
+  empresaId       String
+  contaReceberId  String
+  bancoId         String?
+  numeroBoleto    String
+  numeroDocumento String
+  dataEmissao     DateTime       @default(now())
+  dataVencimento  DateTime
+  dataPagamento   DateTime?
+  valorOriginal   Float
+  valorJuros      Float          @default(0)
+  valorMulta      Float          @default(0)
+  valorDesconto   Float          @default(0)
+  valorPago       Float          @default(0)
+  situacao        SituacaoBoleto @default(EMITIDO)
+  instrucoes      String?
+  mensagem        String?
+  codigoBarras    String?
+  linhaDigitavel  String?
+  pdfPath         String?
+  dataCriacao     DateTime       @default(now())
+  dataAtualizacao DateTime       @updatedAt
+
+  empresa      Empresa      @relation(fields: [empresaId], references: [id])
+  contaReceber ContaReceber @relation(fields: [contaReceberId], references: [id])
+
+  @@unique([empresaId, numeroBoleto])
+  @@map("boletos")
+}
+
+// =====================================================
+// REMESSA BOLETOS (CNAB)
+// =====================================================
+
+model RemessaBoleto {
+  id                String    @id @default(cuid()) @map("_id")
+  empresaId         String
+  nomeArquivo       String
+  tipoArquivo       String    @default("CNAB400")
+  totalBoletos      Int       @default(0)
+  valorTotal        Float     @default(0)
+  conteudo          String
+  dataGeracao       DateTime  @default(now())
+  processado        Boolean   @default(false)
+  dataProcessamento DateTime?
+  observacoes       String?
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("remessas_boleto")
+}
+
+model Banco {
+  id              String   @id @default(cuid()) @map("_id")
+  codigo          String   @unique
+  nome            String
+  nomeReduzido    String
+  cnpj            String?
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  @@map("bancos")
+}
+
+enum SituacaoBoleto {
+  EMITIDO
+  ENVIADO
+  BAIXADO
+  BAIXADO_MANUALMENTE
+  CANCELADO
+  VENCIDO
+  PROTESTADO
+  CARTA_CORRECAO
+}
+
+// =====================================================
+// PDV / PONTO DE VENDA
+// =====================================================
+
+model VendaPDV {
+  id              String            @id @default(cuid()) @map("_id")
+  empresaId       String
+  filialId        String
+  operadorId      String?
+  clienteId       String?
+  numeroCupom     String
+  dataVenda       DateTime          @default(now())
+  subtotal        Float
+  valorDesconto   Float             @default(0)
+  valorAcrescimo  Float             @default(0)
+  valorTotal      Float
+  formaPagamento  FormaPagamentoPDV
+  valorPago       Float
+  valorTroco      Float             @default(0)
+  situacao        SituacaoVendaPDV  @default(ABERTA)
+  observacoes     String?
+  dataCriacao     DateTime          @default(now())
+  dataAtualizacao DateTime          @updatedAt
+
+  empresa  Empresa        @relation(fields: [empresaId], references: [id])
+  filial   Filial         @relation(fields: [filialId], references: [id])
+  operador OperadorPDV?   @relation(fields: [operadorId], references: [id])
+  cliente  Cliente?       @relation(fields: [clienteId], references: [id])
+  itens    ItemVendaPDV[]
+
+  @@unique([empresaId, numeroCupom])
+  @@map("vendas_pdv")
+}
+
+model ItemVendaPDV {
+  id            String   @id @default(cuid()) @map("_id")
+  vendaPDVId    String
+  produtoId     String
+  codigoBarras  String?
+  descricao     String
+  quantidade    Float
+  unidadeMedida String
+  valorUnitario Float
+  valorTotal    Float
+  valorDesconto Float    @default(0)
+  dataCriacao   DateTime @default(now())
+
+  vendaPDV VendaPDV @relation(fields: [vendaPDVId], references: [id], onDelete: Cascade)
+  produto  Produto  @relation(fields: [produtoId], references: [id])
+
+  @@map("itens_venda_pdv")
+}
+
+model OperadorPDV {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  nome            String
+  pin             String
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa    @relation(fields: [empresaId], references: [id])
+  vendas  VendaPDV[]
+  caixas  Caixa[]
+
+  @@unique([empresaId, nome])
+  @@map("operadores_pdv")
+}
+
+model Caixa {
+  id              String        @id @default(cuid()) @map("_id")
+  empresaId       String
+  filialId        String
+  operadorId      String
+  dataAbertura    DateTime
+  dataFechamento  DateTime?
+  saldoInicial    Float
+  saldoFinal      Float?
+  totalEntradas   Float         @default(0)
+  totalSaidas     Float         @default(0)
+  situacao        SituacaoCaixa @default(ABERTO)
+  observacoes     String?
+  dataCriacao     DateTime      @default(now())
+  dataAtualizacao DateTime      @updatedAt
+
+  empresa  Empresa     @relation(fields: [empresaId], references: [id])
+  filial   Filial      @relation(fields: [filialId], references: [id])
+  operador OperadorPDV @relation(fields: [operadorId], references: [id])
+
+  @@map("caixas")
+}
+
+enum SituacaoVendaPDV {
+  ABERTA
+  FINALIZADA
+  CANCELADA
+  ESTORNADA
+}
+
+enum FormaPagamentoPDV {
+  DINHEIRO
+  PIX
+  CARTAO_CREDITO
+  CARTAO_CREDITO_PARCELADO
+  CARTAO_DEBITO
+  BOLETO
+  CHEQUE
+  CREDITO_LOJA
+}
+
+enum SituacaoCaixa {
+  ABERTO
+  FECHADO
+  FECHADO_CONFERIDO
+}
+
+// =====================================================
+// CONTAS A PAGAR
+// =====================================================
+
+model ContaPagar {
+  id              String          @id @default(cuid()) @map("_id")
+  empresaId       String
+  fornecedorId    String
+  pedidoCompraId  String?
+  numeroDocumento String
+  numeroParcela   Int             @default(1)
+  totalParcelas   Int             @default(1)
+  dataVencimento  DateTime
+  dataEmissao     DateTime        @default(now())
+  valorOriginal   Float
+  valorPago       Float           @default(0)
+  valorDesconto   Float           @default(0)
+  valorJuros      Float           @default(0)
+  valorMulta      Float           @default(0)
+  situacao        SituacaoConta   @default(ABERTA)
+  formaPagamento  FormaPagamento?
+  dataPagamento   DateTime?
+  centroCustoId   String?
+  observacoes     String?
+  dataCriacao     DateTime        @default(now())
+  dataAtualizacao DateTime        @updatedAt
+
+  empresa      Empresa       @relation(fields: [empresaId], references: [id])
+  fornecedor   Fornecedor    @relation(fields: [fornecedorId], references: [id])
+  pedidoCompra PedidoCompra? @relation(fields: [pedidoCompraId], references: [id])
+  centroCusto  CentroCusto?  @relation(fields: [centroCustoId], references: [id])
+
+  @@unique([empresaId, numeroDocumento, numeroParcela])
+  @@map("contas_pagar")
+}
+
+enum SituacaoConta {
+  ABERTA
+  PAGO
+  VENCIDO
+  CANCELADO
+  BAIXADO
+}
+
+enum FormaPagamento {
+  DINHEIRO
+  PIX
+  CARTAO_CREDITO
+  CARTAO_DEBITO
+  BOLETO
+  TRANSFERENCIA
+  CHEQUE
+}
+
+// =====================================================
+// CONCILIAÇÃO BANCÁRIA
+// =====================================================
+
+model ContaBancaria {
+  id              String            @id @default(cuid()) @map("_id")
+  empresaId       String
+  banco           String
+  agencia         String
+  conta           String
+  tipo            TipoContaBancaria @default(CORRENTE)
+  saldoInicial    Float             @default(0)
+  saldoAtual      Float             @default(0)
+  ativo           Boolean           @default(true)
+  dataCriacao     DateTime          @default(now())
+  dataAtualizacao DateTime          @updatedAt
+
+  empresa       Empresa                @relation(fields: [empresaId], references: [id])
+  conciliacoes  Conciliacao[]
+  movimentacoes MovimentacaoBancaria[]
+  cheques        Cheque[]
+
+  @@unique([empresaId, banco, agencia, conta])
+  @@map("contas_bancarias")
+}
+
+model MovimentacaoBancaria {
+  id               String                @id @default(cuid()) @map("_id")
+  contaBancariaId  String
+  dataMovimentacao DateTime
+  dataCompetencia  DateTime?
+  tipo             TipoMovimentoBancario
+  descricao        String
+  documento        String?
+  valor            Float
+  conciliado       Boolean               @default(false)
+  conciliacaoId    String?
+  dataCriacao      DateTime              @default(now())
+
+  contaBancaria ContaBancaria @relation(fields: [contaBancariaId], references: [id])
+  conciliacao   Conciliacao?  @relation(fields: [conciliacaoId], references: [id])
+
+  @@map("movimentacoes_bancarias")
+}
+
+model Conciliacao {
+  id                 String   @id @default(cuid()) @map("_id")
+  contaBancariaId    String
+  periodoIni         DateTime
+  periodoFin         DateTime
+  dataConciliacao    DateTime @default(now())
+  totalCreditos      Float    @default(0)
+  totalDebitos       Float    @default(0)
+  totalConciliado    Float    @default(0)
+  totalNaoConciliado Float    @default(0)
+  observacoes        String?
+
+  contaBancaria ContaBancaria          @relation(fields: [contaBancariaId], references: [id])
+  movimentacoes MovimentacaoBancaria[]
+
+  @@map("conciliacoes")
+}
+
+enum TipoContaBancaria {
+  CORRENTE
+  POUPANCA
+  INVESTIMENTO
+}
+
+enum TipoMovimentoBancario {
+  CREDITO
+  DEBITO
+}
+
+// =====================================================
+// CHEQUES
+// =====================================================
+
+model Cheque {
+  id              String         @id @default(cuid()) @map("_id")
+  empresaId       String
+  contaBancariaId String?
+  clienteId       String? // cheque de cliente (recebido)
+  fornecedorId    String? // cheque próprio (emitido)
+  numero          String
+  banco           String
+  agencia         String
+  conta           String
+  emitente        String // nome do emitente
+  valor           Float
+  dataEmissao     DateTime
+  dataVencimento  DateTime
+  dataCompensacao DateTime?
+  tipo            TipoCheque     @default(RECEBIDO) // RECEBIDO, EMITIDO
+  situacao        SituacaoCheque @default(EM_CARTEIRA) // EM_CARTEIRA, DEPOSITADO, COMPENSADO, DEVOLVIDO, REPASSADO, CANCELADO
+  motivoDevolucao String?
+  observacoes     String?
+  dataCriacao     DateTime       @default(now())
+  dataAtualizacao DateTime       @updatedAt
+
+  empresa       Empresa        @relation(fields: [empresaId], references: [id])
+  contaBancaria ContaBancaria? @relation(fields: [contaBancariaId], references: [id])
+  cliente       Cliente?       @relation(fields: [clienteId], references: [id])
+  fornecedor    Fornecedor?    @relation(fields: [fornecedorId], references: [id])
+
+  @@index([empresaId])
+  @@index([situacao])
+  @@index([dataVencimento])
+  @@map("cheques")
+}
+
+enum TipoCheque {
+  RECEBIDO
+  EMITIDO
+}
+
+enum SituacaoCheque {
+  EM_CARTEIRA
+  DEPOSITADO
+  COMPENSADO
+  DEVOLVIDO
+  REPASSADO
+  CANCELADO
+}
+
+// =====================================================
+// CENTRO DE CUSTO
+// =====================================================
+
+model CentroCusto {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  codigo          String
+  nome            String
+  descricao       String?
+  centroPaiId     String?
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa       Empresa        @relation(fields: [empresaId], references: [id])
+  centroPai     CentroCusto?   @relation("CentroCustoHierarquia", fields: [centroPaiId], references: [id])
+  subcentros    CentroCusto[]  @relation("CentroCustoHierarquia")
+  contasPagar   ContaPagar[]
+  contasReceber ContaReceber[]
+  fluxoCaixa    FluxoCaixa[]
+
+  @@unique([empresaId, codigo])
+  @@map("centros_custo")
+}
+
+// =====================================================
+// FLUXO DE CAIXA
+// =====================================================
+
+model FluxoCaixa {
+  id               String         @id @default(cuid()) @map("_id")
+  empresaId        String
+  tipo             TipoFluxoCaixa
+  categoria        String
+  descricao        String
+  valor            Float
+  formaPagamento   FormaPagamento
+  dataMovimentacao DateTime       @default(now())
+  dataCriacao      DateTime       @default(now())
+  referenciaId     String?
+  referenciaTipo   String?
+  centroCustoId    String?
+
+  empresa     Empresa      @relation(fields: [empresaId], references: [id])
+  centroCusto CentroCusto? @relation(fields: [centroCustoId], references: [id])
+
+  @@map("fluxo_caixa")
+}
+
+enum TipoFluxoCaixa {
+  ENTRADA
+  SAIDA
+}
+
+// =====================================================
+// LOGS DO SISTEMA
+// =====================================================
+
+model LogSistema {
+  id          String   @id @default(cuid()) @map("_id")
+  empresaId   String?
+  usuarioId   String?
+  categoria   String
+  acao        String
+  nivel       String
+  mensagem    String
+  detalhes    Json?
+  ip          String?
+  userAgent   String?
+  dataCriacao DateTime @default(now())
+
+  @@index([empresaId])
+  @@index([usuarioId])
+  @@index([categoria])
+  @@index([nivel])
+  @@index([dataCriacao])
+  @@map("logs_sistema")
+}
+
+// =====================================================
+// NF-e - NOTA FISCAL ELETRÔNICA
+// =====================================================
+
+model NotaFiscal {
+  id                 String          @id @default(cuid()) @map("_id")
+  empresaId          String
+  filialId           String
+  clienteId          String?
+  fornecedorId       String?
+  pedidoVendaId      String?         @unique
+  tipoDocumento      TipoDocumentoNF
+  modelo             ModeloNF        @default(NFE)
+  serie              String
+  numero             Int
+  chaveAcesso        String          @unique
+  dataEmissao        DateTime        @default(now())
+  dataSaida          DateTime?
+  tipoOperacao       TipoOperacaoNF
+  finalidadeEmissao  FinalidadeNF    @default(NORMAL)
+  naturezaOperacao   String
+  valorTotal         Float
+  valorDesconto      Float           @default(0)
+  valorFrete         Float           @default(0)
+  valorSeguro        Float           @default(0)
+  valorOutros        Float           @default(0)
+  valorBaseICMS      Float           @default(0)
+  valorICMS          Float           @default(0)
+  valorBaseICMSST    Float           @default(0)
+  valorICMSST        Float           @default(0)
+  valorPIS           Float           @default(0)
+  valorCOFINS        Float           @default(0)
+  valorIPI           Float           @default(0)
+  valorTotalTributos Float           @default(0)
+
+  // Reforma Tributária 2026 - CBS e IBS
+  valorBaseCBS Float @default(0)
+  valorCBS     Float @default(0)
+  aliquotaCBS  Float @default(0)
+  valorBaseIBS Float @default(0)
+  valorIBS     Float @default(0)
+  aliquotaIBS  Float @default(0)
+
+  // Imposto Seletivo (IS) - produtos específicos
+  valorIS    Float @default(0)
+  aliquotaIS Float @default(0)
+
+  // Totais reforma tributária
+  valorTotalReformaTributaria Float @default(0)
+
+  situacao                  SituacaoNF @default(EM_DIGITACAO)
+  statusSefaz               String?
+  motivo                    String?
+  xmlEnvio                  String?
+  xmlRetorno                String?
+  protocolo                 String?
+  dataProtocolo             DateTime?
+  dataAutorizacao           DateTime?
+  numeroRecibo              String?
+  pdfPath                   String?
+  observacoes               String?
+  informacoesComplementares String?
+  dataCriacao               DateTime   @default(now())
+  dataAtualizacao           DateTime   @updatedAt
+
+  empresa     Empresa          @relation(fields: [empresaId], references: [id])
+  filial      Filial           @relation(fields: [filialId], references: [id])
+  cliente     Cliente?         @relation(fields: [clienteId], references: [id])
+  fornecedor  Fornecedor?      @relation(fields: [fornecedorId], references: [id])
+  pedidoVenda PedidoVenda?     @relation(fields: [pedidoVendaId], references: [id])
+  itens       ItemNotaFiscal[]
+  eventos     EventoNF[]
+
+  @@unique([empresaId, modelo, serie, numero])
+  @@map("notas_fiscais")
+}
+
+model ItemNotaFiscal {
+  id                     String  @id @default(cuid()) @map("_id")
+  notaFiscalId           String
+  produtoId              String?
+  numeroItem             Int
+  codigo                 String
+  descricao              String
+  ncm                    String?
+  cfop                   String
+  unidadeComercial       String
+  quantidadeComercial    Float
+  valorUnitarioComercial Float
+  valorTotalBruto        Float
+  valorDesconto          Float   @default(0)
+  valorTotalLiquido      Float
+  codigoEAN              String?
+  codigoTributario       String?
+  origemMercadoria       Int     @default(0)
+  icmsBaseCalculo        Float   @default(0)
+  icmsAliquota           Float   @default(0)
+  icmsValor              Float   @default(0)
+  icmsSTBaseCalculo      Float   @default(0)
+  icmsSTAliquota         Float   @default(0)
+  icmsSTValor            Float   @default(0)
+  pisAliquota            Float   @default(0)
+  pisValor               Float   @default(0)
+  cofinsAliquota         Float   @default(0)
+  cofinsValor            Float   @default(0)
+  ipiAliquota            Float   @default(0)
+  ipiValor               Float   @default(0)
+
+  // Reforma Tributária 2026 - CBS/IBS por item
+  cbsCst         String?
+  cbsBaseCalculo Float   @default(0)
+  cbsAliquota    Float   @default(0)
+  cbsValor       Float   @default(0)
+  ibsCst         String?
+  ibsBaseCalculo Float   @default(0)
+  ibsAliquota    Float   @default(0)
+  ibsValor       Float   @default(0)
+  isAliquota     Float   @default(0)
+  isValor        Float   @default(0)
+
+  dataCriacao DateTime @default(now())
+
+  notaFiscal NotaFiscal @relation(fields: [notaFiscalId], references: [id], onDelete: Cascade)
+  produto    Produto?   @relation(fields: [produtoId], references: [id])
+
+  @@map("itens_nota_fiscal")
+}
+
+model EventoNF {
+  id              String       @id @default(cuid()) @map("_id")
+  notaFiscalId    String
+  tipoEvento      TipoEventoNF
+  sequenciaEvento Int
+  dataEvento      DateTime
+  descricao       String
+  protocolo       String?
+  dataProtocolo   DateTime?
+  xmlEnvio        String?
+  xmlRetorno      String?
+  justificativa   String?
+  dataCriacao     DateTime     @default(now())
+
+  notaFiscal NotaFiscal @relation(fields: [notaFiscalId], references: [id], onDelete: Cascade)
+
+  @@unique([notaFiscalId, tipoEvento, sequenciaEvento])
+  @@map("eventos_nf")
+}
+
+model ConfiguracaoNF {
+  id                 String     @id @default(cuid()) @map("_id")
+  empresaId          String     @unique
+  certificadoDigital String
+  senhaCertificado   String
+  csc                String?
+  cscId              String?
+  ambiente           AmbienteNF @default(HOMOLOGACAO)
+  serieNFe           String     @default("001")
+  serieNFCe          String     @default("001")
+  proximoNFe         Int        @default(1)
+  proximoNFCe        Int        @default(1)
+  uf                 String     @default("35")
+  municipio          String?
+  razaoSocial        String?
+  nomeFantasia       String?
+  cnpj               String?
+  inscricaoEstadual  String?
+  inscricaoMunicipal String?
+  logradouro         String?
+  numero             String?
+  complemento        String?
+  bairro             String?
+  cep                String?
+  telefone           String?
+  email              String?
+  logoPath           String?
+  padrao             PadraoNF   @default(NFE_V4)
+  versao             String     @default("4.00")
+  dataCriacao        DateTime   @default(now())
+  dataAtualizacao    DateTime   @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("configuracoes_nf")
+}
+
+enum TipoDocumentoNF {
+  ENTRADA
+  SAIDA
+}
+
+enum ModeloNF {
+  NFE
+  NFCE
+  NFS_E
+}
+
+enum TipoOperacaoNF {
+  OPERACAO_INTERNA
+  OPERACAO_INTERESTADUAL
+  OPERACAO_EXTERIOR
+}
+
+enum FinalidadeNF {
+  NORMAL
+  COMPLEMENTAR
+  AJUSTE
+  DEVOLUCAO
+}
+
+enum SituacaoNF {
+  EM_DIGITACAO
+  EM_PROCESSAMENTO
+  ASSINADA
+  ENVIADA
+  AUTORIZADA
+  DENEGADA
+  CANCELADA
+  INUTILIZADA
+  CONTINGENCIA
+}
+
+enum TipoEventoNF {
+  CANCELAMENTO
+  CARTA_CORRECAO
+  CONFIRMACAO_OPERACAO
+  CONFIRMACAO_OPERACAO_EPEC
+  EPEC
+  MANIFESTACAO_CONFIRMACAO
+  MANIFESTACAO_DESCONHECIDO
+  MANIFESTACAO_NEGADO
+  PEDIDO_PRERROGATIVA_EMBRULHO
+  REGISTRO_SAIDA
+  REGISTRO_ENTRADA
+}
+
+enum AmbienteNF {
+  PRODUCAO
+  HOMOLOGACAO
+}
+
+enum PadraoNF {
+  NFE_V4
+  NFCE_V4
+}
+
+// =====================================================
+// SPED FISCAL
+// =====================================================
+
+model SpedFiscal {
+  id              String       @id @default(cuid()) @map("_id")
+  empresaId       String
+  periodoIni      DateTime
+  periodoFin      DateTime
+  dataGeracao     DateTime     @default(now())
+  arquivo         String?
+  totalRegistros  Int          @default(0)
+  situacao        SituacaoSped @default(PENDENTE)
+  observacoes     String?
+  dataCriacao     DateTime     @default(now())
+  dataAtualizacao DateTime     @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@unique([empresaId, periodoIni, periodoFin])
+  @@map("sped_fiscal")
+}
+
+model SpedContribuicoes {
+  id              String       @id @default(cuid()) @map("_id")
+  empresaId       String
+  periodoIni      DateTime
+  periodoFin      DateTime
+  dataGeracao     DateTime     @default(now())
+  arquivo         String?
+  totalRegistros  Int          @default(0)
+  situacao        SituacaoSped @default(PENDENTE)
+  observacoes     String?
+  dataCriacao     DateTime     @default(now())
+  dataAtualizacao DateTime     @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@unique([empresaId, periodoIni, periodoFin])
+  @@map("sped_contribuicoes")
+}
+
+enum SituacaoSped {
+  PENDENTE
+  EM_GERACAO
+  GERADO
+  ENVIADO
+  RECUSADO
+  ACEITO
+}
+
+// =====================================================
+// INVENTÁRIO
+// =====================================================
+
+model Inventario {
+  id              String             @id @default(cuid()) @map("_id")
+  empresaId       String
+  filialId        String
+  dataInventario  DateTime
+  dataFechamento  DateTime?
+  tipo            TipoInventario
+  situacao        SituacaoInventario @default(ABERTO)
+  observacoes     String?
+  dataCriacao     DateTime           @default(now())
+  dataAtualizacao DateTime           @updatedAt
+
+  empresa Empresa          @relation(fields: [empresaId], references: [id])
+  filial  Filial           @relation(fields: [filialId], references: [id])
+  itens   ItemInventario[]
+
+  @@map("inventarios")
+}
+
+model ItemInventario {
+  id                String                 @id @default(cuid()) @map("_id")
+  inventarioId      String
+  produtoId         String
+  quantidadeSistema Float
+  quantidadeContada Float?
+  diferenca         Float?
+  custoUnitario     Float
+  valorDiferenca    Float?
+  situacao          SituacaoItemInventario @default(PENDENTE)
+  observacoes       String?
+  dataContagem      DateTime?
+  dataConciliacao   DateTime?
+  dataCriacao       DateTime               @default(now())
+
+  inventario Inventario @relation(fields: [inventarioId], references: [id], onDelete: Cascade)
+  produto    Produto    @relation(fields: [produtoId], references: [id])
+
+  @@unique([inventarioId, produtoId])
+  @@map("itens_inventario")
+}
+
+enum TipoInventario {
+  ANUAL
+  MENSAL
+  ROTATIVO
+  EXTRAORDINARIO
+}
+
+enum SituacaoInventario {
+  ABERTO
+  EM_CONFERENCIA
+  CONCLUIDO
+  CANCELADO
+}
+
+enum SituacaoItemInventario {
+  PENDENTE
+  CONTADO
+  CONCILIADO
+  AJUSTADO
+}
+
+// =====================================================
+// PLANO DE CONTAS
+// =====================================================
+
+model PlanoConta {
+  id              String        @id @default(cuid()) @map("_id")
+  empresaId       String
+  codigo          String
+  nome            String
+  tipo            TipoConta
+  nivel           Int           @default(1)
+  contaPaiId      String?
+  natureza        NaturezaConta
+  aceite          Boolean       @default(true)
+  ativo           Boolean       @default(true)
+  dataCriacao     DateTime      @default(now())
+  dataAtualizacao DateTime      @updatedAt
+
+  empresa     Empresa              @relation(fields: [empresaId], references: [id])
+  contaPai    PlanoConta?          @relation("PlanoContaSubcontas", fields: [contaPaiId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subcontas   PlanoConta[]         @relation("PlanoContaSubcontas")
+  lancamentos LancamentoContabil[]
+
+  @@unique([empresaId, codigo])
+  @@map("plano_contas")
+}
+
+enum TipoConta {
+  SINTETICA
+  ANALITICA
+}
+
+enum NaturezaConta {
+  CREDORA
+  DEVEDORA
+}
+
+enum NaturezaCredito {
+  CREDORA
+  DEVEDORA
+}
+
+// =====================================================
+// LANCAMENTOS CONTÁBEIS
+// =====================================================
+
+model LancamentoContabil {
+  id              String         @id @default(cuid()) @map("_id")
+  empresaId       String
+  data            DateTime
+  dataCompetencia DateTime?
+  tipo            TipoLancamento
+  historia        String
+  valor           Float
+  planoContaId    String
+  documento       String?
+  observacoes     String?
+  dataCriacao     DateTime       @default(now())
+
+  empresa    Empresa    @relation(fields: [empresaId], references: [id])
+  planoConta PlanoConta @relation(fields: [planoContaId], references: [id])
+
+  @@index([empresaId])
+  @@index([data])
+  @@map("lancamentos_contabeis")
+}
+
+enum TipoLancamento {
+  DEBITO
+  CREDITO
+}
+
+// =====================================================
+// ECF - EMISSOR CUPOM FISCAL
+// =====================================================
+
+model ECF {
+  id               String   @id @default(cuid()) @map("_id")
+  empresaId        String
+  identificacao    String
+  marca            String
+  modelo           String
+  numeroSerie      String   @unique
+  numeroFabricacao String
+  versaoSB         String
+  dataInstalacao   DateTime
+  lojaId           String?
+  ativo            Boolean  @default(true)
+  dataCriacao      DateTime @default(now())
+  dataAtualizacao  DateTime @updatedAt
+
+  @@map("ecf")
+}
+
+model ReducaoZ {
+  id                   String           @id @default(cuid()) @map("_id")
+  ecfId                String
+  dataMovimento        DateTime
+  numeroReducao        Int
+  cro                  Int
+  crz                  Int
+  cooInicial           Int
+  cooFinal             Int
+  gtInicial            Float
+  gtFinal              Float
+  valorVendaBruta      Float
+  valorTotalSuprimento Float
+  valorTotalSangria    Float
+  valorBaseICMS        Float
+  valorICMS            Float
+  valorISS             Float
+  valorPIS             Float
+  valorCOFINS          Float
+  situacao             SituacaoReducaoZ @default(ABERTA)
+  dataCriacao          DateTime         @default(now())
+
+  @@unique([ecfId, numeroReducao])
+  @@map("reducoes_z")
+}
+
+model Cupom {
+  id             String            @id @default(cuid()) @map("_id")
+  ecfId          String
+  reducaoZId     String?
+  numeroCupom    Int
+  coo            Int
+  ccf            Int
+  dataEmissao    DateTime
+  subtotal       Float
+  valorDesconto  Float             @default(0)
+  valorAcrescimo Float             @default(0)
+  valorTotal     Float
+  formaPagamento FormaPagamentoECF
+  valorPagamento Float
+  valorTroco     Float             @default(0)
+  situacao       SituacaoCupom     @default(ABERTO)
+  hashCupom      String?
+  dataCriacao    DateTime          @default(now())
+
+  itens ItemCupom[]
+
+  @@unique([ecfId, numeroCupom])
+  @@map("cupons")
+}
+
+model ItemCupom {
+  id             String  @id @default(cuid()) @map("_id")
+  cupomId        String
+  produtoId      String?
+  codigo         String
+  descricao      String
+  quantidade     Float
+  unidadeMedida  String
+  valorUnitario  Float
+  valorTotal     Float
+  valorDesconto  Float   @default(0)
+  valorAcrescimo Float   @default(0)
+  aliquotaICMS   String?
+  csosn          String?
+
+  // Reforma Tributária 2026 - CBS/IBS por item
+  cbsCst         String?
+  cbsBaseCalculo Float   @default(0)
+  cbsAliquota    Float   @default(0)
+  cbsValor       Float   @default(0)
+  ibsCst         String?
+  ibsBaseCalculo Float   @default(0)
+  ibsAliquota    Float   @default(0)
+  ibsValor       Float   @default(0)
+
+  dataCriacao DateTime @default(now())
+
+  cupom Cupom @relation(fields: [cupomId], references: [id], onDelete: Cascade)
+
+  @@map("itens_cupom")
+}
+
+model Suprimento {
+  id            String         @id @default(cuid()) @map("_id")
+  ecfId         String
+  reducaoZId    String?
+  dataMovimento DateTime
+  valor         Float
+  tipo          TipoSuprimento
+  observacoes   String?
+  dataCriacao   DateTime       @default(now())
+
+  @@map("suprimentos")
+}
+
+model Sangria {
+  id            String   @id @default(cuid()) @map("_id")
+  ecfId         String
+  reducaoZId    String?
+  dataMovimento DateTime
+  valor         Float
+  motivo        String
+  observacoes   String?
+  dataCriacao   DateTime @default(now())
+
+  @@map("sangrias")
+}
+
+enum SituacaoReducaoZ {
+  ABERTA
+  FECHADA
+  ENVIADA
+}
+
+enum SituacaoCupom {
+  ABERTO
+  FINALIZADO
+  CANCELADO
+}
+
+enum FormaPagamentoECF {
+  DINHEIRO
+  CHEQUE
+  CARTAO_CREDITO
+  CARTAO_DEBITO
+  VALE
+  OUTROS
+}
+
+enum TipoSuprimento {
+  SUPRIMENTO
+  REFORCO
+}
+
+// =====================================================
+// NFSE - NOTA FISCAL DE SERVIÇOS ELETRÔNICA
+// =====================================================
+
+model NotaServico {
+  id                     String           @id @default(cuid()) @map("_id")
+  empresaId              String
+  filialId               String
+  clienteId              String?
+  rpsId                  String?
+  numero                 Int
+  serie                  String           @default("NFSe")
+  codigoVerificacao      String?
+  dataEmissao            DateTime         @default(now())
+  dataPrestacao          DateTime?
+  competencia            String?
+  tipoRps                TipoRps          @default(RPS)
+  naturezaOperacao       String           @default("1")
+  regimeTributario       RegimeTributario @default(SIMPLES_NACIONAL)
+  optanteSimplesNacional Boolean          @default(false)
+  incentivoFiscal        Boolean          @default(false)
+
+  valorServicos  Float
+  valorDeducoes  Float @default(0)
+  valorPis       Float @default(0)
+  valorCofins    Float @default(0)
+  valorInss      Float @default(0)
+  valorIr        Float @default(0)
+  valorCsll      Float @default(0)
+  valorIss       Float @default(0)
+  valorIssRetido Float @default(0)
+  baseCalculo    Float @default(0)
+  aliquotaIss    Float @default(0)
+  valorTotal     Float
+  valorLiquido   Float
+
+  // Reforma Tributária 2026 - CBS/IBS para serviços
+  valorCBS    Float @default(0)
+  aliquotaCBS Float @default(0)
+  valorIBS    Float @default(0)
+  aliquotaIBS Float @default(0)
+
+  tomadorNome               String?
+  tomadorCnpjCpf            String?
+  tomadorInscricaoMunicipal String?
+  tomadorEndereco           String?
+  tomadorNumero             String?
+  tomadorComplemento        String?
+  tomadorBairro             String?
+  tomadorCidade             String?
+  tomadorUf                 String?
+  tomadorCep                String?
+  tomadorTelefone           String?
+  tomadorEmail              String?
+
+  servicoproduto  String?
+  codigoMunicipio String?
+  codigoServico   String?
+  discriminacao   String?
+
+  situacao             SituacaoNFSe @default(EM_DIGITACAO)
+  statusSefaz          String?
+  mensagemSefaz        String?
+  numeroNfse           String?
+  codigoMunicipioEnvio String?
+  dataAutorizacao      DateTime?
+  protocolo            String?
+  xmlEnvio             String?
+  xmlRetorno           String?
+  pdfPath              String?
+  observacoes          String?
+  dataCriacao          DateTime     @default(now())
+  dataAtualizacao      DateTime     @updatedAt
+
+  empresa Empresa       @relation(fields: [empresaId], references: [id])
+  filial  Filial        @relation(fields: [filialId], references: [id])
+  cliente Cliente?      @relation(fields: [clienteId], references: [id])
+  itens   ItemServico[]
+
+  @@unique([empresaId, serie, numero])
+  @@map("notas_servico")
+}
+
+model ItemServico {
+  id            String  @id @default(cuid()) @map("_id")
+  notaServicoId String
+  numeroItem    Int
+  codigo        String
+  discriminacao String
+  quantidade    Float   @default(1)
+  valorUnitario Float
+  valorTotal    Float
+  tributavel    Boolean @default(true)
+  issAliquota   Float   @default(0)
+  issValor      Float   @default(0)
+
+  // Reforma Tributária 2026 - CBS/IBS para serviços
+  cbsAliquota Float @default(0)
+  cbsValor    Float @default(0)
+  ibsAliquota Float @default(0)
+  ibsValor    Float @default(0)
+
+  dataCriacao DateTime @default(now())
+
+  notaServico NotaServico @relation(fields: [notaServicoId], references: [id], onDelete: Cascade)
+
+  @@map("itens_servico")
+}
+
+enum SituacaoNFSe {
+  EM_DIGITACAO
+  ASSINADA
+  ENVIADA
+  AUTORIZADA
+  CANCELADA
+  DENEGADA
+  PROCESSANDO
+}
+
+enum TipoRps {
+  RPS
+  RPS_CONJUGADO
+  CUPOM
+}
+
+// =====================================================
+// SISTEMA DE LICENCIAMENTO
+// =====================================================
+
+model Plano {
+  id              String       @id @default(cuid()) @map("_id")
+  nome            String // BASIC, PROFISSIONAL, PREMIUM
+  descricao       String?
+  tipoCobranca    TipoCobranca // MENSAL, ANUAL, DEFINITIVO
+  precoMensal     Decimal?     @db.Decimal(10, 2)
+  precoAnual      Decimal?     @db.Decimal(10, 2)
+  precoDefinitivo Decimal?     @db.Decimal(10, 2)
+
+  // Limites
+  limiteUsuarios     Int @default(5)
+  limiteClientes     Int @default(1000)
+  limiteProdutos     Int @default(5000)
+  limiteNotasFiscais Int @default(1000) // por mês
+  limiteEmpresas     Int @default(1) // empresas no grupo
+
+  // Módulos habilitados
+  moduloCrm          Boolean @default(false)
+  moduloAutomacao    Boolean @default(false)
+  moduloMultiEmpresa Boolean @default(false)
+  moduloApi          Boolean @default(false)
+  moduloBoletos      Boolean @default(true)
+  moduloNfse         Boolean @default(true)
+  moduloEcf          Boolean @default(true)
+  moduloDre          Boolean @default(true)
+  moduloPlanoContas  Boolean @default(true)
+
+  ativo           Boolean  @default(true)
+  ordem           Int      @default(0)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  licencas Licenca[]
+
+  @@map("planos")
+}
+
+enum TipoCobranca {
+  MENSAL
+  ANUAL
+  DEFINITIVO
+}
+
+model Licenca {
+  id        String @id @default(cuid()) @map("_id")
+  empresaId String
+  planoId   String
+
+  // Dados da licença
+  chave         String        @unique // Chave única de ativação
+  tipoCobranca  TipoCobranca
+  dataInicio    DateTime
+  dataExpiracao DateTime?
+  status        StatusLicenca @default(ATIVA)
+
+  // Dados de cobrança
+  valorPago       Decimal?  @db.Decimal(10, 2)
+  dataPagamento   DateTime?
+  codigoTransacao String? // ID da transação (MercadoPago, etc)
+
+  // Limites atuais (podem ser自定义)
+  limiteUsuarios     Int?
+  limiteClientes     Int?
+  limiteProdutos     Int?
+  limiteNotasFiscais Int?
+  limiteEmpresas     Int? // Limite de empresas no grupo
+
+  // Ativos (valores atuais em uso)
+  usuariosAtivos Int @default(0)
+  clientesAtivos Int @default(0)
+  produtosAtivos Int @default(0)
+  notasEsteMes   Int @default(0)
+
+  // Recursos habilitados
+  moduloCrm          Boolean @default(false)
+  moduloAutomacao    Boolean @default(false)
+  moduloMultiEmpresa Boolean @default(false)
+  moduloApi          Boolean @default(false)
+
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa      @relation(fields: [empresaId], references: [id])
+  plano   Plano        @relation(fields: [planoId], references: [id])
+  logs    LicencaLog[]
+
+  @@map("licencas")
+}
+
+enum StatusLicenca {
+  ATIVA
+  EXPIRADA
+  CANCELADA
+  SUSPENSA
+}
+
+model LicencaLog {
+  id              String   @id @default(cuid()) @map("_id")
+  licencaId       String
+  acao            String // ATIVACAO, RENOVACAO, UPGRADE, DOWNGRADE, CANCELAMENTO
+  descricao       String?
+  planoAnteriorId String?
+  planoNovoId     String?
+  valor           Decimal? @db.Decimal(10, 2)
+  dataCriacao     DateTime @default(now())
+
+  licenca Licenca @relation(fields: [licencaId], references: [id])
+
+  @@map("licencas_log")
+}
+
+// =====================================================
+// CRM - Customer Relationship Management
+// =====================================================
+
+model CRMPipeline {
+  id        String  @id @default(cuid()) @map("_id")
+  empresaId String
+  nome      String
+  descricao String?
+  cor       String? @default("#3b82f6")
+  ordem     Int     @default(0)
+  ativo     Boolean @default(true)
+
+  oportunidades CRMOportunidade[]
+
+  @@map("crm_pipelines")
+}
+
+model CRMOportunidade {
+  id         String  @id @default(cuid()) @map("_id")
+  empresaId  String
+  pipelineId String
+  clienteId  String?
+
+  titulo        String
+  descricao     String?
+  valor         Decimal @db.Decimal(15, 2)
+  probabilidade Int     @default(50)
+  estagio       String
+
+  // Quote-to-Cash
+  pedidoId     String?
+  notaFiscalId String?
+
+  // Controle de tempo
+  dataFechamentoEsperado DateTime?
+  dataFechamentoReal     DateTime?
+  diasNoEstagio          Int       @default(0)
+
+  // Status
+  status CRMOportunidadeStatus @default(ABERTA)
+  origem String?               @default("manual")
+
+  // Metadados
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+  criadoPor       String?
+
+  pipeline   CRMPipeline                @relation(fields: [pipelineId], references: [id])
+  itens      CRMOportunidadeItem[]
+  tarefas    CRMTarefa[]
+  interacoes CRMInteracao[]
+  historico  CRMOportunidadeHistorico[]
+
+  @@map("crm_oportunidades")
+}
+
+enum CRMOportunidadeStatus {
+  ABERTA
+  GANHA
+  PERDIDA
+  CANCELADA
+}
+
+model CRMOportunidadeItem {
+  id             String  @id @default(cuid()) @map("_id")
+  oportunidadeId String
+  produtoId      String?
+  produtoNome    String
+  quantidade     Decimal @db.Decimal(15, 3)
+  precoUnitario  Decimal @db.Decimal(15, 2)
+  desconto       Decimal @default(0) @db.Decimal(15, 2)
+  total          Decimal @db.Decimal(15, 2)
+
+  oportunidade CRMOportunidade @relation(fields: [oportunidadeId], references: [id], onDelete: Cascade)
+
+  @@map("crm_oportunidade_itens")
+}
+
+model CRMOportunidadeHistorico {
+  id              String   @id @default(cuid()) @map("_id")
+  oportunidadeId  String
+  estagioAnterior String?
+  estagioNovo     String?
+  acao            String // ESTAGIO, STATUS, GANHA, PERDIDA
+  descricao       String?
+  usuarioId       String?
+  dataCriacao     DateTime @default(now())
+
+  oportunidade CRMOportunidade @relation(fields: [oportunidadeId], references: [id], onDelete: Cascade)
+
+  @@map("crm_oportunidade_historico")
+}
+
+model CRMTarefa {
+  id             String  @id @default(cuid()) @map("_id")
+  empresaId      String
+  oportunidadeId String?
+
+  titulo     String
+  descricao  String?
+  tipo       CRMTarefaTipo       @default(OUTRO)
+  prioridade CRMTarefaPrioridade @default(MEDIA)
+
+  responsavelId  String?
+  dataVencimento DateTime?
+  dataConclusao  DateTime?
+  concluida      Boolean   @default(false)
+
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  oportunidade CRMOportunidade? @relation(fields: [oportunidadeId], references: [id])
+
+  @@map("crm_tarefas")
+}
+
+enum CRMTarefaTipo {
+  REUNIAO
+  LIGACAO
+  EMAIL
+  VISITA
+  DEMONSTRACAO
+  PROPOSTA
+  OUTRO
+}
+
+enum CRMTarefaPrioridade {
+  BAIXA
+  MEDIA
+  ALTA
+  URGENTE
+}
+
+model CRMInteracao {
+  id             String  @id @default(cuid()) @map("_id")
+  empresaId      String
+  oportunidadeId String?
+  clienteId      String?
+
+  tipo      CRMInteracaoTipo
+  titulo    String
+  descricao String?
+
+  duracaoMinutos Int?
+  arquivoUrl     String?
+
+  usuarioId String
+  data      DateTime @default(now())
+
+  oportunidade CRMOportunidade? @relation(fields: [oportunidadeId], references: [id])
+
+  @@map("crm_interacoes")
+}
+
+enum CRMInteracaoTipo {
+  LIGACAO
+  EMAIL
+  REUNIAO
+  WHATSAPP
+  VISITA
+  DEMONSTRACAO
+  OUTRO
+}
+
+model CRMCampanha {
+  id        String @id @default(cuid()) @map("_id")
+  empresaId String
+
+  nome      String
+  descricao String?
+
+  tipoSegmento    String?  @default("todos")
+  produtoId       String?
+  diasInatividade Int?
+  valorMinimo     Decimal? @db.Decimal(15, 2)
+
+  status     CRMCampanhaStatus @default(RASCUNHO)
+  dataInicio DateTime?
+  dataFim    DateTime?
+
+  clientesTarget   Int @default(0)
+  enviosRealizados Int @default(0)
+
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  @@map("crm_campanhas")
+}
+
+enum CRMCampanhaStatus {
+  RASCUNHO
+  AGENDADA
+  ATIVA
+  PAUSADA
+  FINALIZADA
+  CANCELADA
+}
+
+// =====================================================
+// AUTOMAÇÃO
+// =====================================================
+
+model Automacao {
+  id        String  @id @default(cuid()) @map("_id")
+  empresaId String
+  nome      String
+  descricao String?
+
+  tipo AutomacaoTipo
+
+  status AutomacaoStatus @default(ATIVA)
+
+  trigger Json
+  acoes   Json
+
+  executadaCount Int       @default(0)
+  ultimaExecucao DateTime?
+
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  logs AutomacaoLog[]
+
+  @@map("automacoes")
+}
+
+enum AutomacaoTipo {
+  TAREFAS
+  MARKETING
+  FINANCEIRO
+  ESTOQUE
+  NOTIFICACOES
+}
+
+enum AutomacaoStatus {
+  ATIVA
+  PAUSADA
+  INATIVA
+}
+
+model AutomacaoLog {
+  id           String   @id @default(cuid()) @map("_id")
+  automacaoId  String
+  executada    Boolean
+  detalhes     Json?
+  erro         String?
+  dataExecucao DateTime @default(now())
+
+  automacao Automacao @relation(fields: [automacaoId], references: [id], onDelete: Cascade)
+
+  @@map("automacao_logs")
+}
+
+model Notificacao {
+  id           String          @id @default(cuid()) @map("_id")
+  empresaId    String
+  tipo         NotificacaoTipo @default(SISTEMA)
+  titulo       String
+  mensagem     String
+  destinatario String?
+  lida         Boolean         @default(false)
+  dataCriacao  DateTime        @default(now())
+  dataLeitura  DateTime?
+
+  @@map("notificacoes")
+}
+
+enum NotificacaoTipo {
+  SISTEMA
+  EMAIL
+  WHATSAPP
+  PUSH
+}
