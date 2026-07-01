@@ -7,12 +7,12 @@ const controller = new SpedFiscalController();
 
 router.use(authMiddleware);
 
+router.get('/blocos', controller.listarBlocos.bind(controller));
+router.get('/config', controller.getConfig.bind(controller));
+router.put('/config', controller.updateConfig.bind(controller));
 router.post('/gerar', controller.gerar.bind(controller));
 router.get('/', controller.listar.bind(controller));
 router.get('/:id', controller.buscarPorId.bind(controller));
 router.get('/:id/download', controller.download.bind(controller));
-router.post('/contribuicoes/gerar', controller.gerarContribuicoes.bind(controller));
-router.get('/contribuicoes', controller.listarContribuicoes.bind(controller));
-router.get('/contribuicoes/:id/download', controller.downloadContribuicoes.bind(controller));
 
 export default router;

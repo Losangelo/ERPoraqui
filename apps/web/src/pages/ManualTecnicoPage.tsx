@@ -710,6 +710,122 @@ A validacao do XML e feita contra estes schemas antes do envio.
 - Usado para assinar XML e autenticar na SEFAZ`,
   },
   {
+    id: 'sped-engine',
+    titulo: 'SPED Engine + BlockRegistry',
+    categoria: 'Backend',
+    conteudo: `## SPED Fiscal Engine
+
+O SPED Fiscal foi reescrito usando uma arquitetura **config-driven** com **SpedEngine** e **BlockRegistry**, permitindo adicionar novos blocos sem modificar o nucleo do gerador.
+
+---
+
+### Arquitetura
+
+\`\`\`
+src/
+  shared/
+    sped/
+      SpedEngine.ts        # Motor principal (gera o arquivo .txt)
+      BlockRegistry.ts      # Registro central de blocos
+      blocks/
+        Bloco0.ts           # Bloco 0 - Abertura
+        BlocoC.ts           # Bloco C - Documentos Fiscais
+        BlocoD.ts           # Bloco D - NFSe
+        BlocoE.ts           # Bloco E - Apuracao ICMS
+        BlocoG.ts           # Bloco G - CIAP
+        BlocoH.ts           # Bloco H - Inventario
+\`\`\`
+
+---
+
+### Block Interface
+
+Cada bloco implementa esta interface:
+
+\`\`\`typescript
+interface SpedBlock {
+  id: string
+  nome: string
+  descricao: string
+  obrigatorio: boolean
+
+  gerar(config: SpedConfig): Promise<string>
+}
+\`\`\`
+
+- \`id\`: Identificador unico do bloco (ex: "0", "C", "D")
+- \`gerar(config)\`: Recebe a configuracao e retorna o conteudo do bloco como string
+- \`obrigatorio\`: Se \`true\`, o bloco e incluido sempre (ex: Bloco 0)
+
+---
+
+### Como adicionar um novo bloco
+
+1. Crie um arquivo \`BlocoX.ts\` em \`apps/api/src/shared/sped/blocks/\`
+2. Implemente a interface \`SpedBlock\`
+3. Registre no \`BlockRegistry\`:
+
+\`\`\`typescript
+// BlockRegistry.ts
+import { BlocoX } from './blocks/BlocoX'
+
+export function createBlockRegistry(): Map<string, SpedBlock> {
+  const registry = new Map<string, SpedBlock>()
+  // ... blocos existentes ...
+  registry.set('X', new BlocoX())
+  return registry
+}
+\`\`\`
+
+4. Pronto. O \`SpedEngine\` automaticamente inclui o bloco no arquivo final.
+
+---
+
+### Blocos Disponiveis e Status
+
+| Bloco | Status | Descricao |
+|-------|--------|-----------|
+| Bloco 0 | ✅ OK | Abertura, identificacao, contador, produtos, parceiros, unidades |
+| Bloco C | ✅ OK | NF-e (C100, C170, C190) |
+| Bloco D | ✅ OK | NFSe |
+| Bloco E | ✅ OK | Apuracao ICMS |
+| Bloco G | ✅ OK | CIAP |
+| Bloco H | ✅ OK | Inventario |
+
+---
+
+### Express Controller Pattern
+
+O controller do SPED Fiscal foi reescrito seguindo o padrao **Express com arrow functions** e **try/catch centralizado**:
+
+\`\`\`typescript
+export const gerarSped = async (req: Request, res: Response) => {
+  try {
+    const { empresaId, periodo, blocosSelecionados } = req.body
+    const config = await buscarConfig(empresaId, periodo)
+    const engine = new SpedEngine(createBlockRegistry())
+    const arquivo = await engine.gerar(config, blocosSelecionados)
+    res.json({ success: true, data: { arquivo } })
+  } catch (error) {
+    appLogger.error('Erro ao gerar SPED', error, {
+      category: LogCategory.BUSINESS,
+      action: 'gerar_sped'
+    })
+    res.status(400).json({ success: false, error: (error as Error).message })
+  }
+}
+\`\`\`
+
+#### Por que reescrevemos?
+
+A implementacao anterior era um **unico arquivo monolítico** com ~2000 linhas, onde toda a logica de cada bloco estava misturada. Isso tornava impossivel:
+- Adicionar novos registros sem quebrar os existentes
+- Testar blocos individualmente
+- Reaproveitar registros comuns (ex: registro 0150 de parceiros)
+
+A nova arquitetura resolve tudo com **separacao por bloco** + **registro centralizado** + **inversao de dependencia** (o engine recebe o registry via construtor).`,
+  },
+  {
     id: 'ambiente-dev',
     titulo: 'Setup do Ambiente de Desenvolvimento',
     categoria: 'DevOps',

@@ -157,10 +157,25 @@
 
 ---
 
+### ✅ Concluídos (Novos)
+
+- [x] **Spec SPED.md:** docs/specs/SPED.md — Especificação técnica completa do SPED Fiscal (config-driven, blocos 0/C/D/E/G/H, motor TXT)
+- [x] **Spec MDFE.md:** docs/specs/MDFE.md — Especificação técnica do MDF-e (modelo 58, documento composto, ciclo SEFAZ)
+- [x] **Plano de Ação Futuro:** docs/plano_acao_futuro.md — Plano de 8 etapas para módulos pendentes
+- [x] **SPED Fiscal — Backend reescrito:** Controller Express pattern, service com BlockRegistry/SpedEngine, blocos 0/C/D/E/G/H implementados
+- [x] **SPED Config:** Modelo SpedConfig + SpedApuracao no Prisma, endpoints GET/PUT /sped-fiscal/config
+- [x] **SPED Blocos:** Endpoint /sped-fiscal/blocos com status de cada bloco (pronto/parcial/pendente)
+- [x] **SPED Frontend atualizado:** SpedFiscalPage com cards de blocos, seleção ativa/desativa, histórico, download
+- [x] **SPED Sidebar:** Item "SPED Fiscal" adicionado ao menu Fiscal
+- [x] **SPED Rotas registradas:** /api/v1/sped-fiscal registrado em main.ts
+
+---
+
 ### 🔴 Em Andamento
 
-1. SPED Fiscal — Blocos C, D, E, G, H completos (atual: ~25%)
-2. MDF-e — 0% implementado
+1. MDF-e — 0% implementado (spec pronta, aguardando implementação)
+2. Motor de Relatórios Genérico
+3. Contratos + Garantias + Devoluções
 
 ---
 

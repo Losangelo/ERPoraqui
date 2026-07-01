@@ -131,6 +131,7 @@ const menuCategorias: CategoriaMenu[] = [
     nome: 'Fiscal',
     icone: BarChart3,
     items: [
+      { id: 'sped-fiscal', label: 'SPED Fiscal', icon: FileText, path: '/sped-fiscal', categoria: 'relatorios' },
       { id: 'relatorios', label: 'Relatórios', icon: BarChart3, path: '/relatorios', categoria: 'relatorios' },
       { id: 'notas-fiscais', label: 'NF-e', icon: FileText, path: '/notas-fiscais', categoria: 'relatorios' },
       { id: 'nfce', label: 'NFC-e', icon: FileText, path: '/nfce', categoria: 'relatorios' },

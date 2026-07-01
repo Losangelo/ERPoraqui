@@ -1634,6 +1634,59 @@ Os relatorios fiscais sao importantes para:
 Consulte seu contador regularmente.`,
   },
   {
+    id: 'sped-fiscal-uso',
+    titulo: 'SPED Fiscal',
+    categoria: 'Fiscal',
+    conteudo: `## SPED Fiscal
+
+O SPED Fiscal (Sistema Publico de Escrituracao Digital) e o arquivo digital que substitui a escrituracao fiscal em papel. Ele contem todos os registros de entrada, saida, apuracao de ICMS/IPI e inventario do periodo.
+
+---
+
+### Quem precisa gerar?
+
+Todas as empresas do **regime normal (Lucro Real/Presumido)** obrigadas a escrituracao fiscal precisam entregar o SPED Fiscal mensalmente. Empresas do **Simples Nacional** podem estar dispensadas (verifique o Ato Declaratorio da SEFAZ do seu estado).
+
+---
+
+### Como gerar no sistema
+
+1. **Periodo:** Va em **Fiscal > SPED Fiscal** e selecione o mes/ano desejado
+2. **Blocos:** Escolha quais blocos incluir no arquivo (veja abaixo as opcoes)
+3. **Ativar/Desativar:** Clique nos **cards coloridos** para ativar ou desativar cada bloco
+4. **Gerar:** Apos definir os blocos, clique em **Gerar SPED**
+5. **Download:** O sistema processa e disponibiliza o arquivo .txt para download
+
+---
+
+### Blocos Disponiveis
+
+| Bloco | Descricao | Obrigatorio |
+|-------|-----------|-------------|
+| **Bloco 0** | Abertura, identificacao da empresa, contador, produtos, parceiros, unidades | Sim |
+| **Bloco C** | Documentos fiscais (NF-e, NFC-e) - entradas e saidas | Sim |
+| **Bloco D** | Documentos fiscais de servicos (NFSe) | Quando houver |
+| **Bloco E** | Apuracao do ICMS (periodo mensal) | Sim |
+| **Bloco G** | CIAP - Controle de Credito de ICMS do Ativo Permanente | Quando houver |
+| **Bloco H** | Inventario fisico (estoque) | Anual |
+
+---
+
+### Prazo de Entrega
+
+O SPED Fiscal deve ser entregue ate o **dia 15 do mes seguinte** ao periodo de apuracao. Se o dia 15 cair em fim de semana ou feriado, o prazo e prorrogado ao proximo dia util (conforme calendario SEFAZ).
+
+---
+
+### Dicas Importantes
+
+- **Ative apenas os blocos necessarios** para gerar um arquivo mais rapido e leve
+- **Clique nos cards** para ativar/desativar blocos — cards verdes estao ativos, cards cinza estao inativos
+- O **Bloco 0** e sempre obrigatorio e nao pode ser desativado
+- Antes de gerar, concilie o movimento do periodo no modulo **Fiscal > Movimentos**
+- Em caso de erros, o sistema exibe quais registros precisam ser corrigidos`,
+  },
+  {
     id: 'logs-sistema',
     titulo: 'Logs do Sistema',
     categoria: 'Sistema',

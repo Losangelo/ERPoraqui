@@ -106,6 +106,13 @@
 | FilialSelect NFCe | apps/web/src/pages/nfce/NFCePage.tsx | Seletor filial integrado | ✅ |
 | FilialSelect NFSe | apps/web/src/pages/nfse/NFSePage.tsx | Seletor filial integrado (substitui text input) | ✅ |
 | FilialSelect NF-e | apps/web/src/pages/notas-fiscais/NotasFiscaisPage.tsx | Seletor filial integrado | ✅ |
+| Spec SPED | docs/specs/SPED.md | Especificação técnica SPED Fiscal config-driven | ✅ |
+| Spec MDF-e | docs/specs/MDFE.md | Especificação técnica MDF-e modelo 58 | ✅ |
+| Plano Ação Futuro | docs/plano_acao_futuro.md | Plano 8 etapas módulos pendentes | ✅ |
+| SPED Fiscal API | apps/api/src/modules/sped-fiscal/ | SpedEngine + blocos 0/C/D/E/G/H | ✅ |
+| SPED Config | apps/api/prisma/schema.prisma | Modelo SpedConfig + SpedApuracao | ✅ |
+| SPED Frontend | apps/web/src/pages/fiscal/SpedFiscalPage.tsx | Cards blocos, seleção, histórico, download | ✅ |
+| SPED Sidebar | apps/web/src/components/layout/Sidebar.tsx | Item SPED Fiscal no menu Fiscal | ✅ |
 
 ---
 
@@ -134,6 +141,7 @@
 ## Histórico de Atualizações
 
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
+- **01/07/2026 (tarde)**: Specs SPED.md + MDFE.md + Plano de Ação Futuro + SPED Fiscal reescrito (Engine with blocks 0/C/D/E/G/H, SpedConfig/SpedApuracao models, controller Express pattern, frontend completo, sidebar).
 - **30/06/2026 (madrugada)**: Correção 403/400/PDV404/PlanoContas404 + Exportação (CSV, JSON, XLSX, PDF em 5 relatórios) + Input Hints em 5 páginas + Spec EXPORTACAO.md.
 - **30/06/2026 (tarde)**: Correção 12 bugs + Testes 62 testes (36 API + 26 WEB) + Temas premium.
 - **30/06/2026 (noite)**: Estoque Avançado (grades, lotes, tabelas preço), CNAB 240/400, Cheques, Centro de Custo — API + Frontend + 4 specs + Correção 30+ erros TS. Pronto para deploy.

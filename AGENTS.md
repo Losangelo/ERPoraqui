@@ -321,6 +321,25 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ API CRUD + árvore hierárquica
 - ✅ Frontend CentrosCustoPage com visualização em árvore
 
+### Status Atual SPED Fiscal
+- ✅ Spec SPED.md criada (config-driven, blocos 0/C/D/E/G/H)
+- ✅ Modelos Prisma: SpedConfig + SpedApuracao
+- ✅ Controller Express pattern (arrow functions, try/catch)
+- ✅ SpedEngine + BlockRegistry (geração modular)
+- ✅ Bloco 0: abertura, parceiros, produtos, unidades, contador
+- ✅ Bloco C: NF-e (C100, C170, C190)
+- ✅ Bloco D: NFSe
+- ✅ Bloco E: apuração ICMS
+- ✅ Bloco G: CIAP
+- ✅ Bloco H: inventário
+- ✅ Frontend SpedFiscalPage: cards blocos, seleção, histórico, download
+- ✅ Sidebar: item SPED Fiscal no menu Fiscal
+- ✅ Rotas /api/v1/sped-fiscal registradas
+
+### Status Atual MDF-e
+- ✅ Spec MDFE.md criada (modelo 58, documento composto)
+- ⏳ Implementação pendente (próximo passo)
+
 ### Status Atual PDV
 - ✅ PDV completo (PdvPage + pdv.ts service)
 - ✅ Carrinho funcional: busca por código de barras, busca por nome, grid de resultados
@@ -342,6 +361,14 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 ### Status Atual Manuais
 - ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
 - ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
+
+### Novidades (01/07/2026 tarde)
+- Specs SPED.md + MDFE.md + plano_acao_futuro.md criadas
+- SPED Fiscal reescrito: Engine with 6 blocos (0, C, D, E, G, H), controller Express pattern
+- SpedConfig/SpedApuracao adicionados ao Prisma schema
+- Frontend SpedFiscalPage completo com cards/blocos/histórico/download
+- Sidebar: item SPED Fiscal
+- Rotas /api/v1/sped-fiscal registradas
 
 ### Correções Recentes (01/07/2026)
 - PDV completo implementado (antes estava como stub)

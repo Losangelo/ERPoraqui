@@ -1,62 +1,110 @@
-import { Controller, Get, Post, Body, Param, Query, Req, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { SpedFiscalService } from './sped-fiscal.service';
-import { gerarSpedFiscalSchema, gerarSpedContribuicoesSchema, spedFiscalFiltroSchema, GerarSpedFiscalInput, GerarSpedContribuicoesInput, SpedFiscalFiltro } from './dto/sped-fiscal.dto';
+import { AuthRequest } from '@/shared/middleware/auth.middleware';
+import {
+  gerarSpedFiscalSchema,
+  spedFiscalFiltroSchema,
+  spedConfigSchema,
+} from './dto/sped-fiscal.dto';
 
-interface AuthRequest {
-  usuario?: { empresaId: string };
-}
-
-@Controller('sped-fiscal')
 export class SpedFiscalController {
-  constructor(private readonly spedFiscalService: SpedFiscalService) {}
+  private readonly service = new SpedFiscalService();
 
-  @Post('gerar')
-  async gerar(@Body() data: GerarSpedFiscalInput, @Req() req: AuthRequest) {
-    const empresaId = req.usuario?.empresaId;
-    return this.spedFiscalService.gerarSpedFiscal(data, empresaId);
-  }
+  gerar = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+      const dados = gerarSpedFiscalSchema.parse(req.body);
+      const resultado = await this.service.gerarSpedFiscal(dados, empresaId);
+      return res.json({ success: true, data: resultado });
+    } catch (error: any) {
+      return res.status(400).json({ success: false, error: { code: 'ERROR', message: error.message } });
+    }
+  };
 
-  @Get('listar')
-  async listar(@Query() filtros: SpedFiscalFiltro, @Req() req: AuthRequest) {
-    const empresaId = req.usuario?.empresaId;
-    return this.spedFiscalService.listar(filtros, empresaId);
-  }
+  listar = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+      const filtros = spedFiscalFiltroSchema.parse({
+        pagina: Number(req.query.pagina) || 1,
+        limite: Number(req.query.limite) || 20,
+        periodoIni: req.query.periodoIni,
+        periodoFin: req.query.periodoFin,
+        situacao: req.query.situacao,
+      });
+      const resultado = await this.service.listar(filtros, empresaId);
+      return res.json({ success: true, ...resultado });
+    } catch (error: any) {
+      return res.status(400).json({ success: false, error: { code: 'ERROR', message: error.message } });
+    }
+  };
 
-  @Get(':id')
-  async buscarPorId(@Param('id') id: string, @Req() req: AuthRequest) {
-    const empresaId = req.usuario?.empresaId;
-    return this.spedFiscalService.buscarPorId(id, empresaId);
-  }
+  buscarPorId = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+      const resultado = await this.service.buscarPorId(req.params.id, empresaId);
+      return res.json({ success: true, data: resultado });
+    } catch (error: any) {
+      return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: error.message } });
+    }
+  };
 
-  @Get(':id/download')
-  async download(@Param('id') id: string, @Req() req: AuthRequest, @Res() res: any) {
-    const empresaId = req.usuario?.empresaId;
-    const arquivo = await this.spedFiscalService.download(id, empresaId);
-    
-    res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Content-Disposition', `attachment; filename="${arquivo.nome}"`);
-    res.send(arquivo.arquivo);
-  }
+  download = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+      const arquivo = await this.service.download(req.params.id, empresaId);
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="${arquivo.nome}"`);
+      return res.send(arquivo.arquivo);
+    } catch (error: any) {
+      return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: error.message } });
+    }
+  };
 
-  @Post('contribuicoes/gerar')
-  async gerarContribuicoes(@Body() data: GerarSpedContribuicoesInput, @Req() req: AuthRequest) {
-    const empresaId = req.usuario?.empresaId;
-    return this.spedFiscalService.gerarSpedContribuicoes(data, empresaId);
-  }
+  getConfig = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+      const config = await this.service.getConfig(empresaId);
+      return res.json({ success: true, data: config });
+    } catch (error: any) {
+      return res.status(400).json({ success: false, error: { code: 'ERROR', message: error.message } });
+    }
+  };
 
-  @Get('contribuicoes/listar')
-  async listarContribuicoes(@Query() filtros: SpedFiscalFiltro, @Req() req: AuthRequest) {
-    const empresaId = req.usuario?.empresaId;
-    return this.spedFiscalService.listarContribuicoes(filtros, empresaId);
-  }
+  updateConfig = async (req: AuthRequest, res: Response) => {
+    try {
+      const empresaId = req.usuario?.empresaId;
+      if (!empresaId) {
+        return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
+      }
+      const dados = spedConfigSchema.parse(req.body);
+      const config = await this.service.updateConfig(empresaId, dados);
+      return res.json({ success: true, data: config });
+    } catch (error: any) {
+      return res.status(400).json({ success: false, error: { code: 'ERROR', message: error.message } });
+    }
+  };
 
-  @Get('contribuicoes/:id/download')
-  async downloadContribuicoes(@Param('id') id: string, @Req() req: AuthRequest, @Res() res: any) {
-    const empresaId = req.usuario?.empresaId;
-    const arquivo = await this.spedFiscalService.downloadContribuicoes(id, empresaId);
-    
-    res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Content-Disposition', `attachment; filename="${arquivo.nome}"`);
-    res.send(arquivo.arquivo);
-  }
+  listarBlocos = async (_req: AuthRequest, res: Response) => {
+    try {
+      const blocos = this.service.listarBlocos();
+      return res.json({ success: true, data: blocos });
+    } catch (error: any) {
+      return res.status(400).json({ success: false, error: { code: 'ERROR', message: error.message } });
+    }
+  };
 }

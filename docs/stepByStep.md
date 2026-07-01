@@ -110,6 +110,32 @@
 
 ---
 
+## 01/07/2026 (tarde) — Specs SPED + MDFE + SPED Fiscal Engine Completo
+
+### Specs Criadas
+- **docs/specs/SPED.md** (360 linhas): Arquitetura config-driven, registro de blocos, BlockRegistry/SpedEngine, blocos 0/C/D/E/G/H/K/1, validação PVA, versões de layout
+- **docs/specs/MDFE.md** (240 linhas): Modelo 58, documento composto, ciclo emissão→autorização→encerramento, módulo transporte, DAMDFE PDF
+- **docs/plano_acao_futuro.md**: Plano de 8 etapas para implementação dos módulos pendentes
+
+### SPED Fiscal — Motor Completo
+- **Prisma**: Adicionados modelos SpedConfig (config por empresa) e SpedApuracao (apuração ICMS/IPI)
+- **Controller reescrito**: Padrão Express com arrow functions e try/catch (consistente com Cheques)
+- **Service reescrito**: SpedEngine com BlockRegistry (0, C, D, E, G, H)
+  - Bloco 0: abertura, parceiros (clientes/fornecedores), unidades, produtos, contador
+  - Bloco C: documentos fiscais NF-e (C100, C170, C190)
+  - Bloco D: notas de serviço NFSe (D100)
+  - Bloco E: apuração ICMS (E100, E110)
+  - Bloco G: controle crédito (G110)
+  - Bloco H: inventário (H010)
+- **Config**: GET/PUT /sped-fiscal/config, GET /sped-fiscal/blocos (status por bloco)
+- **Rotas registradas**: /api/v1/sped-fiscal adicionado em main.ts
+
+### SPED Fiscal — Frontend
+- SpedFiscalPage reescrita: cards com blocos (clique ativa/desativa), período selector, histórico com download
+- Sidebar: item "SPED Fiscal" adicionado ao menu Fiscal
+
+---
+
 ## 03/06/2026 — Criação do Plano de Ação Completo
 
 - Realizado diagnóstico completo comparando fontes xHarbour originais (`fontesPRG/`, 496 arquivos) vs implementação TypeScript moderna (`apps/api/`, `apps/web/`)

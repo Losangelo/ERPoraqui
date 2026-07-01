@@ -1568,6 +1568,44 @@ enum PadraoNF {
 // SPED FISCAL
 // =====================================================
 
+model SpedConfig {
+  id               String   @id @default(cuid()) @map("_id")
+  empresaId        String   @unique
+  filialId         String?
+  versao           String   @default("017")
+  perfil           String   @default("A")
+  finalidade       String   @default("1")
+  blocosAtivos     Json     @default("[\"0\",\"C\",\"D\",\"E\",\"G\",\"H\"]")
+  tipoEscrituracao String   @default("0")
+  cnpjContador     String?
+  contatoContador  String?
+  dataCriacao      DateTime @default(now())
+  dataAtualizacao  DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("sped_config")
+}
+
+model SpedApuracao {
+  id           String   @id @default(cuid()) @map("_id")
+  empresaId    String
+  periodo      DateTime
+  tipo         String   // ICMS, IPI, PIS, COFINS
+  debitos      Decimal  @default(0)
+  creditos     Decimal  @default(0)
+  saldoAnterior Decimal @default(0)
+  saldoFinal   Decimal  @default(0)
+  blocos       Json?
+  dataCriacao  DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@unique([empresaId, periodo, tipo])
+  @@map("sped_apuracao")
+}
+
 model SpedFiscal {
   id              String       @id @default(cuid()) @map("_id")
   empresaId       String
