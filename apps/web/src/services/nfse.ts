@@ -127,7 +127,7 @@ export const nfseService = {
     if (filtros.limite) params.append('limit', filtros.limite.toString());
     if (filtros.empresaId) params.append('empresaId', filtros.empresaId);
     const response = await api.get(`/nfse?${params.toString()}`);
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {

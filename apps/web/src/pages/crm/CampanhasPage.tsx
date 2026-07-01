@@ -296,7 +296,7 @@ export function CampanhasPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Campanha</DialogTitle>
           </DialogHeader>
@@ -317,7 +317,7 @@ export function CampanhasPage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="nome">Nome da Campanha</Label>
-                <Input id="nome" name="nome" required />
+                <Input id="nome" name="nome" required placeholder="Ex: Campanha de Natal 2026" title="Nome identificador da campanha" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="descricao">Descrição</Label>

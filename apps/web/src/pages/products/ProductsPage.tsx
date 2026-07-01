@@ -150,6 +150,7 @@ export function ProductsPage() {
             <Input
               type="text"
               placeholder="Buscar produtos..."
+              title="Buscar pelo nome do produto"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
@@ -235,7 +236,7 @@ export function ProductsPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {editingProduto ? 'Editar Produto' : 'Novo Produto'}
@@ -248,6 +249,8 @@ export function ProductsPage() {
                 <Input
                   id="codigoInterno"
                   type="text"
+                  placeholder="Código interno do produto"
+                  title="SKU ou código interno"
                   value={formData.codigoInterno}
                   onChange={(e) => setFormData({ ...formData, codigoInterno: e.target.value })}
                   required
@@ -258,6 +261,8 @@ export function ProductsPage() {
                 <Input
                   id="codigoBarras"
                   type="text"
+                  placeholder="Código de barras do produto"
+                  title="Código de barras (EAN-13)"
                   value={formData.codigoBarras}
                   onChange={(e) => setFormData({ ...formData, codigoBarras: e.target.value })}
                 />
@@ -267,6 +272,8 @@ export function ProductsPage() {
                 <Input
                   id="gtin"
                   type="text"
+                  placeholder="GTIN do produto"
+                  title="Global Trade Item Number"
                   value={formData.gtin}
                   onChange={(e) => setFormData({ ...formData, gtin: e.target.value })}
                 />
@@ -276,6 +283,8 @@ export function ProductsPage() {
                 <Input
                   id="nome"
                   type="text"
+                  placeholder="Nome completo do produto"
+                  title="Nome do produto"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                   required
@@ -286,6 +295,8 @@ export function ProductsPage() {
                 <Input
                   id="descricao"
                   type="text"
+                  placeholder="Descrição detalhada do produto"
+                  title="Descrição do produto"
                   value={formData.descricao}
                   onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
                 />
@@ -295,6 +306,8 @@ export function ProductsPage() {
                 <Input
                   id="ncm"
                   type="text"
+                  placeholder="0000.00.00"
+                  title="NCM com 8 dígitos"
                   value={formData.ncm}
                   onChange={(e) => setFormData({ ...formData, ncm: e.target.value })}
                   maxLength={8}
@@ -305,6 +318,8 @@ export function ProductsPage() {
                 <Input
                   id="cest"
                   type="text"
+                  placeholder="00.000.00"
+                  title="CEST do produto"
                   value={formData.cest}
                   onChange={(e) => setFormData({ ...formData, cest: e.target.value })}
                 />
@@ -314,6 +329,8 @@ export function ProductsPage() {
                 <Input
                   id="origenMercadoria"
                   type="text"
+                  placeholder="Nacional, Importada..."
+                  title="Origem da mercadoria"
                   value={formData.origenMercadoria}
                   onChange={(e) => setFormData({ ...formData, origenMercadoria: e.target.value as any })}
                 />
@@ -323,6 +340,8 @@ export function ProductsPage() {
                 <Input
                   id="precoCusto"
                   type="number"
+                  placeholder="0,00"
+                  title="Use vírgula para centavos"
                   value={formData.precoCusto}
                   onChange={(e) => setFormData({ ...formData, precoCusto: Number(e.target.value) })}
                   min="0"
@@ -334,6 +353,8 @@ export function ProductsPage() {
                 <Input
                   id="precoVenda"
                   type="number"
+                  placeholder="0,00"
+                  title="Use vírgula para centavos"
                   value={formData.precoVenda}
                   onChange={(e) => setFormData({ ...formData, precoVenda: Number(e.target.value) })}
                   min="0"
@@ -346,6 +367,8 @@ export function ProductsPage() {
                 <Input
                   id="precoMinimo"
                   type="number"
+                  placeholder="0,00"
+                  title="Use vírgula para centavos"
                   value={formData.precoMinimo}
                   onChange={(e) => setFormData({ ...formData, precoMinimo: Number(e.target.value) })}
                   min="0"
@@ -357,6 +380,8 @@ export function ProductsPage() {
                 <Input
                   id="quantidadeEstoque"
                   type="number"
+                  placeholder="Quantidade em estoque"
+                  title="Quantidade atual em estoque"
                   value={formData.quantidadeEstoque}
                   onChange={(e) => setFormData({ ...formData, quantidadeEstoque: Number(e.target.value) })}
                   min="0"
@@ -368,6 +393,8 @@ export function ProductsPage() {
                 <Input
                   id="estoqueMinimo"
                   type="number"
+                  placeholder="Estoque mínimo permitido"
+                  title="Quantidade mínima em estoque"
                   value={formData.estoqueMinimo}
                   onChange={(e) => setFormData({ ...formData, estoqueMinimo: Number(e.target.value) })}
                   min="0"
@@ -379,6 +406,8 @@ export function ProductsPage() {
                 <Input
                   id="estoqueMaximo"
                   type="number"
+                  placeholder="Estoque máximo permitido"
+                  title="Quantidade máxima em estoque"
                   value={formData.estoqueMaximo}
                   onChange={(e) => setFormData({ ...formData, estoqueMaximo: Number(e.target.value) })}
                   min="0"

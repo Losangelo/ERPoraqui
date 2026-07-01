@@ -209,7 +209,7 @@ export function EntradasPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Entrada de Mercadoria</DialogTitle>
           </DialogHeader>

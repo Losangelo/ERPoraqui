@@ -52,7 +52,7 @@ export const produtosVariacoesService = {
     params.append('limite', String(filtros.limite || 100));
 
     const response = await api.get<ProdutosVariacoesResponse>(`/produtos-variacoes?${params}`);
-    return response.data?.dados || [];
+    return response.data?.data || [];
   },
 
   buscarPorId: async (id: string) => {

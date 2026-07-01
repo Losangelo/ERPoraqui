@@ -223,7 +223,7 @@ export function UsuariosPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {editando ? 'Editar Usuário' : 'Novo Usuário'}
@@ -238,6 +238,8 @@ export function UsuariosPage() {
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                 required
+                placeholder="Nome completo do usuário"
+                title="Informe o nome completo"
               />
             </div>
             <div className="grid gap-2">
@@ -248,6 +250,8 @@ export function UsuariosPage() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                placeholder="usuario@exemplo.com"
+                title="Formato: email@provedor.com"
               />
             </div>
             <div className="grid gap-2">
@@ -261,6 +265,8 @@ export function UsuariosPage() {
                 onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
                 required={!editando}
                 minLength={6}
+                placeholder="Mínimo de 6 caracteres"
+                title="A senha deve ter no mínimo 6 caracteres"
               />
             </div>
             <div className="grid gap-2">

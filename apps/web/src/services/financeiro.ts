@@ -13,7 +13,7 @@ export const financeiroService = {
   // Contas a Receber
   listarReceber: async (params?: any) => {
     const response = await api.get('/financeiro/contas-receber', { params });
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
   criarReceber: (data: any) => api.post('/financeiro/contas-receber', data),
   buscarReceber: (id: string) => api.get(`/financeiro/contas-receber/${id}`),
@@ -23,7 +23,7 @@ export const financeiroService = {
   // Contas a Pagar
   listarPagar: async (params?: any) => {
     const response = await api.get('/financeiro/contas-pagar', { params });
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
   criarPagar: (data: any) => api.post('/financeiro/contas-pagar', data),
   buscarPagar: (id: string) => api.get(`/financeiro/contas-pagar/${id}`),

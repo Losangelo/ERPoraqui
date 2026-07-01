@@ -83,7 +83,7 @@ export const produtosService = {
     params.append('limite', String(filtros.limite || 100));
     
     const response = await api.get<ProdutosResponse>(`/produtos?${params}`);
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {

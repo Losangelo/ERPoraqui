@@ -15,6 +15,8 @@ import { RelatoriosFiscaisPage } from '@/pages/relatorios/RelatoriosFiscaisPage'
 import { LogsPage } from '@/pages/logs/LogsPage';
 import AjudaPage from '@/pages/AjudaPage';
 import ManualPage from '@/pages/ManualPage';
+import ManualTecnicoPage from '@/pages/ManualTecnicoPage';
+import FiliaisPage from '@/pages/FiliaisPage';
 import { LoginPage } from '@/pages/LoginPage';
 import OrcamentosPage from '@/pages/OrcamentosPage';
 import BoletosPage from '@/pages/BoletosPage';
@@ -111,8 +113,10 @@ function AppRoutes() {
             <Route path="/logs" element={<LogsPage />} />
             <Route path="/ajuda" element={<AjudaPage />} />
             <Route path="/manual" element={<ManualPage />} />
+            <Route path="/manual-tecnico" element={<ManualTecnicoPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/parametros" element={<ParametrosPage />} />
+            <Route path="/filiais" element={<FiliaisPage />} />
             <Route path="/produtos-variacoes" element={<ProdutosVariacoesPage />} />
             <Route path="/produtos-lotes" element={<ProdutosLotesPage />} />
           </Routes>

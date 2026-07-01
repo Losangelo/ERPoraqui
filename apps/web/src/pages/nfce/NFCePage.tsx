@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { nfceService, NFCe, NFCeFiltros, CriarNFCeDto } from '@/services/nfce';
 import { clientesService, Cliente } from '@/services/clientes';
 import { produtosService, Produto } from '@/services/produtos';
+import { FilialSelect } from '@/components/FilialSelect';
 import { FileText, Plus, Send, XCircle, CheckCircle, QrCode, Trash2 } from 'lucide-react';
 
 const situacoes: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning' }> = {
@@ -305,7 +306,7 @@ export default function NFCePage() {
 
       {/* Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova NFC-e</DialogTitle>
           </DialogHeader>
@@ -317,6 +318,10 @@ export default function NFCePage() {
             
             <TabsContent value="dados" className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Filial</Label>
+                  <FilialSelect value={formData.filialId} onValueChange={v => setFormData({...formData, filialId: v})} placeholder="Selecione a filial" />
+                </div>
                 <div className="grid gap-2">
                   <Label>Cliente</Label>
                   <Select value={formData.clienteId || 'consumidor-final'} onValueChange={(v) => setFormData({...formData, clienteId: v === 'consumidor-final' ? '' : v})}>

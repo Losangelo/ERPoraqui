@@ -32,8 +32,8 @@ export const produtoFiltroSchema = z.object({
   codigoBarras: z.string().optional(),
   categoriaId: z.string().optional(),
   ativo: z.boolean().optional(),
-  pagina: z.number().min(1).default(1),
-  limite: z.number().min(1).max(100).default(20),
+  pagina: z.coerce.number().min(1).default(1),
+  limite: z.coerce.number().min(1).max(500).default(20),
 });
 
 export type CriarProdutoInput = z.infer<typeof criarProdutoSchema>;

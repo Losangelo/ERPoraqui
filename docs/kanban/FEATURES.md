@@ -92,6 +92,20 @@
 | Spec CNAB | docs/specs/BOLETOS_CNAB.md | Especificação CNAB 240/400 | ✅ |
 | Spec Cheques | docs/specs/CHEQUES.md | Especificação cheques | ✅ |
 | Spec Centro Custo | docs/specs/CENTRO_CUSTO.md | Especificação centro de custo | ✅ |
+| Exportação | apps/web/src/components/export/ExportButton.tsx | Componente reutilizável de exportação (CSV/JSON/XLSX/PDF) | ✅ |
+| Exportação util | apps/web/src/utils/export.ts | Funções utilitárias para exportar dados | ✅ |
+| Spec Exportação | docs/specs/EXPORTACAO.md | Especificação módulo exportação | ✅ |
+| Manual Técnico | apps/web/src/pages/ManualTecnicoPage.tsx | Documentação técnica p/ devs c/ senha 2145 | ✅ |
+| Manual Usuário atualizado | apps/web/src/pages/ManualPage.tsx | +13 seções (Multi-empresa, CRM, Automação, etc.) | ✅ |
+| PDV Interface Completa | apps/web/src/pages/PdvPage.tsx | Carrinho, barcode, pagamento, troco | ✅ |
+| PDV Service | apps/web/src/services/pdv.ts | buscarPorCodigoBarras, removerItem, atualizarQuantidade | ✅ |
+| Filial CRUD Backend | apps/api/src/modules/empresas | POST/PUT/DELETE /empresas/:id/filiais | ✅ |
+| Filial DTO | apps/api/src/modules/empresas/dto/filial.dto.ts | Zod schemas para filial | ✅ |
+| Filiais Frontend | apps/web/src/pages/FiliaisPage.tsx | Página CRUD filiais | ✅ |
+| FilialSelect Component | apps/web/src/components/FilialSelect.tsx | Seletor reutilizável empresas+filiais | ✅ |
+| FilialSelect NFCe | apps/web/src/pages/nfce/NFCePage.tsx | Seletor filial integrado | ✅ |
+| FilialSelect NFSe | apps/web/src/pages/nfse/NFSePage.tsx | Seletor filial integrado (substitui text input) | ✅ |
+| FilialSelect NF-e | apps/web/src/pages/notas-fiscais/NotasFiscaisPage.tsx | Seletor filial integrado | ✅ |
 
 ---
 
@@ -119,6 +133,8 @@
 
 ## Histórico de Atualizações
 
+- **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
+- **30/06/2026 (madrugada)**: Correção 403/400/PDV404/PlanoContas404 + Exportação (CSV, JSON, XLSX, PDF em 5 relatórios) + Input Hints em 5 páginas + Spec EXPORTACAO.md.
 - **30/06/2026 (tarde)**: Correção 12 bugs + Testes 62 testes (36 API + 26 WEB) + Temas premium.
 - **30/06/2026 (noite)**: Estoque Avançado (grades, lotes, tabelas preço), CNAB 240/400, Cheques, Centro de Custo — API + Frontend + 4 specs + Correção 30+ erros TS. Pronto para deploy.
 - **04/03/2026**: Implementado License Guard com verificação automática de limites (clientes, produtos, usuários, notas). Adicionada API Pública com proteção por licença (PREMIUM).

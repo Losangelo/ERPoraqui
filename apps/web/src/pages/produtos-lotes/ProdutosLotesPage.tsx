@@ -184,7 +184,8 @@ export function ProdutosLotesPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Buscar lotes..."
+                placeholder="Buscar lotes por código ou produto..."
+                title="Digite o código do lote ou nome do produto"
                 className="pl-10"
               />
             </div>
@@ -298,7 +299,7 @@ export function ProdutosLotesPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {editingLote ? 'Editar Lote' : 'Novo Lote'}
@@ -331,6 +332,8 @@ export function ProdutosLotesPage() {
                   type="text"
                   value={formData.codigoLote}
                   onChange={(e) => setFormData({ ...formData, codigoLote: e.target.value })}
+                  placeholder="Ex: LOTE-2025-001"
+                  title="Código alfanumérico único para identificar o lote"
                   required
                 />
               </div>
@@ -341,6 +344,8 @@ export function ProdutosLotesPage() {
                   type="date"
                   value={formData.dataFabricacao}
                   onChange={(e) => setFormData({ ...formData, dataFabricacao: e.target.value })}
+                  placeholder="Selecione a data de fabricação"
+                  title="Data em que o lote foi fabricado"
                 />
               </div>
               <div className="space-y-2">
@@ -350,6 +355,8 @@ export function ProdutosLotesPage() {
                   type="date"
                   value={formData.dataValidade}
                   onChange={(e) => setFormData({ ...formData, dataValidade: e.target.value })}
+                  placeholder="Selecione a data de validade"
+                  title="Data em que o lote expira"
                 />
               </div>
               <div className="space-y-2">
@@ -359,6 +366,8 @@ export function ProdutosLotesPage() {
                   type="number"
                   value={formData.quantidade}
                   onChange={(e) => setFormData({ ...formData, quantidade: Number(e.target.value) })}
+                  placeholder="Quantidade disponível em estoque"
+                  title="Apenas números inteiros. Ex: 150"
                   min="0"
                   step="1"
                   required
@@ -371,6 +380,8 @@ export function ProdutosLotesPage() {
                   type="number"
                   value={formData.quantidadeOriginal}
                   onChange={(e) => setFormData({ ...formData, quantidadeOriginal: Number(e.target.value) })}
+                  placeholder="Quantidade recebida inicialmente"
+                  title="Quantidade total recebida na entrada do lote. Ex: 500"
                   min="0"
                   step="1"
                   required
@@ -383,6 +394,8 @@ export function ProdutosLotesPage() {
                   type="number"
                   value={formData.custoUnitario}
                   onChange={(e) => setFormData({ ...formData, custoUnitario: Number(e.target.value) })}
+                  placeholder="Ex: 25,50"
+                  title="Valor por unidade em reais. Ex: 25,50 para R$ 25,50"
                   min="0"
                   step="0.01"
                 />
@@ -405,7 +418,7 @@ export function ProdutosLotesPage() {
       </Dialog>
 
       <Dialog open={showAjusteModal} onOpenChange={setShowAjusteModal}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Ajustar Estoque</DialogTitle>
           </DialogHeader>
@@ -421,6 +434,8 @@ export function ProdutosLotesPage() {
                 type="number"
                 value={ajusteQuantidade}
                 onChange={(e) => setAjusteQuantidade(Number(e.target.value))}
+                placeholder="Nova quantidade em estoque"
+                title="Valor total após o ajuste. Apenas números inteiros. Ex: 200"
                 min="0"
                 step="1"
                 required
@@ -434,6 +449,7 @@ export function ProdutosLotesPage() {
                 value={ajusteMotivo}
                 onChange={(e) => setAjusteMotivo(e.target.value)}
                 placeholder="Ex: Ajuste manual de inventário"
+                title="Descreva o motivo do ajuste de estoque"
               />
             </div>
             <DialogFooter>

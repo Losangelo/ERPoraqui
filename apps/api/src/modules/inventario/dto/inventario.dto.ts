@@ -30,8 +30,8 @@ export const inventarioFiltroSchema = z.object({
   situacao: z.enum(['ABERTO', 'EM_CONFERENCIA', 'CONCLUIDO', 'CANCELADO']).optional(),
   dataInicial: z.date().optional(),
   dataFinal: z.date().optional(),
-  pagina: z.number().default(1),
-  limite: z.number().default(20),
+  pagina: z.coerce.number().min(1).default(1),
+  limite: z.coerce.number().min(1).default(20),
 });
 
 export type CriarInventarioInput = z.infer<typeof criarInventarioSchema>;

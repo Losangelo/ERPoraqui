@@ -64,6 +64,7 @@ Você é o guardião da integridade do projeto a longo prazo:
 2. **Não apague** tabelas ou rotas sem autorização explícita.
 3. **Confirmação:** Após salvar, sempre mostre o bloco de código **FINAL COMPLETO** para revisão do usuário.
 4. **Commit:** Apenas faça commit quando solicitado pelo usuário.
+5. **Input Hints (placeholder descritivo):** Todo `<Input>` deve ter um `placeholder` com descrição detalhada do campo (ex: "Nome completo do cliente" em vez de apenas "Nome"). Use `title` para dicas adicionais se o campo tiver formato específico (ex: "Formato: (99) 99999-9999"). Campos de texto longo devem usar `<textarea>` com `placeholder` descritivo. Essa regra se aplica a formulários de criação, edição, filtros e busca.
 
 ---
 
@@ -155,7 +156,11 @@ export function PageName() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="field">Campo</Label>
-                <Input id="field" />
+                <Input
+                  id="field"
+                  placeholder="Descrição detalhada do campo"
+                  title="Dica adicional sobre formato ou regra"
+                />
               </div>
             </div>
             <DialogFooter>
@@ -315,6 +320,34 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ centrocustoId vinculado a ContaPagar/ContaReceber/FluxoCaixa
 - ✅ API CRUD + árvore hierárquica
 - ✅ Frontend CentrosCustoPage com visualização em árvore
+
+### Status Atual PDV
+- ✅ PDV completo (PdvPage + pdv.ts service)
+- ✅ Carrinho funcional: busca por código de barras, busca por nome, grid de resultados
+- ✅ Controles +/- quantidade, remover item, seleção cliente c/ busca
+- ✅ Dialog pagamento: Dinheiro, PIX, Crédito, Débito, Crédito Parcelado
+- ✅ Cálculo automático de troco + Dialog venda finalizada
+- ✅ Fluxo: itens local → envia API ao finalizar
+- ✅ Spec PDV.md criada
+
+### Status Atual Filial
+- ✅ Filial CRUD Backend (POST/PUT/DELETE /empresas/:id/filiais)
+- ✅ Filial DTO Zod (criarFilialSchema, atualizarFilialSchema)
+- ✅ Filial CRUD Frontend (FiliaisPage c/ CRUD completo)
+- ✅ FilialSelect componente reutilizável integrado em NFCePage, NFSePage, NotasFiscaisPage
+- ✅ Sidebar: Cadastros > Filiais
+- ✅ Spec FILIAIS.md criada
+- ✅ Item "Filiais" adicionado à sidebar
+
+### Status Atual Manuais
+- ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
+- ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
+
+### Correções Recentes (01/07/2026)
+- PDV completo implementado (antes estava como stub)
+- Filial CRUD completo (backend + frontend + componente reutilizável)
+- FilialSelect integrado nas 3 páginas de nota (NFCe, NFSe, NF-e)
+- Deploy realizado via rsync + docker compose build/up
 
 ### Correções Recentes (30/06/2026)
 - Crash 502: 7 controllers com `.parse()` fora de try/catch → movido para dentro + `process.on('unhandledRejection')`

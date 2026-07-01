@@ -3,6 +3,10 @@ import {
   CriarEmpresaInput, 
   AtualizarEmpresaInput 
 } from './dto/empresa.dto';
+import { 
+  CriarFilialInput, 
+  AtualizarFilialInput 
+} from './dto/filial.dto';
 
 export class EmpresasService {
   async criar(dados: CriarEmpresaInput) {
@@ -32,9 +36,54 @@ export class EmpresasService {
 
   async listarFiliais(empresaId: string) {
     return prisma.filial.findMany({
-      where: { empresaId, ativo: true },
+      where: { empresaId },
       orderBy: { razaoSocial: 'asc' },
+      include: { empresa: { select: { razaoSocial: true, nomeFantasia: true } } },
     });
+  }
+
+  async criarFilial(dados: CriarFilialInput) {
+    const { logradouro, numero, complemento, bairro, cidade, uf, cep, ...resto } = dados;
+    return prisma.filial.create({
+      data: {
+        ...resto,
+        endereco: logradouro ? { logradouro, numero, complemento, bairro, cidade, uf, cep } : undefined,
+      },
+      include: { empresa: { select: { razaoSocial: true, nomeFantasia: true } } },
+    });
+  }
+
+  async buscarFilialPorId(id: string) {
+    return prisma.filial.findUnique({
+      where: { id },
+      include: { empresa: { select: { razaoSocial: true, nomeFantasia: true } } },
+    });
+  }
+
+  async atualizarFilial(id: string, dados: AtualizarFilialInput) {
+    const { logradouro, numero, complemento, bairro, cidade, uf, cep, ...resto } = dados;
+    return prisma.filial.update({
+      where: { id },
+      data: {
+        ...resto,
+        ...(logradouro && { endereco: { logradouro, numero, complemento, bairro, cidade, uf, cep } }),
+      },
+      include: { empresa: { select: { razaoSocial: true, nomeFantasia: true } } },
+    });
+  }
+
+  async removerFilial(id: string) {
+    const emUso = await Promise.all([
+      prisma.pedidoVenda.count({ where: { filialId: id } }),
+      prisma.vendaPDV.count({ where: { filialId: id } }),
+      prisma.caixa.count({ where: { filialId: id } }),
+      prisma.notaFiscal.count({ where: { filialId: id } }),
+    ]);
+    const total = emUso.reduce((a, b) => a + b, 0);
+    if (total > 0) {
+      throw new Error(`Filial não pode ser removida pois está vinculada a ${total} registro(s)`);
+    }
+    return prisma.filial.delete({ where: { id } });
   }
 
   async listar() {

@@ -22,7 +22,7 @@ export interface CentroCusto {
 export const centrosCustoService = {
   listar: async () => {
     const response = await api.get('/centros-custo');
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   criar: (data: {
@@ -46,6 +46,6 @@ export const centrosCustoService = {
 
   arvore: async () => {
     const response = await api.get('/centros-custo/arvore');
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 };

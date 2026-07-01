@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Plus, ArrowUpCircle, ArrowDownCircle, Search } from 'lucide-react';
 import { fluxoCaixaService } from '@/services/financeiro';
 import { Button } from '@/components/ui/button';
+import { ExportButton } from '@/components/export/ExportButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
@@ -80,17 +81,35 @@ export function FluxoCaixaPage() {
     return new Date(date).toLocaleDateString('pt-BR');
   };
 
+  const colunasExportacao = [
+    { label: 'Data', accessor: (row: Record<string, unknown>) => formatDate(row.dataMovimentacao as string) },
+    { label: 'Tipo', accessor: 'tipo' },
+    { label: 'Categoria', accessor: 'categoria' },
+    { label: 'Descrição', accessor: 'descricao' },
+    { label: 'Forma Pagamento', accessor: 'formaPagamento' },
+    { label: 'Valor', accessor: (row: Record<string, unknown>) => formatCurrency(row.valor as number) },
+  ];
+
   return (
-    <div className="space-y-6">
+    <div id="relatorio-fluxo-caixa" className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Fluxo de Caixa</h1>
           <p className="text-gray-500">Controle de entradas e saídas</p>
         </div>
-        <Button onClick={() => setShowModal(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nova Movimentação
-        </Button>
+        <div className="flex gap-2">
+          <ExportButton
+            dados={movimentacoes as unknown as Record<string, unknown>[]}
+            colunas={colunasExportacao}
+            nomeArquivo="fluxo-caixa"
+            tituloRelatorio="Fluxo de Caixa"
+            elementoIdParaPDF="relatorio-fluxo-caixa"
+          />
+          <Button onClick={() => setShowModal(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Nova Movimentação
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -207,7 +226,7 @@ export function FluxoCaixaPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Movimentação</DialogTitle>
           </DialogHeader>
@@ -229,6 +248,8 @@ export function FluxoCaixaPage() {
               <Input
                 id="categoria"
                 type="text"
+                placeholder="Ex: Vendas, Aluguel, Salários"
+                title="Categorize a movimentação financeira"
                 value={formData.categoria}
                 onChange={(e) => setFormData({ ...formData, categoria: e.target.value })}
                 required
@@ -239,6 +260,8 @@ export function FluxoCaixaPage() {
               <Input
                 id="descricao"
                 type="text"
+                placeholder="Descreva detalhadamente a movimentação"
+                title="Ex: Recebimento de cliente X ou Pagamento de fornecedor Y"
                 value={formData.descricao}
                 onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
                 required
@@ -250,6 +273,8 @@ export function FluxoCaixaPage() {
                 id="valor"
                 type="number"
                 step="0.01"
+                placeholder="Valor da movimentação"
+                title="Use ponto para decimais. Ex: 2500.00"
                 value={formData.valor}
                 onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
                 required

@@ -234,7 +234,7 @@ export function InventarioPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Novo Inventário</DialogTitle>
           </DialogHeader>

@@ -76,7 +76,7 @@ export const notasFiscaisService = {
     params.append('limite', String(filtros.limite || 20));
 
     const response = await api.get(`/notas-fiscais?${params}`);
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {

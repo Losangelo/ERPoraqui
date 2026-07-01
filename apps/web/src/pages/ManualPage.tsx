@@ -1033,6 +1033,699 @@ Em erros persistentes:
 3. Entre em contato com o suporte tecnico`,
   },
   {
+    id: 'multi-empresa',
+    titulo: 'Multi-empresa - Gerenciar Multiplas Empresas',
+    categoria: 'Sistema',
+    conteudo: `Aprenda a gerenciar multiplas empresas no mesmo sistema.
+
+---
+
+## O que e Multi-empresa?
+
+O ERPoraqui permite cadastrar mais de uma empresa (CNPJ) na mesma instalacao. Cada empresa e independente:
+- **Dados separados**: Cada empresa tem seus proprios clientes, produtos, vendas
+- **Login unico**: Voce acessa todas as empresas com o mesmo usuario
+- **Troca rapida**: Altere entre empresas sem sair do sistema
+
+---
+
+## Alternando entre Empresas
+
+1. Clique no nome da empresa no canto superior direito
+2. Selecione "Trocar Empresa"
+3. Escolha a empresa desejada
+4. O sistema recarrega com os dados da nova empresa
+
+---
+
+## Cadastrando Nova Empresa
+
+1. Va em **Sistema** > **Multi-empresa**
+2. Clique em **+ Nova Empresa**
+3. Preencha os dados:
+   - **Razao Social**: Nome juridico completo
+   - **Nome Fantasia**: Nome comercial
+   - **CNPJ**: Cadastro Nacional da Pessoa Juridica
+   - **Inscricao Estadual**: Para notas fiscais
+   - **Regime Tributario**: Simples Nacional, Lucro Presumido, Lucro Real
+4. Clique em **Salvar**
+
+---
+
+## Filiais
+
+Cada empresa pode ter filiais:
+1. Dentro da empresa, va em **Filiais**
+2. Clique em **+ Nova Filial**
+3. Informe os dados da filial
+4. Defina se e matriz ou filial
+
+---
+
+## Licencas
+
+Cada empresa precisa de uma licenca para funcionar:
+- Licencas sao gerenciadas pelo administrador
+- Contate o suporte para contratar novos modulos`,
+  },
+  {
+    id: 'crm-uso',
+    titulo: 'Como Usar o CRM',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a usar o CRM para gerenciar relacionamento com clientes.
+
+---
+
+## O que e CRM?
+
+CRM (Customer Relationship Management) e o modulo para acompanhar:
+- **Leads**: Potenciais clientes em negociacao
+- **Oportunidades**: Vendas em andamento
+- **Campanhas**: Acoes de marketing
+- **Historico**: Todo contato com o cliente
+
+---
+
+## Acessando o CRM
+
+1. Clique em **Vendas** > **CRM**
+2. Voce ve o funil de vendas:
+   - **Lead**: Primeiro contato
+   - **Qualificado**: Cliente com perfil adequado
+   - **Proposta**: Orcamento enviado
+   - **Fechado**: Venda concluida
+
+---
+
+## Criando um Lead
+
+1. No CRM, clique em **+ Novo Lead**
+2. Preencha:
+   - **Nome**: Nome do contato
+   - **Empresa**: Nome da empresa
+   - **Telefone / E-mail**: Para contato
+   - **Origem**: Como conheceu (site, indicacao, etc.)
+3. Salve
+
+---
+
+## Avancando no Funil
+
+Arraste o lead entre as etapas:
+1. **Lead -> Qualificado**: Agendou reuniao
+2. **Qualificado -> Proposta**: Enviou orcamento
+3. **Proposta -> Fechado**: Cliente comprou
+
+---
+
+## Campanhas
+
+1. Va em **CRM** > **Campanhas**
+2. Clique em **+ Nova Campanha**
+3. Defina:
+   - **Nome**: Ex: "Promocao de Carnes"
+   - **Publico**: Clientes ou leads especificos
+   - **Data**: Periodo da campanha
+4. Acompanhe os resultados
+
+---
+
+## Dica
+
+Use o CRM diariamente para nao perder oportunidades.
+Registre todo contato com o cliente no historico.`,
+  },
+  {
+    id: 'automacao',
+    titulo: 'Automacao - Regras Automaticas',
+    categoria: 'Sistema',
+    conteudo: `Aprenda a criar regras automaticas no sistema.
+
+---
+
+## O que e Automacao?
+
+O modulo de automacao executa acoes automaticamente quando algo acontece.
+
+---
+
+## Exemplos de Automacao
+
+| Disparo | Acao |
+|---------|------|
+| Novo cliente cadastrado | Enviar e-mail de boas-vindas |
+| Venda finalizada | Enviar SMS de agradecimento |
+| Conta vencendo | Disparar cobranca automatica |
+| Estoque baixo | Notificar o comprador |
+
+---
+
+## Criando uma Regra
+
+1. Va em **Sistema** > **Automacao**
+2. Clique em **+ Nova Regra**
+3. Configure:
+   - **Nome**: Identificacao da regra
+   - **Evento**: O que dispara (ex: "Pedido Criado")
+   - **Condicao**: Filtro opcional (ex: "Valor > R$ 500")
+   - **Acao**: O que fazer (ex: "Enviar E-mail")
+4. Ative a regra
+5. Pronto! O sistema executa automaticamente
+
+---
+
+## Cuidados
+
+- Crie regras simples no inicio
+- Teste cada regra antes de ativar
+- Acompanhe o log de execucao
+- Regras em excesso podem deixar o sistema lento`,
+  },
+  {
+    id: 'tabelas-preco-uso',
+    titulo: 'Tabelas de Preco',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a criar tabelas de preco diferenciadas.
+
+---
+
+## O que sao Tabelas de Preco?
+
+Permitem definir precos diferentes para grupos de clientes:
+- **Cliente VIP**: Preco especial
+- **Atacado**: Preco por quantidade
+- **Promocao**: Preco temporario
+
+---
+
+## Criando uma Tabela
+
+1. Va em **Estoque** > **Tabelas de Preco**
+2. Clique em **+ Nova Tabela**
+3. Informe:
+   - **Nome**: Ex: "Tabela Atacado"
+   - **Tipo**: Percentual ou Valor Fixo
+   - **Base**: Preco de venda ou custo
+4. Salve
+
+---
+
+## Adicionando Produtos
+
+1. Na tabela criada, clique em **Adicionar Produtos**
+2. Selecione os produtos
+3. Defina o ajuste de preco:
+   - Acrescimo ou desconto percentual
+   - Ou valor fixo
+4. Salve
+
+---
+
+## Usando nas Vendas
+
+Ao fazer um orcamento ou pedido:
+1. Selecione o cliente
+2. Escolha a tabela de preco
+3. Os precos sao calculados automaticamente`,
+  },
+  {
+    id: 'variacoes-lotes',
+    titulo: 'Variacoes e Lotes de Produtos',
+    categoria: 'Estoque',
+    conteudo: `Aprenda a usar variacoes e lotes para controle avancado.
+
+---
+
+## Variacoes de Produto
+
+Usado quando um produto tem versoes diferentes:
+- **Exemplo**: Camiseta nas cores P, M, G
+- **Exemplo**: Calcados nos tamanhos 38, 39, 40
+
+### Como criar variacoes?
+
+1. Cadastre o **produto base** (ex: "Camiseta")
+2. Va em **Estoque** > **Variacoes**
+3. Selecione o produto
+4. Adicione variacoes:
+   - **Tamanho**: P, M, G
+   - **Cor**: Vermelho, Azul
+5. Cada variacao tem precos e estoque proprios
+
+---
+
+## Lotes de Produto
+
+Usado para rastrear lotes por data de fabricacao:
+- **Exemplo**: Medicamentos com data de validade
+- **Exemplo**: Alimentos com lote do fabricante
+
+### Como gerenciar lotes?
+
+1. Va em **Estoque** > **Lotes**
+2. Selecione o produto
+3. Cadastre:
+   - **Numero do Lote**: Fornecido pelo fabricante
+   - **Data de Fabricacao**
+   - **Data de Validade**
+   - **Quantidade**
+4. Na venda, o sistema pergunta qual lote usar
+
+---
+
+## Dicas
+
+- Use variacoes para produtos com versoes
+- Use lotes para controle de validade
+- Ambos podem ser usados juntos
+- O estoque e controlado automaticamente por variacao/lote`,
+  },
+  {
+    id: 'cheques-uso',
+    titulo: 'Gerenciamento de Cheques',
+    categoria: 'Financeiro',
+    conteudo: `Aprenda a controlar cheques recebidos e emitidos.
+
+---
+
+## Tipos de Cheques
+
+- **Cheque Recebido**: De clientes como pagamento
+- **Cheque Emitido**: Para pagar fornecedores
+
+---
+
+## Registrando um Cheque Recebido
+
+1. Va em **Financeiro** > **Cheques**
+2. Clique em **+ Novo Cheque**
+3. Preencha:
+   - **Cliente**: Quem emitiu o cheque
+   - **Banco**: Numero do banco
+   - **Agencia**: Agencia bancaria
+   - **Conta**: Numero da conta
+   - **Numero do Cheque**: Numeracao do cheque
+   - **Valor**: Valor nominal
+   - **Data de Emissao**
+   - **Data de Vencimento**: Para deposito
+4. Salve
+
+---
+
+## Acoes com Cheques
+
+### Depositar
+1. Selecione o cheque
+2. Clique em **Depositar**
+3. O valor entra no fluxo de caixa
+
+### Compensar
+1. Apos o banco confirmar
+2. Clique em **Compensar**
+3. Status muda para "Compensado"
+
+### Devolver
+1. Se o cheque voltar (sem fundos)
+2. Clique em **Devolver**
+3. Informe o motivo
+4. A conta volta a ser devida
+
+### Cancelar
+Use para cheques extraviados ou cancelados antes do deposito`,
+  },
+  {
+    id: 'centros-custo-uso',
+    titulo: 'Centros de Custo',
+    categoria: 'Financeiro',
+    conteudo: `Aprenda a organizar as financas por departamento.
+
+---
+
+## O que sao Centros de Custo?
+
+Centros de Custo sao categorias para agrupar receitas e despesas por departamento ou projeto:
+- **Exemplos**: Administrativo, Vendas, Producao, Marketing, TI
+- Ajudam a saber quanto cada area gasta e gera de receita
+
+---
+
+## Criando um Centro de Custo
+
+1. Va em **Financeiro** > **Centros de Custo**
+2. Clique em **+ Novo**
+3. Informe:
+   - **Nome**: Ex: "Departamento Comercial"
+   - **Codigo**: Ex: "COM"
+   - **Centro de Custo Pai**: Para hierarquia (opcional)
+4. Salve
+
+---
+
+## Vinculando nas Operacoes
+
+Ao criar:
+- **Conta a Receber**: Selecione o centro de custo
+- **Conta a Pagar**: Selecione o centro de custo
+- **Lancamento no Fluxo de Caixa**: Selecione o centro
+
+---
+
+## Relatorios por Centro de Custo
+
+1. Va em **Gestao** > **DRE**
+2. Filtre por centro de custo
+3. Veja o resultado por departamento
+
+---
+
+## Dica
+
+Crie centros de custo alinhados com seu organograma.
+Isso facilita a tomada de decisao e o planejamento financeiro.`,
+  },
+  {
+    id: 'dre-uso',
+    titulo: 'DRE - Demonstrativo de Resultados',
+    categoria: 'Gestao',
+    conteudo: `Aprenda a consultar o resultado financeiro da empresa.
+
+---
+
+## O que e DRE?
+
+DRE (Demonstrativo do Resultado do Exercicio) mostra:
+- **Receitas**: Total de vendas no periodo
+- **Deducoes**: Impostos, devolucoes
+- **Custos**: Custo das mercadorias vendidas
+- **Despesas**: Gastos operacionais
+- **Resultado**: Lucro ou Prejuizo
+
+---
+
+## Acessando o DRE
+
+1. Va em **Gestao** > **DRE**
+2. Selecione o **periodo** (mes/ano)
+3. O sistema carrega automaticamente:
+   - Receita Bruta
+   - Dedusoes
+   - Receita Liquida
+   - Custos
+   - Despesas
+   - Resultado Liguido
+
+---
+
+## Exportando o DRE
+
+1. No DRE, clique no botao **Exportar**
+2. Escolha o formato:
+   - **PDF**: Para apresentar
+   - **Excel (XLSX)**: Para analisar
+   - **CSV**: Para importar em outros sistemas
+3. O arquivo e baixado automaticamente
+
+---
+
+## Dica
+
+Consulte o DRE mensalmente para acompanhar a saude financeira.
+Compare meses anteriores para ver a evolucao do negocio.`,
+  },
+  {
+    id: 'nfce-uso',
+    titulo: 'NFC-e - Nota Fiscal do Consumidor',
+    categoria: 'Fiscal',
+    conteudo: `Aprenda a emitir NFC-e para vendas ao consumidor final.
+
+---
+
+## O que e NFC-e?
+
+NFC-e (Nota Fiscal do Consumidor Eletronica) substitui o cupom fiscal.
+Usada em vendas para consumidor final (pessoa fisica).
+
+---
+
+## Diferenca entre NF-e e NFC-e
+
+| Caracteristica | NF-e | NFC-e |
+|----------------|------|-------|
+| Destinatario | Pessoa Juridica | Consumidor Final |
+| CPF/CNPJ | Obrigatorio | Opcional |
+| DANFE | Papel A4 | Papel termico (cupom) |
+| QR Code | Nao | Sim |
+
+---
+
+## Emitindo NFC-e
+
+1. Va em **Fiscal** > **NFC-e**
+2. Clique em **+ Nova NFC-e**
+3. Selecione a **venda do PDV** ou crie manual
+4. Confira os produtos
+5. Clique em **Emitir**
+6. A nota e enviada para a SEFAZ
+7. Imprima o cupom na impressora termica
+
+---
+
+## QR Code
+
+A NFC-e tem QR Code para o cliente consultar:
+- O consumidor le o QR Code com o celular
+- Ve a nota completa no site da SEFAZ
+- Garante a autenticidade da nota`,
+  },
+  {
+    id: 'nfse-uso',
+    titulo: 'NFSe - Nota Fiscal de Servicos',
+    categoria: 'Fiscal',
+    conteudo: `Aprenda a emitir notas fiscais de servicos.
+
+---
+
+## O que e NFSe?
+
+NFSe (Nota Fiscal de Servicos Eletronica) e usada para:
+- Prestacao de servicos
+- Profissionais liberais (medicos, advogados)
+- Empresas de servicos (consultoria, manutencao)
+
+---
+
+## Emitindo NFSe
+
+1. Va em **Fiscal** > **NFSe**
+2. Clique em **+ Nova NFSe**
+3. Preencha:
+   - **Tomador**: Cliente do servico
+   - **Descricao**: Tipo de servico
+   - **Valor**: Valor do servico
+   - **ISS**: Aliquota do imposto (varia por cidade)
+4. Clique em **Emitir**
+5. A nota e enviada para a prefeitura
+
+---
+
+## Diferenca para NF-e
+
+| NF-e (Produtos) | NFSe (Servicos) |
+|-----------------|-----------------|
+| NCM do produto | Codigo de servico (LC 116) |
+| ICMS estadual | ISS municipal |
+| SEFAZ estadual | Prefeitura municipal |
+
+---
+
+## Dica
+
+Verifique com seu contador a aliquota de ISS da sua cidade.
+Cada municipio tem suas proprias regras.`,
+  },
+  {
+    id: 'ecf-uso',
+    titulo: 'ECF - Escrituracao Contabil Fiscal',
+    categoria: 'Fiscal',
+    conteudo: `Aprenda sobre a ECF e sua integracao com o sistema.
+
+---
+
+## O que e ECF?
+
+ECF (Escrituracao Contabil Fiscal) e a obrigacao acessoria que substituiu a DIPJ.
+Deve ser entregue anualmente a Receita Federal.
+
+---
+
+## O que o sistema oferece?
+
+O ERPoraqui gera os dados necessarios para a ECF:
+- **Lancamentos contabeis**: Do plano de contas
+- **Saldos de contas**: Por periodo
+- **Demonstrativos**: DRE e Balanco
+
+---
+
+## Como usar?
+
+1. Va em **Fiscal** > **ECF**
+2. Selecione o **ano-calendario**
+3. Clique em **Gerar Dados**
+4. O sistema compila as informacoes
+5. Exporte para o formato exigido pela Receita
+
+---
+
+## Aviso Importante
+
+A ECF deve ser assinada por um contador registrado no CRC.
+O sistema gera os dados, mas a entrega e responsabilidade do contador.`,
+  },
+  {
+    id: 'relatorios-fiscais-uso',
+    titulo: 'Relatorios Fiscais',
+    categoria: 'Fiscal',
+    conteudo: `Aprenda a gerar relatorios fiscais para contabilidade.
+
+---
+
+## Relatorios Disponiveis
+
+| Relatorio | Descricao |
+|-----------|----------|
+| SPED Fiscal | ICMS/IPI para o fisco estadual |
+| SPED PIS/COFINS | Contribuicoes federais |
+| Livro de Entradas | Notas de compra |
+| Livro de Saidas | Notas de venda |
+| Apuracao de ICMS | Calculo do imposto |
+
+---
+
+## Gerando um Relatorio
+
+1. Va em **Fiscal** > **Relatorios**
+2. Selecione o **tipo** de relatorio
+3. Defina o **periodo** (mes/ano)
+4. Escolha a **filial** (se houver)
+5. Clique em **Gerar**
+6. O sistema processa e exibe na tela
+
+---
+
+## Exportacao
+
+Apos gerar, voce pode:
+- **Visualizar** na tela
+- **Exportar para PDF** para arquivar
+- **Exportar para Excel** para analise
+- **Exportar para CSV** para importar em outros sistemas
+
+---
+
+## Dica
+
+Os relatorios fiscais sao importantes para:
+- Contabilidade
+- Fiscalizacao da Receita
+- Tomada de decisoes
+- Planejamento tributario
+
+Consulte seu contador regularmente.`,
+  },
+  {
+    id: 'logs-sistema',
+    titulo: 'Logs do Sistema',
+    categoria: 'Sistema',
+    conteudo: `Aprenda a consultar os registros de atividades do sistema.
+
+---
+
+## O que sao Logs?
+
+Logs registram todas as acoes importantes no sistema:
+- Quem fez o que
+- Quando fez
+- Deu certo ou errou
+
+---
+
+## Acessando Logs
+
+1. Va em **Gestao** > **Logs**
+2. Voce ve uma lista com:
+   - **Data/Hora**: Quando ocorreu
+   - **Usuario**: Quem fez
+   - **Acao**: O que foi feito
+   - **Categoria**: Tipo de operacao
+   - **Status**: Sucesso ou erro
+   - **Detalhes**: Informacao adicional
+
+---
+
+## Filtrando Logs
+
+Use os filtros para encontrar rapidamente:
+- **Periodo**: Data inicial e final
+- **Usuario**: Apenas de um usuario
+- **Categoria**: Apenas um tipo (ex: vendas)
+- **Status**: Apenas erros
+
+---
+
+## Por que consultar Logs?
+
+- Descobrir quem alterou um cadastro
+- Investigar erros em notas fiscais
+- Auditar acoes de usuarios
+- Resolver problemas tecnicos`,
+  },
+  {
+    id: 'exportacao-relatorios',
+    titulo: 'Exportacao de Relatorios',
+    categoria: 'Dicas',
+    conteudo: `Aprenda a exportar relatorios em varios formatos.
+
+---
+
+## Formatos Disponiveis
+
+O sistema oferece 4 formatos de exportacao:
+
+| Formato | Quando usar |
+|---------|-------------|
+| **CSV** | Importar em outros sistemas |
+| **JSON** | Integracoes com desenvolvedores |
+| **XLSX (Excel)** | Analisar dados, criar graficos |
+| **PDF** | Apresentar, arquivar, imprimir |
+
+---
+
+## Como Exportar
+
+1. Na pagina do relatorio (DRE, Fluxo de Caixa, Contas, etc.)
+2. Clique no botao **Exportar**
+3. Escolha o formato desejado
+4. O arquivo e baixado automaticamente
+
+---
+
+## Paginas com Exportacao
+
+- DRE (Demonstrativo de Resultados)
+- Fluxo de Caixa
+- Contas a Receber
+- Contas a Pagar
+- Relatorios Fiscais
+
+---
+
+## Dica
+
+Use **PDF** para enviar relatorios formais.
+Use **Excel (XLSX)** para analisar os dados com graficos e filtros.`,
+  },
+  {
     id: 'atalhos',
     titulo: 'Atalhos e Dicas',
     categoria: 'Dicas',

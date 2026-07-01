@@ -51,7 +51,7 @@ export interface ChequeFiltros {
 export const chequesService = {
   listar: async (params?: ChequeFiltros) => {
     const response = await api.get('/cheques', { params });
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   criar: (data: {

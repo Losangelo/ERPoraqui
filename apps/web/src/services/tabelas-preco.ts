@@ -34,7 +34,7 @@ export interface TabelaPrecoFiltros {
 export const tabelasPrecoService = {
   listar: async (filtros?: TabelaPrecoFiltros) => {
     const response = await api.get('/tabelas-preco', { params: filtros });
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {
@@ -62,7 +62,7 @@ export const tabelasPrecoService = {
 
   listarItens: async (tabelaPrecoId: string) => {
     const response = await api.get(`/tabelas-preco/${tabelaPrecoId}/itens`);
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   adicionarItem: (tabelaPrecoId: string, data: {

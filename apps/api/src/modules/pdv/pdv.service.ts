@@ -424,12 +424,27 @@ export class PdvService {
 
     const parsed = abrirCaixaSchema.parse(data);
 
+    let operadorId = parsed.operadorId;
+
     const operador = await prisma.operadorPDV.findFirst({
       where: { id: parsed.operadorId, empresaId, ativo: true },
     });
 
     if (!operador) {
-      throw new Error('Operador não encontrado');
+      const usuario = await prisma.usuario.findFirst({
+        where: { id: parsed.operadorId, empresaId, ativo: true },
+      });
+      if (usuario) {
+        const novoOperador = await prisma.operadorPDV.create({
+          data: {
+            empresaId,
+            nome: usuario.nome,
+            pin: '0000',
+            ativo: true,
+          },
+        });
+        operadorId = novoOperador.id;
+      }
     }
 
     const caixaAberto = await prisma.caixa.findFirst({
@@ -444,7 +459,7 @@ export class PdvService {
       data: {
         empresaId,
         filialId: parsed.filialId,
-        operadorId: parsed.operadorId,
+        operadorId,
         dataAbertura: new Date(),
         saldoInicial: parsed.saldoInicial,
         totalEntradas: 0,
@@ -501,11 +516,7 @@ export class PdvService {
       include: { operador: true, filial: true },
     });
 
-    if (!caixa) {
-      throw new Error('Nenhum caixa aberto nesta filial');
-    }
-
-    return caixa;
+    return caixa ?? null;
   }
 
   async listarVendas(empresaId: string, filtros: PdvFiltro) {

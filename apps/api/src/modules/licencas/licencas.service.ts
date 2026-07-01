@@ -346,6 +346,59 @@ export class LicencasService {
 
   // ==================== SEEDER DE PLANOS PADRÃO ====================
 
+  async seedLicencasParaEmpresas(planoId?: string) {
+    const empresas = await this.prisma.empresa.findMany();
+
+    if (empresas.length === 0) {
+      return { message: 'Nenhuma empresa encontrada para vincular licenca' };
+    }
+
+    let plano = planoId
+      ? await this.prisma.plano.findUnique({ where: { id: planoId } })
+      : await this.prisma.plano.findFirst({ where: { nome: 'BASIC' } });
+
+    if (!plano) {
+      return { message: 'Nenhum plano encontrado para criar licenca' };
+    }
+
+    let criadas = 0;
+    for (const empresa of empresas) {
+      const licencaExistente = await this.prisma.licenca.findFirst({
+        where: { empresaId: empresa.id, status: 'ATIVA' },
+      });
+      if (licencaExistente) continue;
+
+      const chave = this.gerarChaveLicenca();
+      await this.prisma.licenca.create({
+        data: {
+          empresaId: empresa.id,
+          planoId: plano.id,
+          chave,
+          tipoCobranca: 'DEFINITIVO',
+          dataInicio: new Date(),
+          dataExpiracao: null,
+          status: 'ATIVA',
+          limiteUsuarios: plano.limiteUsuarios,
+          limiteClientes: plano.limiteClientes,
+          limiteProdutos: plano.limiteProdutos,
+          limiteNotasFiscais: plano.limiteNotasFiscais,
+          limiteEmpresas: plano.limiteEmpresas,
+          moduloCrm: plano.moduloCrm,
+          moduloAutomacao: plano.moduloAutomacao,
+          moduloMultiEmpresa: plano.moduloMultiEmpresa,
+          moduloApi: plano.moduloApi,
+          usuariosAtivos: 0,
+          clientesAtivos: 0,
+          produtosAtivos: 0,
+          notasEsteMes: 0,
+        },
+      });
+      criadas++;
+    }
+
+    return { message: `Licencas criadas para ${criadas} empresas` };
+  }
+
   async seedPlanosPadrao() {
     const planosExistentes = await this.prisma.plano.count();
     if (planosExistentes > 0) {
@@ -365,7 +418,7 @@ export class LicencasService {
         limiteProdutos: 1000,
         limiteNotasFiscais: 500,
         limiteEmpresas: 1,
-        moduloCrm: false,
+        moduloCrm: true,
         moduloAutomacao: false,
         moduloMultiEmpresa: false,
         moduloApi: false,
@@ -426,6 +479,11 @@ export class LicencasService {
 
     for (const plano of planos) {
       await this.prisma.plano.create({ data: plano });
+    }
+
+    const planoBasic = await this.prisma.plano.findFirst({ where: { nome: 'BASIC' } });
+    if (planoBasic) {
+      await this.seedLicencasParaEmpresas(planoBasic.id);
     }
 
     return { message: 'Planos criados com sucesso', planos };

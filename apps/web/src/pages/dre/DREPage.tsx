@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { dreService, DREData, DREMensal } from '@/services/dre';
 import { TrendingUp, DollarSign, Percent } from 'lucide-react';
+import { ExportButton } from '@/components/export/ExportButton';
 
 export default function DREPage() {
   const [data, setData] = useState<DREData | null>(null);
@@ -46,12 +47,35 @@ export default function DREPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div id="relatorio-dre" className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Demonstração do Resultado do Exercício</h1>
           <p className="text-muted-foreground">DRE - Análise financeira</p>
         </div>
+        {data && (
+          <ExportButton
+            dados={[
+              { descricao: 'Receita Bruta de Vendas', valor: data.receitaBruta },
+              { descricao: '(-) Devoluções e Abatimentos', valor: data.devolucoesAbatimentos },
+              { descricao: '= Receita Líquida', valor: data.receitaLiquida },
+              { descricao: '(-) Custo das Mercadorias Vendidas', valor: data.custoMercadoriasVendidas },
+              { descricao: '= Lucro Bruto', valor: data.lucroBruto },
+              { descricao: '(-) Despesas Operacionais', valor: data.despesasOperacionais.total },
+              { descricao: '(+) Resultado Financeiro', valor: data.resultadoFinanceiro },
+              { descricao: '= Lucro Operacional', valor: data.lucroOperacional },
+              { descricao: '(-) Impostos', valor: data.impostos },
+              { descricao: '= Lucro Líquido do Período', valor: data.lucroLiquido },
+            ]}
+            colunas={[
+              { label: 'Descrição', accessor: 'descricao' },
+              { label: 'Valor', accessor: (row) => formatCurrency(row.valor as number) },
+            ]}
+            nomeArquivo="dre"
+            tituloRelatorio="Demonstração do Resultado do Exercício"
+            elementoIdParaPDF="relatorio-dre"
+          />
+        )}
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
@@ -68,11 +92,11 @@ export default function DREPage() {
             <CardContent className="flex gap-4 items-end">
               <div className="grid gap-2">
                 <Label>Data Inicial</Label>
-                <Input type="date" value={dataInicial} onChange={(e) => setDataInicial(e.target.value)} />
+                <Input type="date" value={dataInicial} onChange={(e) => setDataInicial(e.target.value)} placeholder="dd/mm/aaaa" title="Selecione a data inicial do período" />
               </div>
               <div className="grid gap-2">
                 <Label>Data Final</Label>
-                <Input type="date" value={dataFinal} onChange={(e) => setDataFinal(e.target.value)} />
+                <Input type="date" value={dataFinal} onChange={(e) => setDataFinal(e.target.value)} placeholder="dd/mm/aaaa" title="Selecione a data final do período" />
               </div>
               <Button onClick={carregarDRE}>Gerar DRE</Button>
             </CardContent>
@@ -180,7 +204,7 @@ export default function DREPage() {
             <CardContent className="flex gap-4 items-end">
               <div className="grid gap-2">
                 <Label>Ano</Label>
-                <Input type="number" value={ano} onChange={(e) => setAno(parseInt(e.target.value))} />
+                <Input type="number" value={ano} onChange={(e) => setAno(parseInt(e.target.value))} placeholder="Ex: 2026" title="Informe o ano para gerar o DRE mensal" />
               </div>
               <Button onClick={carregarMensal}>Gerar</Button>
             </CardContent>

@@ -39,6 +39,50 @@ export class AuthService {
       },
     });
 
+    // Criar licenca BASICA automatica para a nova empresa
+    try {
+      const planoBasic = await prisma.plano.findFirst({ where: { nome: 'BASIC' } });
+      if (planoBasic) {
+        const licencaExistente = await prisma.licenca.findFirst({
+          where: { empresaId: empresa.id, status: 'ATIVA' },
+        });
+        if (!licencaExistente) {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          let chave = '';
+          for (let i = 0; i < 16; i++) {
+            if (i > 0 && i % 4 === 0) chave += '-';
+            chave += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          await prisma.licenca.create({
+            data: {
+              empresaId: empresa.id,
+              planoId: planoBasic.id,
+              chave,
+              tipoCobranca: 'DEFINITIVO',
+              dataInicio: new Date(),
+              dataExpiracao: null,
+              status: 'ATIVA',
+              limiteUsuarios: planoBasic.limiteUsuarios,
+              limiteClientes: planoBasic.limiteClientes,
+              limiteProdutos: planoBasic.limiteProdutos,
+              limiteNotasFiscais: planoBasic.limiteNotasFiscais,
+              limiteEmpresas: planoBasic.limiteEmpresas,
+              moduloCrm: planoBasic.moduloCrm,
+              moduloAutomacao: planoBasic.moduloAutomacao,
+              moduloMultiEmpresa: planoBasic.moduloMultiEmpresa,
+              moduloApi: planoBasic.moduloApi,
+              usuariosAtivos: 0,
+              clientesAtivos: 0,
+              produtosAtivos: 0,
+              notasEsteMes: 0,
+            },
+          });
+        }
+      }
+    } catch {
+      // Falha ao criar licenca nao deve impedir o registro
+    }
+
     const token = jwt.sign(
       { usuarioId: usuario.id, empresaId: usuario.empresaId },
       process.env.JWT_SECRET || 'default-secret',

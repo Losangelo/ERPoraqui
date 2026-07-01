@@ -271,7 +271,7 @@ export function ProdutosVariacoesPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {editingVariacao ? 'Editar Variação' : 'Nova Variação'}
@@ -302,6 +302,8 @@ export function ProdutosVariacoesPage() {
                 <Input
                   id="sku"
                   type="text"
+                  placeholder="Ex: CAMISETA-M-BRANCA"
+                  title="Código único alfanumérico para identificar a variação"
                   value={formData.sku}
                   onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                   required
@@ -312,6 +314,8 @@ export function ProdutosVariacoesPage() {
                 <Input
                   id="codigoBarras"
                   type="text"
+                  placeholder="Código de barras (EAN-13)"
+                  title="Formato: 13 dígitos numéricos. Ex: 7891234567890"
                   value={formData.codigoBarras}
                   onChange={(e) => setFormData({ ...formData, codigoBarras: e.target.value })}
                 />
@@ -321,6 +325,8 @@ export function ProdutosVariacoesPage() {
                 <Input
                   id="nome"
                   type="text"
+                  placeholder="Ex: Camiseta M, Azul, 42"
+                  title="Descreva a característica específica da variação (tamanho, cor, versão)"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                   required
@@ -331,6 +337,8 @@ export function ProdutosVariacoesPage() {
                 <Input
                   id="valor"
                   type="text"
+                  placeholder="Ex: 129,90"
+                  title="Valor de venda da variação. Use vírgula para centavos"
                   value={formData.valor}
                   onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
                   required
@@ -341,6 +349,8 @@ export function ProdutosVariacoesPage() {
                 <Input
                   id="precoAdicional"
                   type="number"
+                  placeholder="0,00"
+                  title="Acréscimo no preço em relação ao produto base. Use 0 se não houver adicional"
                   value={formData.precoAdicional}
                   onChange={(e) => setFormData({ ...formData, precoAdicional: Number(e.target.value) })}
                   min="0"
@@ -352,6 +362,8 @@ export function ProdutosVariacoesPage() {
                 <Input
                   id="estoque"
                   type="number"
+                  placeholder="Quantidade disponível"
+                  title="Informe a quantidade inicial em estoque. Apenas números inteiros"
                   value={formData.estoque}
                   onChange={(e) => setFormData({ ...formData, estoque: Number(e.target.value) })}
                   min="0"

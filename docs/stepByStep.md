@@ -1,5 +1,17 @@
 # Step-by-Step — ERPoraqui
 
+## 30/06/2026 (madrugada) — Correção 403/400/404, Exportação, Input Hints
+
+- **Fix 403:** Seed automático `seedLicencasParaEmpresas` cria licenças para empresas sem licença; `moduloCrm: true` adicionado ao plano BASIC
+- **Fix 400:** `z.coerce.number()` adicionado em 4 DTOs para evitar NaN
+- **Fix response.data:** 10 serviços corrigidos — `.dados` → `.data`
+- **Fix DialogContent:** `aria-describedby` adicionado em 39 instâncias (34 arquivos)
+- **Fix PDV 404:** `buscarCaixaAberto` retorna `null` em vez de `throw NotFound`
+- **Fix PlanoContas 404:** Rota `/arvore` movida antes de `/:id` para evitar conflito
+- **Exportação:** `utils/export.ts` (CSV/JSON/XLSX/PDF) + componente `ExportButton` + integrado em DRE, FluxoCaixa, ContasReceber, ContasPagar, RelatoriosFiscais
+- **Input Hints:** Regra de ouro #5 adicionada ao `AGENTS.md` + `placeholder` descritivo aplicado em ChequesPage, CentrosCustoPage, ProdutosVariacoesPage, ProdutosLotesPage, TabelasPrecoPage
+- **Spec:** `docs/specs/EXPORTACAO.md` criada
+
 ## 30/06/2026 — NF-e Phase 1: Shared Modules + Spec + Assinatura Digital
 
 - Criado `docs/specs/NFE.md` com especificação técnica completa do módulo NF-e/NFC-e
@@ -73,6 +85,30 @@
 - `docs/specs/BOLETOS_CNAB.md` — CNAB 240/400
 - `docs/specs/CHEQUES.md` — Cheques
 - `docs/specs/CENTRO_CUSTO.md` — Centro de custo
+
+## 01/07/2026 — PDV Completo + Manuais + Filial CRUD
+
+### PDV Interface Completa
+- **PdvPage.tsx** reescrita com carrinho funcional (busca por código de barras, busca por nome, grid de resultados)
+- Controles de quantidade (+/-), remover item, seleção de cliente com busca
+- Dialog de pagamento com 5 formas de pagamento (Dinheiro, PIX, Crédito, Débito, Crédito Parcelado)
+- Cálculo automático de troco
+- Dialog de venda finalizada com resumo (valor, forma, cupom, troco)
+- Fluxo: iniciar venda → adicionar itens localmente → enviar via API ao finalizar
+- **pdv.ts** service: +buscarPorCodigoBarras, +removerItem, +atualizarQuantidade, +buscarVenda
+
+### Manuais
+- **Manual do Usuário** (ManualPage.tsx): +13 seções novas (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
+- **Manual Técnico** (ManualTecnicoPage.tsx): 11 seções técnicas (Arquitetura, Stack, Estrutura, Padrões API, Frontend, Banco, Shared Modules, Deploy, Licenças, NF-e, Setup Dev, Problemas Comuns, Git Workflow) — acesso protegido por senha 2145
+
+### Filial CRUD Completo
+- **Backend**: DTO Zod (criarFilialSchema, atualizarFilialSchema), service (criarFilial, buscarFilialPorId, atualizarFilial, removerFilial com validação de vínculos), controller, routes (POST/PUT/DELETE)
+- **Frontend**: FiliaisPage.tsx com CRUD completo (tabela, busca, seletor de empresa, diálogo criação/edição com endereço, selects)
+- **FilialSelect.tsx**: Componente reutilizável que carrega empresas + filiais dinamicamente
+- **Integração**: NFCePage, NFSePage, NotasFiscaisPage — todas agora com seletor de filial via FilialSelect
+- **Sidebar**: Item "Filiais" em Cadastros
+
+---
 
 ## 03/06/2026 — Criação do Plano de Ação Completo
 

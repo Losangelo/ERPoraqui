@@ -325,7 +325,7 @@ export function OrdersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Novo Pedido</DialogTitle>
           </DialogHeader>
@@ -370,6 +370,8 @@ export function OrdersPage() {
                   min="1"
                   value={formData.quantidade}
                   onChange={(e) => setFormData({ ...formData, quantidade: e.target.value })}
+                  placeholder="Quantidade de unidades"
+                  title="Informe a quantidade do produto"
                 />
               </div>
               <div className="grid gap-2">

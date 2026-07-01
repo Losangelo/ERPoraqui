@@ -255,9 +255,9 @@ export default function ChequesPage() {
           </SelectContent>
         </Select>
         <div className="flex gap-2 items-center">
-          <Input type="date" value={dataInicial} onChange={(e) => setDataInicial(e.target.value)} className="w-40" />
+          <Input type="date" placeholder="DD/MM/AAAA" title="Data inicial do filtro" value={dataInicial} onChange={(e) => setDataInicial(e.target.value)} className="w-40" />
           <span className="text-muted-foreground">até</span>
-          <Input type="date" value={dataFinal} onChange={(e) => setDataFinal(e.target.value)} className="w-40" />
+          <Input type="date" placeholder="DD/MM/AAAA" title="Data final do filtro" value={dataFinal} onChange={(e) => setDataFinal(e.target.value)} className="w-40" />
         </div>
       </div>
 
@@ -342,7 +342,7 @@ export default function ChequesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Novo Cheque</DialogTitle>
           </DialogHeader>
@@ -351,6 +351,8 @@ export default function ChequesPage() {
               <div className="grid gap-2">
                 <Label>Número</Label>
                 <Input
+                  placeholder="Número do cheque"
+                  title="Ex: 000001"
                   value={formData.numero}
                   onChange={(e) => setFormData({ ...formData, numero: e.target.value })}
                 />
@@ -374,26 +376,28 @@ export default function ChequesPage() {
             <div className="grid grid-cols-3 gap-4">
               <div className="grid gap-2">
                 <Label>Banco</Label>
-                <Input value={formData.banco} onChange={(e) => setFormData({ ...formData, banco: e.target.value })} />
+                <Input placeholder="Nome do banco emissor" title="Ex: Banco do Brasil, Itaú" value={formData.banco} onChange={(e) => setFormData({ ...formData, banco: e.target.value })} />
               </div>
               <div className="grid gap-2">
                 <Label>Agência</Label>
-                <Input value={formData.agencia} onChange={(e) => setFormData({ ...formData, agencia: e.target.value })} />
+                <Input placeholder="Número da agência sem dígito" title="Ex: 1234" value={formData.agencia} onChange={(e) => setFormData({ ...formData, agencia: e.target.value })} />
               </div>
               <div className="grid gap-2">
                 <Label>Conta</Label>
-                <Input value={formData.conta} onChange={(e) => setFormData({ ...formData, conta: e.target.value })} />
+                <Input placeholder="Número da conta corrente" title="Ex: 12345-0" value={formData.conta} onChange={(e) => setFormData({ ...formData, conta: e.target.value })} />
               </div>
             </div>
             <div className="grid gap-2">
               <Label>Emitente</Label>
-              <Input value={formData.emitente} onChange={(e) => setFormData({ ...formData, emitente: e.target.value })} />
+              <Input placeholder="Nome completo do emitente do cheque" title="Pessoa física ou jurídica que emitiu o cheque" value={formData.emitente} onChange={(e) => setFormData({ ...formData, emitente: e.target.value })} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label>Valor</Label>
                 <Input
                   type="number"
+                  placeholder="0,00"
+                  title="Use vírgula para centavos. Ex: 1500,50"
                   value={formData.valor}
                   onChange={(e) => setFormData({ ...formData, valor: parseFloat(e.target.value) || 0 })}
                   min={0}
@@ -404,6 +408,8 @@ export default function ChequesPage() {
                 <Label>Vencimento</Label>
                 <Input
                   type="date"
+                  placeholder="DD/MM/AAAA"
+                  title="Data de vencimento do cheque"
                   value={formData.dataVencimento}
                   onChange={(e) => setFormData({ ...formData, dataVencimento: e.target.value })}
                 />
@@ -432,10 +438,12 @@ export default function ChequesPage() {
             </div>
             <div className="grid gap-2">
               <Label>Observações</Label>
-              <Input
-                value={formData.observacoes}
-                onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
-              />
+                <Input
+                  placeholder="Informações adicionais relevantes"
+                  title="Anotações sobre o cheque (opcional)"
+                  value={formData.observacoes}
+                  onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
+                />
             </div>
           </div>
           <DialogFooter>

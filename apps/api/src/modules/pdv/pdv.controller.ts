@@ -289,9 +289,12 @@ export class PdvController {
       }
 
       const resultado = await this.service.buscarCaixaAberto(empresaId, filialId as string);
-      return res.json({ success: true, data: resultado });
+      return res.json({ success: true, data: resultado ?? null });
     } catch (error: any) {
-      return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: error.message } });
+      if (error.message === 'Nenhum caixa aberto nesta filial') {
+        return res.json({ success: true, data: null });
+      }
+      return res.status(500).json({ success: false, error: { code: 'INTERNAL_ERROR', message: error.message } });
     }
   };
 

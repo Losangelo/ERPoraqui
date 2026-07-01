@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { FileText, Download } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { relatoriosService } from '@/services/financeiro';
 import { Button } from '@/components/ui/button';
+import { ExportButton } from '@/components/export/ExportButton';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export function RelatoriosFiscaisPage() {
@@ -53,11 +54,34 @@ export function RelatoriosFiscaisPage() {
     { id: 'spedContribuicoes', label: 'SPED Contribuições' },
   ];
 
+  const colunasExportacao = [
+    { label: 'Item', accessor: 'item' },
+    { label: 'Valor', accessor: (row: Record<string, unknown>) => formatCurrency(row.valor as number) },
+  ];
+
+  const dadosExportacao = resultado
+    ? Object.entries(resultado).flatMap(([chave, valor]) => {
+        if (typeof valor === 'number') return [{ item: chave, valor }]
+        if (Array.isArray(valor)) return valor.map((v: any, i: number) => ({ item: `${chave}[${i}]`, valor: typeof v === 'object' ? JSON.stringify(v) : v }))
+        if (typeof valor === 'object' && valor !== null) return [{ item: chave, valor: JSON.stringify(valor) }]
+        return [{ item: chave, valor }]
+      })
+    : []
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Relatórios Fiscais</h1>
-        <p className="text-gray-500">Geração de relatórios contábeis e fiscais</p>
+    <div id="relatorios-fiscais" className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Relatórios Fiscais</h1>
+          <p className="text-gray-500">Geração de relatórios contábeis e fiscais</p>
+        </div>
+        <ExportButton
+          dados={dadosExportacao}
+          colunas={colunasExportacao}
+          nomeArquivo="relatorios-fiscais"
+          tituloRelatorio="Relatórios Fiscais"
+          elementoIdParaPDF="relatorio-fiscal-resultado"
+        />
       </div>
 
       <Card>
@@ -114,13 +138,9 @@ export function RelatoriosFiscaisPage() {
       </Card>
 
       {resultado && (
-        <Card>
-          <CardHeader className="border-b border-gray-200 flex flex-row items-center justify-between py-4 px-6">
+        <Card id="relatorio-fiscal-resultado">
+          <CardHeader className="border-b border-gray-200 py-4 px-6">
             <CardTitle>Resultado</CardTitle>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Download className="h-4 w-4" />
-              Exportar
-            </Button>
           </CardHeader>
           
           <CardContent className="p-6">

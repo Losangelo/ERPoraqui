@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { nfseService, NotaServico, CriarNFSeDto } from '@/services/nfse';
+import { FilialSelect } from '@/components/FilialSelect';
 import { Plus, Send, XCircle, Trash2 } from 'lucide-react';
 
 const situacoes: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning' }> = {
@@ -285,7 +286,7 @@ export default function NFSePage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova NFSe - Nota Fiscal de Serviços</DialogTitle>
           </DialogHeader>
@@ -302,12 +303,7 @@ export default function NFSePage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="filial">Filial</Label>
-                    <Input
-                      id="filial"
-                      value={formData.filialId}
-                      onChange={(e) => setFormData(prev => ({ ...prev, filialId: e.target.value }))}
-                      placeholder="ID da filial"
-                    />
+                    <FilialSelect value={formData.filialId} onValueChange={v => setFormData(prev => ({ ...prev, filialId: v }))} placeholder="Selecione a filial" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="tipoRps">Tipo RPS</Label>

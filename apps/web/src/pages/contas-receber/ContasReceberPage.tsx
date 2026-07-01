@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ExportButton } from '@/components/export/ExportButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -164,17 +165,36 @@ export default function ContasReceberPage() {
   const totalRecebido = contas.filter(c => c.situacao === 'PAGO').reduce((sum, c) => sum + c.valorRecebido, 0);
   const totalVencido = contas.filter(c => c.situacao === 'VENCIDO').reduce((sum, c) => sum + c.valorOriginal, 0);
 
+  const colunasExportacao = [
+    { label: 'Documento', accessor: 'numeroDocumento' },
+    { label: 'Parcela', accessor: (row: Record<string, unknown>) => `${row.numeroParcela}/${row.totalParcelas}` },
+    { label: 'Cliente', accessor: (row: Record<string, unknown>) => (row.cliente as { nome?: string })?.nome || '-' },
+    { label: 'Vencimento', accessor: (row: Record<string, unknown>) => formatDate(row.dataVencimento as string) },
+    { label: 'Valor', accessor: (row: Record<string, unknown>) => formatCurrency(row.valorOriginal as number) },
+    { label: 'Recebido', accessor: (row: Record<string, unknown>) => formatCurrency(row.valorRecebido as number) },
+    { label: 'Status', accessor: 'situacao' },
+  ];
+
   return (
-    <div className="space-y-4">
+    <div id="relatorio-contas-receber" className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Contas a Receber</h1>
           <p className="text-muted-foreground">Gerenciamento de contas a receber</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Nova Conta
-        </Button>
+        <div className="flex gap-2">
+          <ExportButton
+            dados={contasFiltradas as unknown as Record<string, unknown>[]}
+            colunas={colunasExportacao}
+            nomeArquivo="contas-a-receber"
+            tituloRelatorio="Contas a Receber"
+            elementoIdParaPDF="relatorio-contas-receber"
+          />
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Nova Conta
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -299,7 +319,7 @@ export default function ContasReceberPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Conta a Receber</DialogTitle>
           </DialogHeader>
@@ -318,6 +338,8 @@ export default function ContasReceberPage() {
             <div className="grid gap-2">
               <Label>Número Documento</Label>
               <Input 
+                placeholder="Número do documento fiscal ou contrato"
+                title="Ex: NF-12345 ou CTR-001"
                 value={formData.numeroDocumento}
                 onChange={(e) => setFormData({...formData, numeroDocumento: e.target.value})}
               />
@@ -326,6 +348,8 @@ export default function ContasReceberPage() {
               <Label>Data Vencimento</Label>
               <Input 
                 type="date"
+                placeholder="dd/mm/aaaa"
+                title="Selecione a data de vencimento da conta"
                 value={formData.dataVencimento}
                 onChange={(e) => setFormData({...formData, dataVencimento: e.target.value})}
               />
@@ -334,6 +358,8 @@ export default function ContasReceberPage() {
               <Label>Valor Total</Label>
               <Input 
                 type="number"
+                placeholder="Valor total da conta"
+                title="Use ponto para decimais. Ex: 1500.50"
                 value={formData.valorOriginal}
                 onChange={(e) => setFormData({...formData, valorOriginal: parseFloat(e.target.value) || 0})}
               />
@@ -343,6 +369,8 @@ export default function ContasReceberPage() {
                 <Label>Parcelas</Label>
                 <Input 
                   type="number"
+                  placeholder="Quantidade de parcelas"
+                  title="Mínimo de 1 parcela"
                   value={formData.quantidadeParcelas}
                   onChange={(e) => setFormData({...formData, quantidadeParcelas: parseInt(e.target.value) || 1})}
                 />
@@ -351,6 +379,8 @@ export default function ContasReceberPage() {
                 <Label>Intervalo (dias)</Label>
                 <Input 
                   type="number"
+                  placeholder="Dias entre parcelas"
+                  title="Ex: 30 para parcelas mensais"
                   value={formData.intervaloParcelas}
                   onChange={(e) => setFormData({...formData, intervaloParcelas: parseInt(e.target.value) || 30})}
                 />

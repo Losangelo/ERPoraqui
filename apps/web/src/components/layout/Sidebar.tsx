@@ -110,6 +110,7 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'suppliers', label: 'Fornecedores', icon: Truck, path: '/suppliers', categoria: 'cadastros' },
       { id: 'vendedores', label: 'Vendedores', icon: Users, path: '/vendedores', categoria: 'cadastros' },
       { id: 'transportadoras', label: 'Transportadoras', icon: Truck, path: '/transportadoras', categoria: 'cadastros' },
+      { id: 'filiais', label: 'Filiais', icon: Building2, path: '/filiais', categoria: 'cadastros' },
     ],
   },
   {
@@ -156,6 +157,7 @@ const menuCategorias: CategoriaMenu[] = [
     items: [
       { id: 'ajuda', label: 'Ajuda', icon: HelpCircle, path: '/ajuda', categoria: 'sistema' },
       { id: 'manual', label: 'Manual do Usuário', icon: BookOpen, path: '/manual', categoria: 'sistema' },
+      { id: 'manual-tecnico', label: 'Manual Técnico', icon: BookOpen, path: '/manual-tecnico', categoria: 'sistema' },
       { id: 'planos', label: 'Planos e Licença', icon: CreditCard, path: '/planos', categoria: 'sistema' },
       { id: 'multi-empresa', label: 'Multi-empresa', icon: Building2, path: '/multi-empresa', categoria: 'sistema' },
       { id: 'automacao', label: 'Automação', icon: Zap, path: '/automacao', categoria: 'sistema' },

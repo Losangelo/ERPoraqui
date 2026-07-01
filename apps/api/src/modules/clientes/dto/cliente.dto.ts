@@ -28,8 +28,8 @@ export const clienteFiltroSchema = z.object({
   documento: z.string().optional(),
   tipoPessoa: z.enum(['FISICA', 'JURIDICA']).optional(),
   ativo: z.boolean().optional(),
-  pagina: z.number().min(1).default(1),
-  limite: z.number().min(1).max(100).default(20),
+  pagina: z.coerce.number().min(1).default(1),
+  limite: z.coerce.number().min(1).max(500).default(20),
 });
 
 export type CriarClienteInput = z.infer<typeof criarClienteSchema>;

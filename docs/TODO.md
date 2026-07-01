@@ -137,6 +137,23 @@
 - [x] **Financeiro — Centro Custo:** Schema + API CRUD + árvore hierárquica + Frontend
 - [x] **Specs criadas:** ESTOQUE_AVANCADO.md, BOLETOS_CNAB.md, CHEQUES.md, CENTRO_CUSTO.md
 - [x] **Correções TypeScript:** 30+ erros pré-existentes corrigidos no frontend, build limpo
+- [x] **PDV buscarCaixaAberto:** 404 eliminado — service retorna null em vez de throw
+- [x] **403 licença:** Seed automático de licenças para empresas sem licença + moduloCrm=true no BASIC
+- [x] **400 validação:** z.coerce.number() em 4 DTOs + ativo boolean conversion + inventario args fix
+- [x] **response.data.dados → data:** 10 ocorrências em 6 services corrigidas
+- [x] **aria-describedby:** 39 DialogContent em 34 arquivos corrigidos
+- [x] **Input Hints:** Placeholder descritivo em ChequesPage, CentrosCustoPage, ProdutosVariacoesPage, ProdutosLotesPage, TabelasPrecoPage
+- [x] **Regra Input Hints:** Adicionada ao AGENTS.md (regra de ouro #5)
+- [x] **Exportação:** Componente ExportButton + util export.ts (CSV, JSON, XLSX, PDF) + integrado em DRE, FluxoCaixa, ContasReceber, ContasPagar, RelatoriosFiscais
+- [x] **Spec EXPORTACAO.md:** Especificação técnica do módulo de exportação
+- [x] **PlanoContas route fix:** /arvore movido antes de /:id para evitar conflito
+- [x] **Manual Técnico:** docs/ManualTecnicoPage.tsx — 11 seções técnicas para equipe de devs, acesso protegido por senha 2145
+- [x] **Manual do Usuário atualizado:** +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
+- [x] **PDV Interface completa:** Carrinho, busca por código de barras/nome, +/-, remover, cliente, pagamento com troco
+- [x] **Filial CRUD Backend:** POST/PUT/DELETE /empresas/:id/filiais + DTO Zod
+- [x] **Filial CRUD Frontend:** FiliaisPage com tabela, busca, diálogo criação/edição
+- [x] **FilialSelect Component:** Componente reutilizável com loading de empresas+filiais
+- [x] **Filial Selector NFCe/NFSe/NF-e:** FilialSelect integrado nas 3 páginas que estavam sem
 
 ---
 

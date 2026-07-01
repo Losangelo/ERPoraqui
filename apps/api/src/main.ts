@@ -5,6 +5,9 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { pino } from 'pino';
 
+import { prisma } from '@/database/prisma.service';
+import { LicencasService } from '@/modules/licencas/licencas.service';
+
 import { clientesRoutes } from './modules/clientes';
 import { produtosRoutes } from './modules/produtos';
 import { fornecedoresRoutes } from './modules/fornecedores';
@@ -144,8 +147,23 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = process.env.PORT || 3002;
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   logger.info(`Server running on port ${PORT}`);
+
+  // Seed planos e licencas na inicializacao
+  try {
+    const licencasService = new LicencasService(prisma);
+    const seedResult = await licencasService.seedPlanosPadrao();
+    if (seedResult.message !== 'Planos ja existem') {
+      logger.info('Planos padrao seedados com sucesso');
+    }
+    const licencasResult = await licencasService.seedLicencasParaEmpresas();
+    if (licencasResult.message !== 'Nenhuma empresa encontrada para vincular licenca') {
+      logger.info(`Seed de licencas: ${licencasResult.message}`);
+    }
+  } catch (err) {
+    logger.error({ err }, 'Erro ao seedar dados na inicializacao');
+  }
 });
 
 export default app;

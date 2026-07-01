@@ -220,6 +220,7 @@ export default function TabelasPrecoPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             placeholder="Buscar por nome..."
+            title="Digite parte do nome da tabela para filtrar"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10"
@@ -357,7 +358,7 @@ export default function TabelasPrecoPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar Tabela de Preço' : 'Nova Tabela de Preço'}</DialogTitle>
           </DialogHeader>
@@ -366,6 +367,8 @@ export default function TabelasPrecoPage() {
               <div className="grid gap-2">
                 <Label>Nome</Label>
                 <Input
+                  placeholder="Nome da tabela de preço"
+                  title="Ex: Tabela Padrão - À Vista"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                 />
@@ -391,6 +394,8 @@ export default function TabelasPrecoPage() {
             <div className="grid gap-2">
               <Label>Descrição</Label>
               <Input
+                placeholder="Descrição da tabela de preço"
+                title="Descrição opcional para identificar a finalidade da tabela"
                 value={formData.descricao}
                 onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
               />
@@ -400,6 +405,8 @@ export default function TabelasPrecoPage() {
                 <Label>Markup Base (%)</Label>
                 <Input
                   type="number"
+                  placeholder="Ex: 25.50"
+                  title="Valor percentual do markup base (aceita decimais)"
                   value={formData.markupBase}
                   onChange={(e) => setFormData({ ...formData, markupBase: parseFloat(e.target.value) || 0 })}
                   min={0}
@@ -431,7 +438,7 @@ export default function TabelasPrecoPage() {
       </Dialog>
 
       <Dialog open={itemDialogOpen} onOpenChange={setItemDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{itemEditando ? 'Editar Item' : 'Adicionar Produto'}</DialogTitle>
           </DialogHeader>
@@ -461,6 +468,8 @@ export default function TabelasPrecoPage() {
                 <Label>Preço Venda</Label>
                 <Input
                   type="number"
+                  placeholder="0,00"
+                  title="Valor de venda do produto nesta tabela"
                   value={itemForm.precoVenda}
                   onChange={(e) => setItemForm({ ...itemForm, precoVenda: parseFloat(e.target.value) || 0 })}
                   min={0}
@@ -471,6 +480,8 @@ export default function TabelasPrecoPage() {
                 <Label>Preço Mínimo</Label>
                 <Input
                   type="number"
+                  placeholder="0,00"
+                  title="Valor mínimo permitido para negociação"
                   value={itemForm.precoMinimo}
                   onChange={(e) => setItemForm({ ...itemForm, precoMinimo: parseFloat(e.target.value) || 0 })}
                   min={0}
@@ -481,6 +492,8 @@ export default function TabelasPrecoPage() {
                 <Label>Desconto Máx. (%)</Label>
                 <Input
                   type="number"
+                  placeholder="Ex: 10.0"
+                  title="Percentual máximo de desconto permitido (0 a 100)"
                   value={itemForm.descontoMaximo}
                   onChange={(e) => setItemForm({ ...itemForm, descontoMaximo: parseFloat(e.target.value) || 0 })}
                   min={0}

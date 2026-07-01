@@ -380,7 +380,7 @@ export function CRMPage() {
       </Tabs>
 
       <Dialog open={dialogAberto && tipoDialog === 'oportunidade'} onOpenChange={setDialogAberto}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Oportunidade</DialogTitle>
           </DialogHeader>
@@ -401,7 +401,7 @@ export function CRMPage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="titulo">Título</Label>
-                <Input id="titulo" name="titulo" required />
+                <Input id="titulo" name="titulo" required placeholder="Ex: Venda de 100 unidades do produto X" title="Título descritivo da oportunidade" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="descricao">Descrição</Label>
@@ -410,11 +410,11 @@ export function CRMPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="valor">Valor (R$)</Label>
-                  <Input id="valor" name="valor" type="number" step="0.01" required />
+                  <Input id="valor" name="valor" type="number" step="0.01" required placeholder="0,00" title="Valor total da oportunidade" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="probabilidade">Probabilidade (%)</Label>
-                  <Input id="probabilidade" name="probabilidade" type="number" defaultValue="50" />
+                  <Input id="probabilidade" name="probabilidade" type="number" defaultValue="50" placeholder="Ex: 50" title="Chance de fechamento em percentual (0-100)" />
                 </div>
               </div>
               <div className="grid gap-2">
@@ -444,7 +444,7 @@ export function CRMPage() {
       </Dialog>
 
       <Dialog open={dialogAberto && tipoDialog === 'tarefa'} onOpenChange={setDialogAberto}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Tarefa</DialogTitle>
           </DialogHeader>
@@ -464,7 +464,7 @@ export function CRMPage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="titulo">Título</Label>
-                <Input id="titulo" name="titulo" required />
+                <Input id="titulo" name="titulo" required placeholder="Ex: Ligar para cliente sobre proposta" title="Título descritivo da tarefa" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="descricao">Descrição</Label>
@@ -504,7 +504,7 @@ export function CRMPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="dataVencimento">Data de Vencimento</Label>
-                <Input id="dataVencimento" name="dataVencimento" type="date" />
+                <Input id="dataVencimento" name="dataVencimento" type="date" title="Data limite para conclusão da tarefa" />
               </div>
             </div>
             <DialogFooter>

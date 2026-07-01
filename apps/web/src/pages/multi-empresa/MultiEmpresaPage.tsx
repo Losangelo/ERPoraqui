@@ -221,7 +221,7 @@ export function MultiEmpresaPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Vincular Empresa</DialogTitle>
           </DialogHeader>

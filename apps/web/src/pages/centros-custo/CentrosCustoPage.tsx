@@ -234,7 +234,7 @@ export default function CentrosCustoPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar Centro de Custo' : 'Novo Centro de Custo'}</DialogTitle>
           </DialogHeader>
@@ -245,7 +245,8 @@ export default function CentrosCustoPage() {
                 <Input
                   value={formData.codigo}
                   onChange={(e) => setFormData({ ...formData, codigo: e.target.value })}
-                  placeholder="01.001"
+                  placeholder="Código de identificação único"
+                  title="Ex: 01.001 — use pontos para separar níveis hierárquicos"
                 />
               </div>
               <div className="grid gap-2">
@@ -273,6 +274,8 @@ export default function CentrosCustoPage() {
               <Input
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                placeholder="Nome completo do centro de custo"
+                title="Ex: Administrativo, Financeiro, TI — nome descritivo e único"
               />
             </div>
             <div className="grid gap-2">
@@ -280,6 +283,8 @@ export default function CentrosCustoPage() {
               <Input
                 value={formData.descricao}
                 onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
+                placeholder="Descrição detalhada da finalidade do centro de custo"
+                title="Explique o propósito e o escopo deste centro de custo"
               />
             </div>
             {editando && (

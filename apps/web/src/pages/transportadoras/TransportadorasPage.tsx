@@ -165,7 +165,7 @@ export function TransportadorasPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar' : 'Nova'} Transportadora</DialogTitle>
           </DialogHeader>

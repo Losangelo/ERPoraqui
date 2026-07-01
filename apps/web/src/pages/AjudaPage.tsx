@@ -949,18 +949,13 @@ O topo da página mostra:
 
 Os centros de custo podem ser organizados em árvore:
 
-```
 Empresa
-├── Administrativo
-│   ├── RH
-│   └── Financeiro
-├── Comercial
-│   ├── Vendas Internas
-│   └── Vendas Externas
-└── Produção
-    ├── Fábrica 1
-    └── Fábrica 2
-```
+  Administrativo
+    RH, Financeiro
+  Comercial
+    Vendas Internas, Vendas Externas
+  Producao
+    Fabrica 1, Fabrica 2
 
 ---
 

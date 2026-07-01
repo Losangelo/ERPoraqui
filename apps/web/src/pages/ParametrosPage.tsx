@@ -232,7 +232,7 @@ export function ParametrosPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{editando ? "Editar Parâmetro" : "Novo Parâmetro"}</DialogTitle>
           </DialogHeader>

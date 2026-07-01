@@ -133,7 +133,7 @@ export function EstoquePage() {
       </Card>
 
       <Dialog open={!!produtoSelecionado} onOpenChange={() => setProdutoSelecionado(null)}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Detalhes do Produto</DialogTitle>
           </DialogHeader>

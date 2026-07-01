@@ -83,8 +83,8 @@ export class InventarioService {
     return inventario;
   }
 
-  async listar(filtros: InventarioFiltro, empresaId: string) {
-    const parsed = inventarioFiltroSchema.parse(filtros);
+  async listar(empresaId: string, filtros: InventarioFiltro) {
+    const parsed = filtros;
 
     const where: any = { empresaId };
 

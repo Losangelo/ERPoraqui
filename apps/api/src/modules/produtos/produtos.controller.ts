@@ -45,6 +45,7 @@ export class ProdutosController {
     try {
       const filtros = produtoFiltroSchema.parse({
         ...req.query,
+        ativo: req.query.ativo === 'true' ? true : req.query.ativo === 'false' ? false : undefined,
         pagina: Number(req.query.pagina) || 1,
         limite: Number(req.query.limite) || 20,
       });

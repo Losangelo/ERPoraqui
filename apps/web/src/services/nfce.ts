@@ -70,7 +70,7 @@ export const nfceService = {
     params.append('pagina', String(filtros.pagina || 1));
     params.append('limite', String(filtros.limite || 20));
     const response = await api.get(`/nfce?${params}`);
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {

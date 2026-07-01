@@ -91,7 +91,7 @@ export const comprasService = {
     params.append('pagina', '1');
     params.append('limite', '100');
     const response = await api.get(`/pedidos-compra?${params}`);
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   async buscarPedido(id: string): Promise<PedidoCompra> {
@@ -120,7 +120,7 @@ export const comprasService = {
     params.append('pagina', '1');
     params.append('limite', '100');
     const response = await api.get(`/cotacoes-compra?${params}`);
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   async buscarCotacao(id: string): Promise<CotacaoCompra> {
@@ -150,7 +150,7 @@ export const comprasService = {
     params.append('pagina', '1');
     params.append('limite', '100');
     const response = await api.get(`/entradas-mercadoria?${params}`);
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   async buscarEntrada(id: string): Promise<EntradaMercadoria> {

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { notasFiscaisService, NotaFiscal, CriarNotaFiscalDto } from "@/services/notas-fiscais"
 import { clientesService } from "@/services/clientes"
 import { produtosService } from "@/services/produtos"
+import { FilialSelect } from "@/components/FilialSelect"
 import { FileText, Search, Plus, Send, X, FileSignature, Download, Eye, Trash2, Mail } from "lucide-react"
 
 const SITUACOES = [
@@ -359,7 +360,7 @@ export function NotasFiscaisPage() {
 
       {/* Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Nova Nota Fiscal Eletrônica</DialogTitle>
           </DialogHeader>
@@ -371,6 +372,10 @@ export function NotasFiscaisPage() {
             
             <TabsContent value="lista" className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label>Filial</Label>
+                  <FilialSelect value={formData.filialId} onValueChange={v => setFormData({...formData, filialId: v})} placeholder="Selecione a filial" />
+                </div>
                 <div className="grid gap-2">
                   <Label>Cliente</Label>
                   <Select value={formData.clienteId} onValueChange={(v) => setFormData({...formData, clienteId: v})}>
@@ -501,7 +506,7 @@ export function NotasFiscaisPage() {
 
       {/* Detail Dialog */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Detalhes da NF-e</DialogTitle>
           </DialogHeader>
@@ -543,7 +548,7 @@ export function NotasFiscaisPage() {
 
       {/* Cancel Dialog */}
       <Dialog open={acaoDialog === "cancelar"} onOpenChange={(open) => { if (!open) setAcaoDialog(null); }}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Cancelar Nota Fiscal</DialogTitle>
           </DialogHeader>

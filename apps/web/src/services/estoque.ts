@@ -80,7 +80,7 @@ export const EstoqueService = {
 export const categoriasService = {
   async listar(): Promise<Categoria[]> {
     const response = await api.get('/categorias?pagina=1&limite=100');
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   async buscarPorId(id: string): Promise<Categoria> {
@@ -106,7 +106,7 @@ export const categoriasService = {
 export const unidadesService = {
   async listar(): Promise<UnidadeMedida[]> {
     const response = await api.get('/unidades-medida?pagina=1&limite=100');
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   async buscarPorId(id: string): Promise<UnidadeMedida> {
@@ -153,5 +153,24 @@ export const empresasService = {
   async listarFiliais(empresaId: string): Promise<Filial[]> {
     const response = await api.get(`/empresas/${empresaId}/filiais`);
     return response.data;
+  },
+
+  async criarFilial(empresaId: string, data: any): Promise<Filial> {
+    const response = await api.post(`/empresas/${empresaId}/filiais`, data);
+    return response.data;
+  },
+
+  async buscarFilial(empresaId: string, filialId: string): Promise<Filial> {
+    const response = await api.get(`/empresas/${empresaId}/filiais/${filialId}`);
+    return response.data;
+  },
+
+  async atualizarFilial(empresaId: string, filialId: string, data: any): Promise<Filial> {
+    const response = await api.put(`/empresas/${empresaId}/filiais/${filialId}`, data);
+    return response.data;
+  },
+
+  async removerFilial(empresaId: string, filialId: string): Promise<void> {
+    await api.delete(`/empresas/${empresaId}/filiais/${filialId}`);
   },
 };

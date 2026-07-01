@@ -146,6 +146,7 @@ export function SuppliersPage() {
             <Input
               type="text"
               placeholder="Buscar fornecedores..."
+              title="Buscar pelo nome do fornecedor"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
@@ -230,7 +231,7 @@ export function SuppliersPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {editingFornecedor ? 'Editar Fornecedor' : 'Novo Fornecedor'}
@@ -243,6 +244,8 @@ export function SuppliersPage() {
                 <Input
                   id="nome"
                   type="text"
+                  placeholder="Nome ou Razão Social do fornecedor"
+                  title="Nome do fornecedor"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                   required
@@ -265,6 +268,8 @@ export function SuppliersPage() {
                 <Input
                   id="documento"
                   type="text"
+                  placeholder="00.000.000/0000-00 ou 000.000.000-00"
+                  title="CPF ou CNPJ do fornecedor"
                   value={formData.documento}
                   onChange={(e) => setFormData({ ...formData, documento: e.target.value })}
                   required
@@ -275,6 +280,8 @@ export function SuppliersPage() {
                 <Input
                   id="inscricaoEstadual"
                   type="text"
+                  placeholder="Inscrição Estadual"
+                  title="IE do fornecedor"
                   value={formData.inscricaoEstadual}
                   onChange={(e) => setFormData({ ...formData, inscricaoEstadual: e.target.value })}
                 />
@@ -284,6 +291,8 @@ export function SuppliersPage() {
                 <Input
                   id="inscricaoMunicipal"
                   type="text"
+                  placeholder="Inscrição Municipal"
+                  title="IM do fornecedor"
                   value={formData.inscricaoMunicipal}
                   onChange={(e) => setFormData({ ...formData, inscricaoMunicipal: e.target.value })}
                 />
@@ -293,6 +302,8 @@ export function SuppliersPage() {
                 <Input
                   id="email"
                   type="email"
+                  placeholder="email@exemplo.com"
+                  title="Email do fornecedor"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -302,6 +313,8 @@ export function SuppliersPage() {
                 <Input
                   id="telefone"
                   type="text"
+                  placeholder="(99) 99999-9999"
+                  title="Formato: (99) 99999-9999"
                   value={formData.telefone}
                   onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
                 />
@@ -311,6 +324,8 @@ export function SuppliersPage() {
                 <Input
                   id="telefoneCelular"
                   type="text"
+                  placeholder="(99) 99999-9999"
+                  title="Formato: (99) 99999-9999"
                   value={formData.telefoneCelular}
                   onChange={(e) => setFormData({ ...formData, telefoneCelular: e.target.value })}
                 />
@@ -323,6 +338,8 @@ export function SuppliersPage() {
                 <Input
                   id="logradouro"
                   type="text"
+                  placeholder="Rua, Avenida, Travessa..."
+                  title="Endereço do fornecedor"
                   value={formData.logradouro}
                   onChange={(e) => setFormData({ ...formData, logradouro: e.target.value })}
                 />
@@ -332,6 +349,8 @@ export function SuppliersPage() {
                 <Input
                   id="numero"
                   type="text"
+                  placeholder="Número do endereço"
+                  title="Número do endereço"
                   value={formData.numero}
                   onChange={(e) => setFormData({ ...formData, numero: e.target.value })}
                 />
@@ -341,6 +360,8 @@ export function SuppliersPage() {
                 <Input
                   id="complemento"
                   type="text"
+                  placeholder="Apto, Bloco, Sala..."
+                  title="Complemento do endereço"
                   value={formData.complemento}
                   onChange={(e) => setFormData({ ...formData, complemento: e.target.value })}
                 />
@@ -350,6 +371,8 @@ export function SuppliersPage() {
                 <Input
                   id="bairro"
                   type="text"
+                  placeholder="Nome do bairro"
+                  title="Bairro do fornecedor"
                   value={formData.bairro}
                   onChange={(e) => setFormData({ ...formData, bairro: e.target.value })}
                 />
@@ -359,6 +382,8 @@ export function SuppliersPage() {
                 <Input
                   id="cep"
                   type="text"
+                  placeholder="00000-000"
+                  title="Formato: 00000-000"
                   value={formData.cep}
                   onChange={(e) => setFormData({ ...formData, cep: e.target.value })}
                 />
@@ -368,6 +393,8 @@ export function SuppliersPage() {
                 <Input
                   id="cidade"
                   type="text"
+                  placeholder="Nome da cidade"
+                  title="Cidade do fornecedor"
                   value={formData.cidade}
                   onChange={(e) => setFormData({ ...formData, cidade: e.target.value })}
                 />
@@ -377,6 +404,8 @@ export function SuppliersPage() {
                 <Input
                   id="uf"
                   type="text"
+                  placeholder="UF"
+                  title="Sigla do estado (ex: SP, RJ, MG)"
                   value={formData.uf}
                   onChange={(e) => setFormData({ ...formData, uf: e.target.value })}
                   maxLength={2}

@@ -173,7 +173,7 @@ export function VendedoresPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={(open) => { if (!open) { setShowModal(false); resetForm(); } }}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar' : 'Novo'} Vendedor</DialogTitle>
           </DialogHeader>

@@ -26,7 +26,7 @@ export const parametrosService = {
     if (filtros.busca) params.append('busca', filtros.busca);
 
     const response = await api.get(`/parametros?${params}`);
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {

@@ -135,6 +135,7 @@ export function CustomersPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar clientes..."
+                title="Buscar pelo nome do cliente"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -213,7 +214,7 @@ export function CustomersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {editingCliente ? 'Editar Cliente' : 'Novo Cliente'}
@@ -230,6 +231,8 @@ export function CustomersPage() {
                 <Label htmlFor="nome">Nome</Label>
                 <Input
                   id="nome"
+                  placeholder="Nome completo do cliente"
+                  title="Nome do cliente"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                   required
@@ -252,6 +255,8 @@ export function CustomersPage() {
                   <Label htmlFor="documento">CPF/CNPJ</Label>
                   <Input
                     id="documento"
+                    placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                    title="CPF ou CNPJ do cliente"
                     value={formData.documento}
                     onChange={(e) => setFormData({ ...formData, documento: e.target.value })}
                     required
@@ -262,6 +267,8 @@ export function CustomersPage() {
                   <Input
                     id="email"
                     type="email"
+                    placeholder="email@exemplo.com"
+                    title="Email do cliente"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
@@ -270,6 +277,8 @@ export function CustomersPage() {
                   <Label htmlFor="telefone">Telefone</Label>
                   <Input
                     id="telefone"
+                    placeholder="(99) 99999-9999"
+                    title="Formato: (99) 99999-9999"
                     value={formData.telefone}
                     onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
                   />
@@ -278,6 +287,8 @@ export function CustomersPage() {
                   <Label htmlFor="telefoneCelular">Celular</Label>
                   <Input
                     id="telefoneCelular"
+                    placeholder="(99) 99999-9999"
+                    title="Formato: (99) 99999-9999"
                     value={formData.telefoneCelular}
                     onChange={(e) => setFormData({ ...formData, telefoneCelular: e.target.value })}
                   />
@@ -287,6 +298,8 @@ export function CustomersPage() {
                   <Input
                     id="limiteCredito"
                     type="number"
+                    placeholder="0,00"
+                    title="Use vírgula para centavos"
                     value={formData.limiteCredito}
                     onChange={(e) => setFormData({ ...formData, limiteCredito: Number(e.target.value) })}
                     min="0"

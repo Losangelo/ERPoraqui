@@ -49,6 +49,16 @@ export interface PdvFiltros {
   limite?: number;
 }
 
+export interface ProdutoPDV {
+  id: string;
+  codigoInterno: string;
+  codigoBarras?: string;
+  nome: string;
+  precoVenda: number;
+  quantidadeEstoque: number;
+  unidadeMedida?: { sigla: string };
+}
+
 export const pdvService = {
   listarVendas: async (filtros: PdvFiltros = {}) => {
     const params = new URLSearchParams();
@@ -63,7 +73,7 @@ export const pdvService = {
     params.append('limite', String(filtros.limite || 20));
 
     const response = await api.get(`/pdv/vendas?${params}`);
-    return response.data?.data || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarCaixaAberto: async (filialId?: string) => {
@@ -103,8 +113,28 @@ export const pdvService = {
   },
 
   listarProdutos: async (termo?: string) => {
-    const params = termo ? `?termo=${termo}&pagina=1&limite=20` : '?pagina=1&limite=20';
+    const params = termo ? `?termo=${encodeURIComponent(termo)}&pagina=1&limite=20` : '?pagina=1&limite=20';
     const response = await api.get(`/pdv/produtos${params}`);
+    return response.data;
+  },
+
+  buscarPorCodigoBarras: async (codigo: string) => {
+    const response = await api.get(`/pdv/produtos/barras/${encodeURIComponent(codigo)}`);
+    return response.data;
+  },
+
+  removerItem: async (vendaId: string, produtoId: string) => {
+    const response = await api.delete(`/pdv/venda/${vendaId}/itens/${produtoId}`);
+    return response.data;
+  },
+
+  atualizarQuantidade: async (vendaId: string, produtoId: string, quantidade: number) => {
+    const response = await api.put(`/pdv/venda/${vendaId}/itens/${produtoId}/quantidade`, { quantidade });
+    return response.data;
+  },
+
+  buscarVenda: async (vendaId: string) => {
+    const response = await api.get(`/pdv/vendas/${vendaId}`);
     return response.data;
   },
 };

@@ -71,7 +71,7 @@ export const fornecedoresService = {
     params.append('limite', String(filtros.limite || 100));
     
     const response = await api.get<FornecedoresResponse>(`/fornecedores?${params}`);
-    return response.data?.dados || response.data || [];
+    return response.data?.data || response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {
