@@ -47,6 +47,7 @@ import { automacaoRoutes } from './modules/automacao/automacao.routes';
 import chequesRoutes from './modules/cheques/cheques.routes';
 import centrosCustoRoutes from './modules/centros-custo/centros-custo.routes';
 import spedFiscalRoutes from './modules/sped-fiscal/sped-fiscal.routes';
+import mdfeRoutes from './modules/mdfe/mdfe.routes';
 import { produtosVariacoesRoutes } from './modules/produtos-variacoes';
 import { produtosLotesRoutes } from './modules/produtos-lotes';
 import { tabelasPrecoRoutes } from './modules/tabelas-preco';
@@ -134,6 +135,7 @@ app.use('/api/v1/tabelas-preco', tabelasPrecoRoutes);
 app.use('/api/v1/cheques', chequesRoutes);
 app.use('/api/v1/centros-custo', centrosCustoRoutes);
 app.use('/api/v1/sped-fiscal', spedFiscalRoutes);
+app.use('/api/v1/mdfe', mdfeRoutes);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err.message);

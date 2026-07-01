@@ -2,13 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { api } from '@/services/api';
 import { 
-  FileText, Download, CheckCircle, Clock, Settings, Loader2, AlertCircle,
-  Database, BarChart3, Package, ClipboardList, Receipt, TrendingUp
+  FileText, Download, CheckCircle, Clock, Loader2, AlertCircle,
+  Database, BarChart3, Package, Receipt, TrendingUp
 } from 'lucide-react';
 
 interface SpedBlock {

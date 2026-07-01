@@ -338,7 +338,18 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 
 ### Status Atual MDF-e
 - ✅ Spec MDFE.md criada (modelo 58, documento composto)
-- ⏳ Implementação pendente (próximo passo)
+- ✅ Modelos Prisma: Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento
+- ✅ Reverse relations em Empresa + Filial
+- ✅ API CRUD Veículos (GET/POST/PUT/DELETE /api/v1/mdfe/veiculos)
+- ✅ API CRUD Condutores (GET/POST/PUT/DELETE /api/v1/mdfe/condutores)
+- ✅ API CRUD MDF-e (GET/POST/PUT/DELETE /api/v1/mdfe)
+- ✅ API eventos: incluir/remover documento, cancelar, encerrar
+- ✅ Geração de chave de acesso 44 dígitos (modelo 58)
+- ✅ Frontend VeiculosPage (CRUD completo, dialog formulário)
+- ✅ Frontend CondutoresPage (CRUD completo, dialog formulário)
+- ✅ Frontend MdfePage (listagem, filtro, criação, detalhes, ações)
+- ✅ Sidebar: MDF-e, Veículos, Condutores no menu Fiscal
+- ✅ Rotas registradas em App.tsx + main.ts
 
 ### Status Atual PDV
 - ✅ PDV completo (PdvPage + pdv.ts service)
@@ -369,6 +380,14 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - Frontend SpedFiscalPage completo com cards/blocos/histórico/download
 - Sidebar: item SPED Fiscal
 - Rotas /api/v1/sped-fiscal registradas
+
+### Novidades (01/07/2026 noite)
+- MDF-e completo: Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento)
+- API CRUD Veículos + Condutores + MDF-e com eventos (incluir/remover doc, cancelar, encerrar)
+- Frontend VeiculosPage, CondutoresPage, MdfePage com dialog CRUD, filtros, detalhes
+- Sidebar: MDF-e, Veículos, Condutores adicionados
+- Rotas registradas em frontend (App.tsx) + backend (main.ts)
+- db push executado com sucesso
 
 ### Correções Recentes (01/07/2026)
 - PDV completo implementado (antes estava como stub)

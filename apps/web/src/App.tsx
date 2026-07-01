@@ -44,6 +44,9 @@ import { MovimentacoesPage } from '@/pages/estoque/MovimentacoesPage';
 import { CategoriasPage } from '@/pages/estoque/CategoriasPage';
 import { UnidadesMedidaPage } from '@/pages/estoque/UnidadesMedidaPage';
 import { SpedFiscalPage } from '@/pages/fiscal/SpedFiscalPage';
+import { MdfePage } from '@/pages/fiscal/MdfePage';
+import { VeiculosPage } from '@/pages/fiscal/VeiculosPage';
+import { CondutoresPage } from '@/pages/fiscal/CondutoresPage';
 import ContasReceberPage from '@/pages/contas-receber/ContasReceberPage';
 import ContasPagarPage from '@/pages/contas-pagar/ContasPagarPage';
 import TabelasPrecoPage from '@/pages/tabelas-preco/TabelasPrecoPage';
@@ -97,6 +100,9 @@ function AppRoutes() {
             <Route path="/ecf" element={<ECFPage />} />
             <Route path="/nfse" element={<NFSePage />} />
             <Route path="/sped-fiscal" element={<SpedFiscalPage />} />
+            <Route path="/mdfe" element={<MdfePage />} />
+            <Route path="/veiculos" element={<VeiculosPage />} />
+            <Route path="/condutores" element={<CondutoresPage />} />
             <Route path="/planos" element={<PlanosPage />} />
             <Route path="/compras" element={<PedidosCompraPage />} />
             <Route path="/compras/cotacoes" element={<CotacoesPage />} />

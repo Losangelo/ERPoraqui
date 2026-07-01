@@ -136,6 +136,39 @@
 
 ---
 
+## 01/07/2026 (noite) — MDF-e Completo (Backend + Frontend + Rotas)
+
+### Prisma Models
+- **Veiculo**: placa, renavam, rntrc, tipoPropriedade (1/2/3), tara, capacidade, carroceria, ativo
+- **Condutor**: cpf, nome, rntrc, cnh, cnhCategoria, cnhVencimento, telefone, email, ativo
+- **Mdfe**: chaveAcesso 44d (modelo 58), ufCarregamento/Descarregamento, veiculo/condutor, documentos, eventos, situacao (EM_DIGITACAO/AUTORIZADO/CANCELADO/ENCERRADO)
+- **MdfeDocumento**: tipo (NFE/CTE/MDFE), chaveAcesso, valor, peso
+- **MdfeEvento**: tipo (CANCELAMENTO/ENCERRAMENTO), descricao, protocolo
+- Reverse relations adicionadas em Empresa + Filial
+
+### API MDF-e (`/api/v1/mdfe`)
+- **Veículos CRUD**: GET/POST/PUT/DELETE /veiculos (validação placa única por empresa)
+- **Condutores CRUD**: GET/POST/PUT/DELETE /condutores (validação CPF único por empresa)
+- **MDF-e CRUD**: GET/POST/PUT/DELETE / (chave 44d auto-gerada, numeração auto-increment)
+- **Eventos**: POST /:id/incluir-documento, DELETE /:id/documentos/:docId, POST /:id/cancelar, POST /:id/encerrar
+- Zod schemas para validação de entrada
+
+### Frontend MDF-e
+- **VeiculosPage.tsx**: CRUD completo com dialog formulário (placa, renavam, marca, modelo, ano, cor, carroceria, capacidade/tara, RNTRC, propriedade — select)
+- **CondutoresPage.tsx**: CRUD completo com dialog formulário (nome, CPF, CNH, categoria, vencimento, RNTRC, telefone, email)
+- **MdfePage.tsx**: Listagem com filtro por situação, criação de novo MDF-e (select veículo/condutor da base), dialog de detalhes completo (chave, veículo, condutor, docs vinculados, eventos, ações cancelar/encerrar)
+
+### Rotas
+- Backend: /api/v1/mdfe registrado em main.ts
+- Frontend: /mdfe, /veiculos, /condutores registrados em App.tsx
+- Sidebar: MDF-e, Veículos, Condutores no menu Fiscal
+
+### db push executado com sucesso
+- Nenhum erro de tipo no backend
+- Apenas erros TS6133 pré-existentes no frontend (não relacionados)
+
+---
+
 ## 03/06/2026 — Criação do Plano de Ação Completo
 
 - Realizado diagnóstico completo comparando fontes xHarbour originais (`fontesPRG/`, 496 arquivos) vs implementação TypeScript moderna (`apps/api/`, `apps/web/`)

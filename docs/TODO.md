@@ -168,6 +168,15 @@
 - [x] **SPED Frontend atualizado:** SpedFiscalPage com cards de blocos, seleção ativa/desativa, histórico, download
 - [x] **SPED Sidebar:** Item "SPED Fiscal" adicionado ao menu Fiscal
 - [x] **SPED Rotas registradas:** /api/v1/sped-fiscal registrado em main.ts
+- [x] **MDF-e — Prisma Models:** Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento + reverse relations
+- [x] **MDF-e — API CRUD Veículos:** GET/POST/PUT/DELETE /api/v1/mdfe/veiculos
+- [x] **MDF-e — API CRUD Condutores:** GET/POST/PUT/DELETE /api/v1/mdfe/condutores
+- [x] **MDF-e — API CRUD MDF-e:** GET/POST/PUT/DELETE + eventos (incluir/remover doc, cancelar, encerrar)
+- [x] **MDF-e — Frontend VeiculosPage:** CRUD completo com dialog formulário
+- [x] **MDF-e — Frontend CondutoresPage:** CRUD completo com dialog formulário
+- [x] **MDF-e — Frontend MdfePage:** Listagem, filtro por situação, criação, detalhes com documentos/eventos, ações
+- [x] **MDF-e — Sidebar:** Itens MDF-e, Veículos, Condutores no menu Fiscal
+- [x] **MDF-e — Rotas:** Registradas em App.tsx (frontend) + main.ts (backend)
 
 ---
 

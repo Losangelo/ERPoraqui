@@ -100,7 +100,12 @@ model Empresa {
   licencas             Licenca[]
   produtoVariacoes     ProdutoVariacao[]
   produtoLotes         ProdutoLote[]
-  tabelasPreco         TabelaPreco[]
+   tabelasPreco         TabelaPreco[]
+   spedConfigs          SpedConfig[]
+   spedApuracoes        SpedApuracao[]
+   veiculos             Veiculo[]
+   condutores           Condutor[]
+   mdfes                Mdfe[]
 
   // Multi-empresa (grupo econômico - empresas vinculadas à mesma licença)
   matrizId           String?
@@ -135,9 +140,10 @@ model Filial {
   caixas       Caixa[]
   notasFiscais NotaFiscal[]
   inventarios  Inventario[]
-  notasServico NotaServico[]
+   notasServico NotaServico[]
+   mdfes        Mdfe[]
 
-  @@map("filiais")
+   @@map("filiais")
 }
 
 enum RegimeTributario {
@@ -2071,6 +2077,124 @@ enum TipoRps {
   RPS
   RPS_CONJUGADO
   CUPOM
+}
+
+// =====================================================
+// MDF-E - MANIFESTO ELETRÔNICO
+// =====================================================
+
+model Veiculo {
+  id              String  @id @default(cuid()) @map("_id")
+  empresaId       String
+  placa           String
+  renavam         String?
+  rntrc           String?
+  tipoPropriedade String  @default("1")   // 1=Próprio, 2=Terceiro
+  tara            Decimal @default(0) @db.Decimal(10, 2)
+  capacidade      Decimal @default(0) @db.Decimal(10, 2)
+  tipoCarroceria  String?
+  marca           String?
+  modelo          String?
+  anoFabricacao   Int?
+  cor             String?
+  ativo           Boolean @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  mdfes   Mdfe[]
+
+  @@unique([empresaId, placa])
+  @@map("veiculos")
+}
+
+model Condutor {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  cpf             String
+  nome            String
+  rntrc           String?
+  cnh             String?
+  cnhCategoria    String?
+  cnhVencimento   DateTime?
+  telefone        String?
+  email           String?
+  endereco        Json?
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  mdfes   Mdfe[]
+
+  @@unique([empresaId, cpf])
+  @@map("condutores")
+}
+
+model Mdfe {
+  id                String   @id @default(cuid()) @map("_id")
+  empresaId         String
+  filialId          String
+  serie             Int      @default(1)
+  numero            Int
+  chaveAcesso       String   @unique
+  modelo            String   @default("58")
+  ufCarregamento    String
+  ufDescarregamento String?
+  modal             String   @default("1")      // 1=Rodoviário
+  rntrc             String?
+  veiculoId         String?
+  condutorId        String?
+  valorTotalCarga   Decimal  @default(0) @db.Decimal(15, 2)
+  qtdTotalDocumentos Int     @default(0)
+  dataEmissao       DateTime @default(now())
+  dataAutorizacao   DateTime?
+  dataEncerramento  DateTime?
+  situacao          String   @default("EM_DIGITACAO")
+  protocolo         String?
+  xmlAutorizado     String?
+  observacoes       String?
+  dataCriacao       DateTime @default(now())
+  dataAtualizacao   DateTime @updatedAt
+
+  empresa    Empresa        @relation(fields: [empresaId], references: [id])
+  filial     Filial         @relation(fields: [filialId], references: [id])
+  veiculo    Veiculo?       @relation(fields: [veiculoId], references: [id])
+  condutor   Condutor?      @relation(fields: [condutorId], references: [id])
+  documentos MdfeDocumento[]
+  eventos    MdfeEvento[]
+
+  @@unique([empresaId, serie, numero])
+  @@map("mdfe")
+}
+
+model MdfeDocumento {
+  id             String  @id @default(cuid()) @map("_id")
+  mdfeId         String
+  tipo           String  // NFE, CTE, MDFE
+  chaveAcesso    String
+  valorDocumento Decimal @default(0) @db.Decimal(15, 2)
+  pesoTotal      Decimal @default(0) @db.Decimal(10, 2)
+  dataCriacao    DateTime @default(now())
+
+  mdfe Mdfe @relation(fields: [mdfeId], references: [id], onDelete: Cascade)
+
+  @@map("mdfe_documentos")
+}
+
+model MdfeEvento {
+  id          String   @id @default(cuid()) @map("_id")
+  mdfeId      String
+  tipo        String   // CANCELAMENTO, ENCERRAMENTO, INCLUSAO_DOC, TROCA_VEICULO
+  descricao   String
+  dataEvento  DateTime @default(now())
+  protocolo   String?
+  xmlRetorno  String?
+  dataCriacao DateTime @default(now())
+
+  mdfe Mdfe @relation(fields: [mdfeId], references: [id], onDelete: Cascade)
+
+  @@map("mdfe_eventos")
 }
 
 // =====================================================

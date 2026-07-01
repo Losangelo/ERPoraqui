@@ -132,6 +132,9 @@ const menuCategorias: CategoriaMenu[] = [
     icone: BarChart3,
     items: [
       { id: 'sped-fiscal', label: 'SPED Fiscal', icon: FileText, path: '/sped-fiscal', categoria: 'relatorios' },
+      { id: 'mdfe', label: 'MDF-e', icon: Truck, path: '/mdfe', categoria: 'relatorios' },
+      { id: 'veiculos', label: 'Veículos', icon: Truck, path: '/veiculos', categoria: 'relatorios' },
+      { id: 'condutores', label: 'Condutores', icon: UserCircle, path: '/condutores', categoria: 'relatorios' },
       { id: 'relatorios', label: 'Relatórios', icon: BarChart3, path: '/relatorios', categoria: 'relatorios' },
       { id: 'notas-fiscais', label: 'NF-e', icon: FileText, path: '/notas-fiscais', categoria: 'relatorios' },
       { id: 'nfce', label: 'NFC-e', icon: FileText, path: '/nfce', categoria: 'relatorios' },
