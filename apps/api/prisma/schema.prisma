@@ -106,6 +106,7 @@ model Empresa {
    veiculos             Veiculo[]
    condutores           Condutor[]
    mdfes                Mdfe[]
+   reportTemplates      ReportTemplate[]
 
   // Multi-empresa (grupo econômico - empresas vinculadas à mesma licença)
   matrizId           String?
@@ -2195,6 +2196,28 @@ model MdfeEvento {
   mdfe Mdfe @relation(fields: [mdfeId], references: [id], onDelete: Cascade)
 
   @@map("mdfe_eventos")
+}
+
+// =====================================================
+// MOTOR DE RELATÓRIOS GENÉRICO
+// =====================================================
+
+model ReportTemplate {
+  id             String   @id @default(cuid()) @map("_id")
+  empresaId      String
+  nome           String
+  descricao      String?
+  dataSource     String
+  colunas        Json
+  filtros        Json?
+  formato        String   @default("table")
+  ativo          Boolean  @default(true)
+  dataCriacao    DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@map("report_templates")
 }
 
 // =====================================================

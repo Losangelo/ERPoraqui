@@ -169,7 +169,29 @@
 
 ---
 
-## 03/06/2026 — Criação do Plano de Ação Completo
+## 01/07/2026 (noite 2) — Motor de Relatórios Genérico
+
+### Prisma
+- **ReportTemplate**: modelo salvar templates por empresa (nome, fonte, colunas, filtros, formato)
+
+### Backend (`/api/v1/relatorios`)
+- **ReportRegistry**: 8 data sources pré-definidas (clientes, produtos, pedidos-venda, pedidos-compra, contas-receber, contas-pagar, notas-fiscais, notas-servico)
+- Cada fonte define colunas (key, label, type) e função de query contra o PostgreSQL
+- **GET /data-sources** — lista fontes disponíveis com metadados
+- **GET /data-sources/:id** — detalhes de uma fonte
+- **POST /executar** — executa relatório (fonte + colunas + filtros) → JSON
+- **CRUD /templates** — salvar, carregar, atualizar, excluir templates
+
+### Frontend (RelatoriosPage)
+- Painel esquerdo: seletor de fonte, checkboxes de colunas, filtros dinâmicos, formato (tabela/CSV/XLSX)
+- Painel direito: preview em tabela com formatação automática (datas, números, booleanos)
+- Download CSV/XLSX usando utils/export.ts existente
+- Templates: listar, carregar, salvar, excluir
+- Substitui a antiga RelatoriosFiscaisPage na rota /relatorios
+
+### Rotas
+- Backend: /api/v1/relatorios registrado em main.ts
+- Frontend: /relatorios em App.tsx (aponta para RelatoriosPage)
 
 - Realizado diagnóstico completo comparando fontes xHarbour originais (`fontesPRG/`, 496 arquivos) vs implementação TypeScript moderna (`apps/api/`, `apps/web/`)
 - Identificada cobertura real de ~38% (FEATURES.md e TODO.md estavam superestimados)

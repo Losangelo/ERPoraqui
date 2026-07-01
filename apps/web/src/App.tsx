@@ -11,7 +11,7 @@ import { FluxoCaixaPage } from '@/pages/fluxo-caixa/FluxoCaixaPage';
 import { UsuariosPage } from '@/pages/usuarios/UsuariosPage';
 import { TransportadorasPage } from '@/pages/transportadoras/TransportadorasPage';
 import { VendedoresPage } from '@/pages/vendedores/VendedoresPage';
-import { RelatoriosFiscaisPage } from '@/pages/relatorios/RelatoriosFiscaisPage';
+import { RelatoriosPage } from '@/pages/relatorios/RelatoriosPage';
 import { LogsPage } from '@/pages/logs/LogsPage';
 import AjudaPage from '@/pages/AjudaPage';
 import ManualPage from '@/pages/ManualPage';
@@ -92,7 +92,7 @@ function AppRoutes() {
             <Route path="/usuarios" element={<UsuariosPage />} />
             <Route path="/transportadoras" element={<TransportadorasPage />} />
             <Route path="/vendedores" element={<VendedoresPage />} />
-            <Route path="/relatorios" element={<RelatoriosFiscaisPage />} />
+            <Route path="/relatorios" element={<RelatoriosPage />} />
             <Route path="/notas-fiscais" element={<NotasFiscaisPage />} />
             <Route path="/dre" element={<DREPage />} />
             <Route path="/plano-contas" element={<PlanoContasPage />} />

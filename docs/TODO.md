@@ -177,14 +177,16 @@
 - [x] **MDF-e — Frontend MdfePage:** Listagem, filtro por situação, criação, detalhes com documentos/eventos, ações
 - [x] **MDF-e — Sidebar:** Itens MDF-e, Veículos, Condutores no menu Fiscal
 - [x] **MDF-e — Rotas:** Registradas em App.tsx (frontend) + main.ts (backend)
+- [x] **Spec REPORT_ENGINE.md:** docs/specs/REPORT_ENGINE.md — Motor de Relatórios Genérico (8 data sources, formatos)
+- [x] **ReportTemplate Prisma:** Modelo no schema (nome, dataSource, colunas, filtros, formato)
+- [x] **Report Engine API:** /api/v1/relatorios — 8 data sources, POST /executar, CRUD /templates
+- [x] **Report Engine Frontend:** RelatoriosPage com seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates
 
 ---
 
 ### 🔴 Em Andamento
 
-1. MDF-e — 0% implementado (spec pronta, aguardando implementação)
-2. Motor de Relatórios Genérico
-3. Contratos + Garantias + Devoluções
+1. Contratos + Garantias + Devoluções
 
 ---
 

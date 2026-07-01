@@ -121,6 +121,10 @@
 | MDF-e Frontend Condutores | apps/web/src/pages/fiscal/CondutoresPage.tsx | CRUD condutores com dialog formulário | ✅ |
 | MDF-e Frontend Página | apps/web/src/pages/fiscal/MdfePage.tsx | Listagem, filtro, criação, detalhes, ações | ✅ |
 | MDF-e Sidebar | apps/web/src/components/layout/Sidebar.tsx | Itens MDF-e, Veículos, Condutores no menu Fiscal | ✅ |
+| Spec Report Engine | docs/specs/REPORT_ENGINE.md | Especificação motor de relatórios genérico | ✅ |
+| ReportTemplate Prisma | apps/api/prisma/schema.prisma | Modelo ReportTemplate (fonte, colunas, filtros, formato) | ✅ |
+| Report Engine API | apps/api/src/modules/relatorios | 8 data sources, executar, CRUD templates | ✅ |
+| Report Engine Frontend | apps/web/src/pages/relatorios/RelatoriosPage.tsx | Seletor fonte, colunas, filtros, preview, download, templates | ✅ |
 
 ---
 
@@ -139,7 +143,6 @@
 - 🟡 Spec MDF-e (`docs/specs/MDFE.md`)
 
 ### Melhorias Pendentes
-- 🟢 Motor de Relatórios Genérico
 - 🟢 Módulos verticais — Contratos, garantias, devoluções
 - 🟢 UX + Input Hints completo (base toda)
 
@@ -149,6 +152,7 @@
 
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.
+- **01/07/2026 (noite 2)**: Motor de Relatórios Genérico — Spec REPORT_ENGINE.md, ReportTemplate Prisma, 8 data sources (clientes, produtos, pedidos, contas, NF-e, NFSe), API executar + CRUD templates, Frontend RelatoriosPage (seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates).
 - **30/06/2026 (madrugada)**: Correção 403/400/PDV404/PlanoContas404 + Exportação (CSV, JSON, XLSX, PDF em 5 relatórios) + Input Hints em 5 páginas + Spec EXPORTACAO.md.
 - **30/06/2026 (tarde)**: Correção 12 bugs + Testes 62 testes (36 API + 26 WEB) + Temas premium.
 - **30/06/2026 (noite)**: Estoque Avançado (grades, lotes, tabelas preço), CNAB 240/400, Cheques, Centro de Custo — API + Frontend + 4 specs + Correção 30+ erros TS. Pronto para deploy.

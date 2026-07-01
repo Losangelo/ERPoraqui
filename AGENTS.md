@@ -351,6 +351,15 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Sidebar: MDF-e, Veículos, Condutores no menu Fiscal
 - ✅ Rotas registradas em App.tsx + main.ts
 
+### Status Atual Motor de Relatórios
+- ✅ Spec REPORT_ENGINE.md criada
+- ✅ Modelo Prisma ReportTemplate
+- ✅ ReportRegistry: 8 data sources (clientes, produtos, pedidos venda/compra, contas R/P, NF-e, NFSe)
+- ✅ API executar: seleciona fonte + colunas + filtros → JSON
+- ✅ API CRUD templates (salvar/carregar/excluir)
+- ✅ Frontend RelatoriosPage: seletor fonte, checkboxes colunas, filtros, preview tabela, download CSV/XLSX, templates
+- ✅ Rotas: /api/v1/relatorios registrado em main.ts + /relatorios em App.tsx
+
 ### Status Atual PDV
 - ✅ PDV completo (PdvPage + pdv.ts service)
 - ✅ Carrinho funcional: busca por código de barras, busca por nome, grid de resultados
@@ -388,6 +397,14 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - Sidebar: MDF-e, Veículos, Condutores adicionados
 - Rotas registradas em frontend (App.tsx) + backend (main.ts)
 - db push executado com sucesso
+
+### Novidades (01/07/2026 noite 2)
+- Spec REPORT_ENGINE.md criada (motor de relatórios genérico, 8 data sources)
+- Prisma: ReportTemplate model
+- Backend: /api/v1/relatorios (data sources, executar, templates CRUD)
+- Frontend: RelatoriosPage com seletor fonte, checkboxes colunas, filtros, preview tabela, download CSV/XLSX, templates salvos
+- Sidebar: Relatórios atualizado para o novo motor
+- db push executado
 
 ### Correções Recentes (01/07/2026)
 - PDV completo implementado (antes estava como stub)
