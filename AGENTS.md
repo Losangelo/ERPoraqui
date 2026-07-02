@@ -402,8 +402,18 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
 - ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
 
-### Novidades (02/07/2026)
-- Lookup Field System: Spec LOOKUP.md + LookupDialog (modal busca c/ teclado + ordenação) + LookupField (trigger read-only + atalhos F2/Ctrl+L) + lookup-sources (5 fontes) + OrcamentosPage atualizada com LookupField cliente
+### Novidades (02/07/2026 — Blitz 2)
+- Auth Store: authStore.ts deletado (nunca importado)
+- Pipeline CI: .github/workflows/ci.yml (type-check + tests c/ PostgreSQL)
+- Promoções: Engine promocional (PERCENTUAL/VALOR_FIXO/LEVE_PAGUE, datas) — API + Frontend
+- Kardex: Product stock ledger c/ saldo acumulado, CSV export — Frontend
+- Conciliação Bancária: Painel esquerdo/direito, 4 dialogs — Frontend
+- Convênios: CRUD completo c/ LookupField cliente — API + Frontend
+- Licitações: CRUD completo c/ itens + LookupField produto — API + Frontend
+- Adiantamentos: CRUD c/ LookupField cliente/fornecedor — API + Frontend
+- Quitações: Quitação em lote contas receber/pagar — API + Frontend
+- CT-e: Modelo 57, chave 44 dígitos — API + Frontend
+- Relatórios: 10 novas fontes (vendas-por-periodo, comissoes, lucratividade, fluxo-caixa, dre, estoque-geral, sped-contribuicoes, contas-vencidas, centro-custo, cheques)
 
 ### Novidades (01/07/2026 tarde)
 - Specs SPED.md + MDFE.md + plano_acao_futuro.md criadas

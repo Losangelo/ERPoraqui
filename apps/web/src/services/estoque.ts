@@ -4,13 +4,14 @@ export interface MovimentacaoEstoque {
   id: string;
   empresaId: string;
   produtoId: string;
-  produto?: { id: string; nome: string };
+  produto?: { id: string; nome: string; codigoInterno?: string };
   tipoMovimentacao: 'ENTRADA' | 'SAIDA' | 'TRANSFERENCIA' | 'AJUSTE' | 'DEVOLUCAO';
   quantidade: number;
   quantidadeAnterior: number;
   quantidadeNova: number;
   motivo?: string;
   dataMovimentacao: string;
+  saldoAcumulado?: number;
 }
 
 export interface Categoria {
@@ -73,6 +74,19 @@ export const EstoqueService = {
 
   async criarMovimentacao(data: Partial<MovimentacaoEstoque>): Promise<MovimentacaoEstoque> {
     const response = await api.post('/movimentacoes-internas', data);
+    return response.data;
+  },
+
+  async historicoProduto(
+    produtoId: string,
+    filtros?: { dataInicio?: string; dataFim?: string; pagina?: number; limite?: number }
+  ): Promise<{ dados: MovimentacaoEstoque[]; meta: { pagina: number; limite: number; total: number; totalPaginas: number } }> {
+    const params = new URLSearchParams();
+    if (filtros?.dataInicio) params.append('dataInicio', filtros.dataInicio);
+    if (filtros?.dataFim) params.append('dataFim', filtros.dataFim);
+    if (filtros?.pagina) params.append('pagina', String(filtros.pagina));
+    if (filtros?.limite) params.append('limite', String(filtros.limite));
+    const response = await api.get(`/movimentacoes-internas/produto/${produtoId}/historico?${params}`);
     return response.data;
   },
 };

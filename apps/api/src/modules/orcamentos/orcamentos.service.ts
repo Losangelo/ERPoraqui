@@ -10,6 +10,18 @@ import {
 } from './dto/orcamento.dto';
 
 export class OrcamentosService {
+  private async gerarNumeroOrcamento(empresaId: string): Promise<string> {
+    const ultimo = await prisma.orcamento.findFirst({
+      where: { empresaId },
+      orderBy: { numeroOrcamento: 'desc' },
+    });
+    if (ultimo) {
+      const seq = parseInt(ultimo.numeroOrcamento.replace(/\D/g, ''), 10) + 1;
+      return `ORC${String(seq).padStart(6, '0')}`;
+    }
+    return 'ORC000001';
+  }
+
   async criar(empresaId: string, data: CriarOrcamentoInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
 
@@ -18,13 +30,25 @@ export class OrcamentosService {
     const empresa = await prisma.empresa.findUnique({ where: { id: empresaId } });
     if (!empresa) throw new Error('Empresa não encontrada');
 
-    const filial = await prisma.filial.findFirst({ where: { id: parsed.filialId, empresaId } });
+    let filialId = parsed.filialId;
+    if (!filialId) {
+      const primeiraFilial = await prisma.filial.findFirst({ where: { empresaId } });
+      if (!primeiraFilial) throw new Error('Nenhuma filial encontrada para a empresa');
+      filialId = primeiraFilial.id;
+    }
+
+    const filial = await prisma.filial.findFirst({ where: { id: filialId, empresaId } });
     if (!filial) throw new Error('Filial não encontrada');
 
     const cliente = await prisma.cliente.findFirst({ where: { id: parsed.clienteId, empresaId } });
     if (!cliente) throw new Error('Cliente não encontrado');
 
-    const valorItens = parsed.itens.reduce((acc, item) => {
+    const numeroOrcamento = parsed.numeroOrcamento || await this.gerarNumeroOrcamento(empresaId);
+    const dataValidade = parsed.dataValidade ? new Date(parsed.dataValidade) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const dataEmissao = parsed.dataEmissao ? new Date(parsed.dataEmissao) : new Date();
+    const itens = parsed.itens || [];
+
+    const valorItens = itens.reduce((acc, item) => {
       const total = (item.quantidade * item.valorUnitario) - item.valorDesconto;
       return acc + total;
     }, 0);
@@ -34,12 +58,12 @@ export class OrcamentosService {
     const orcamento = await prisma.orcamento.create({
       data: {
         empresaId,
-        filialId: parsed.filialId,
+        filialId,
         clienteId: parsed.clienteId,
-        numeroOrcamento: parsed.numeroOrcamento,
+        numeroOrcamento,
         serie: parsed.serie,
-        dataValidade: parsed.dataValidade,
-        dataEmissao: parsed.dataEmissao ?? new Date(),
+        dataValidade,
+        dataEmissao,
         valorTotal,
         valorDesconto: parsed.valorDesconto,
         valorFrete: parsed.valorFrete,
@@ -47,8 +71,8 @@ export class OrcamentosService {
         observacoes: parsed.observacoes,
         observacoesInternas: parsed.observacoesInternas,
         situacao: 'ABERTO',
-        itens: {
-          create: parsed.itens.map((item, index) => ({
+        itens: itens.length > 0 ? {
+          create: itens.map((item, index) => ({
             produtoId: item.produtoId,
             numeroItem: index + 1,
             quantidade: item.quantidade,
@@ -57,7 +81,7 @@ export class OrcamentosService {
             valorTotal: (item.quantidade * item.valorUnitario) - item.valorDesconto,
             valorDesconto: item.valorDesconto,
           })),
-        },
+        } : undefined,
       },
       include: {
         filial: true,

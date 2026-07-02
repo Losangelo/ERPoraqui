@@ -52,10 +52,17 @@ import relatoriosRoutes from './modules/relatorios/relatorios.routes';
 import contratosRoutes from './modules/contratos/contratos.routes';
 import garantiasRoutes from './modules/garantias/garantias.routes';
 import devolucoesRoutes from './modules/devolucoes/devolucoes.routes';
+import conveniosRoutes from './modules/convenios/convenios.routes';
+import licitacoesRoutes from './modules/licitacoes/licitacoes.routes';
+import cteRoutes from './modules/cte/cte.routes';
 import { produtosVariacoesRoutes } from './modules/produtos-variacoes';
 import { produtosLotesRoutes } from './modules/produtos-lotes';
 import { tabelasPrecoRoutes } from './modules/tabelas-preco';
+import promocoesRoutes from './modules/promocoes/promocoes.routes';
 import authRoutes from './modules/auth/auth.routes';
+import renegociacaoRoutes from './modules/renegociacao/renegociacao.routes';
+import { adiantamentosRoutes } from './modules/adiantamentos';
+import { quitacoesRoutes } from './modules/quitacoes';
 import appLogger from './shared/logger/logger';
 
 dotenv.config();
@@ -136,6 +143,7 @@ app.use('/api/v1/automacao', automacaoRoutes);
 app.use('/api/v1/produtos-variacoes', produtosVariacoesRoutes);
 app.use('/api/v1/produtos-lotes', produtosLotesRoutes);
 app.use('/api/v1/tabelas-preco', tabelasPrecoRoutes);
+app.use('/api/v1/promocoes', promocoesRoutes);
 app.use('/api/v1/cheques', chequesRoutes);
 app.use('/api/v1/centros-custo', centrosCustoRoutes);
 app.use('/api/v1/sped-fiscal', spedFiscalRoutes);
@@ -144,6 +152,12 @@ app.use('/api/v1/relatorios', relatoriosRoutes);
 app.use('/api/v1/contratos', contratosRoutes);
 app.use('/api/v1/garantias', garantiasRoutes);
 app.use('/api/v1/devolucoes', devolucoesRoutes);
+app.use('/api/v1/renegociacao', renegociacaoRoutes);
+app.use('/api/v1/adiantamentos', adiantamentosRoutes);
+app.use('/api/v1/quitacoes', quitacoesRoutes);
+app.use('/api/v1/convenios', conveniosRoutes);
+app.use('/api/v1/licitacoes', licitacoesRoutes);
+app.use('/api/v1/cte', cteRoutes);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err.message);

@@ -1,5 +1,5 @@
 import { prisma } from '@/database/prisma.service';
-import { MovimentacaoEstoqueInput, MovimentacaoEstoqueFiltro } from './dto/movimentacao-estoque.dto';
+import { MovimentacaoEstoqueInput, MovimentacaoEstoqueFiltro, HistoricoProdutoParams } from './dto/movimentacao-estoque.dto';
 
 export class MovimentacaoEstoqueService {
   async criar(empresaId: string, dados: MovimentacaoEstoqueInput) {
@@ -146,29 +146,64 @@ export class MovimentacaoEstoqueService {
     };
   }
 
-  async historicoProduto(produtoId: string, empresaId: string) {
+  async historicoProduto(produtoId: string, empresaId: string, filtros?: HistoricoProdutoParams) {
     if (!empresaId) throw new Error('Empresa não identificada');
 
-    const movimentacoes = await prisma.movimentacaoEstoque.findMany({
-      where: { produtoId, empresaId },
-      orderBy: { dataMovimentacao: 'desc' },
-      take: 50,
-      include: {
-        produto: {
-          select: {
-            id: true,
-            codigoInterno: true,
-            nome: true,
+    const { dataInicio, dataFim, pagina = 1, limite = 100 } = filtros || {};
+
+    const where: any = {
+      produtoId,
+      empresaId,
+      ...((dataInicio || dataFim) && {
+        dataMovimentacao: {
+          ...(dataInicio && { gte: new Date(dataInicio) }),
+          ...(dataFim && { lte: new Date(dataFim) }),
+        },
+      }),
+    };
+
+    const [movimentacoes, total] = await Promise.all([
+      prisma.movimentacaoEstoque.findMany({
+        where,
+        orderBy: { dataMovimentacao: 'asc' },
+        skip: (pagina - 1) * limite,
+        take: limite,
+        include: {
+          produto: {
+            select: {
+              id: true,
+              codigoInterno: true,
+              nome: true,
+            },
           },
         },
-      },
+      }),
+      prisma.movimentacaoEstoque.count({ where }),
+    ]);
+
+    let saldo = 0;
+    const dadosComSaldo = movimentacoes.map((m) => {
+      const qtd = Number(m.quantidade);
+      const tipo = m.tipoMovimentacao;
+      const signal = (tipo === 'ENTRADA' || tipo === 'DEVOLUCAO') ? qtd : -qtd;
+      saldo += signal;
+      return {
+        ...m,
+        quantidade: qtd,
+        quantidadeAnterior: Number(m.quantidadeAnterior),
+        quantidadeNova: Number(m.quantidadeNova),
+        saldoAcumulado: saldo,
+      };
     });
 
-    return movimentacoes.map((m) => ({
-      ...m,
-      quantidade: Number(m.quantidade),
-      quantidadeAnterior: Number(m.quantidadeAnterior),
-      quantidadeNova: Number(m.quantidadeNova),
-    }));
+    return {
+      dados: dadosComSaldo,
+      meta: {
+        pagina,
+        limite,
+        total,
+        totalPaginas: Math.ceil(total / limite),
+      },
+    };
   }
 }

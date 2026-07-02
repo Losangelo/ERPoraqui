@@ -16,5 +16,13 @@ export const MovimentacaoEstoqueFiltroSchema = z.object({
   limite: z.number().int().positive().max(100).default(20),
 });
 
+export const HistoricoProdutoSchema = z.object({
+  dataInicio: z.string().optional(),
+  dataFim: z.string().optional(),
+  pagina: z.coerce.number().int().positive().default(1),
+  limite: z.coerce.number().int().positive().max(200).default(100),
+});
+
 export type MovimentacaoEstoqueInput = z.infer<typeof MovimentacaoEstoqueSchema>;
 export type MovimentacaoEstoqueFiltro = z.infer<typeof MovimentacaoEstoqueFiltroSchema>;
+export type HistoricoProdutoParams = z.infer<typeof HistoricoProdutoSchema>;

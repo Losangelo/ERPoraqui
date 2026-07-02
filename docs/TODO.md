@@ -198,6 +198,17 @@
 - [x] **LookupField:** Componente trigger com input read-only + label amigável + atalhos (F2, Ctrl+L)
 - [x] **lookup-sources.ts:** Config centralizada com 5 fontes (clientes, produtos, fornecedores, vendedores, transportadoras)
 - [x] **OrcamentosPage:** Formulário de novo orçamento agora usa LookupField para seleção de cliente
+- [x] **Auth Store Cleanup:** Deletado authStore.ts (nunca importado, dead Zustand store)
+- [x] **Pipeline CI:** .github/workflows/ci.yml — GitHub Actions type-check + tests (PostgreSQL)
+- [x] **Promoções API + Frontend:** Engine promocional (Prisma, Zod DTOs, API CRUD, frontend PromocoesPage)
+- [x] **Kardex Frontend:** EstoquePage c/ saldo acumulado, filtros data/produto, CSV export
+- [x] **Conciliação Bancária Frontend:** ConciliacaoPage painel esquerdo/direito, 4 dialogs
+- [x] **Convênios API + Frontend:** Full CRUD c/ LookupField cliente, sidebar Fiscal
+- [x] **Licitações API + Frontend:** Full CRUD c/ itens, LookupField produto, sidebar Compras
+- [x] **Adiantamentos API + Frontend:** Full CRUD c/ LookupField cliente/fornecedor, sidebar Financeiro
+- [x] **Quitações API + Frontend:** Quitação lote contas receber/pagar, sidebar Financeiro
+- [x] **CT-e API + Frontend:** Modelo 57, chave 44 dígitos, LookupField tomador/remetente/destinatario, sidebar Fiscal
+- [x] **Relatórios +10 fontes:** vendas-por-periodo, comissoes, lucratividade, fluxo-caixa, dre, estoque-geral, sped-contribuicoes, contas-vencidas, centro-custo, cheques
 
 ---
 
@@ -211,7 +222,7 @@
 
 ### 🔴 Em Andamento
 
-Nenhum — Fase 5 concluída.
+Nenhum — Blitz 2 concluída.
 
 ---
 
@@ -226,10 +237,10 @@ Nenhum — Fase 5 concluída.
 
 ---
 
-### 🟡 Pendentes (Demais Módulos)
+### 🟢 Pendentes (Módulos Remanescentes)
 
-1. Relatórios — Motor genérico de relatórios
-2. Módulos verticais — Contratos, garantias, devoluções, licitações
+1. Módulo Ótica — Receituário, lentes, médicos, pacientes
+2. Módulo Industrial — OP, BOM, roteiro de produção
 
 ---
 

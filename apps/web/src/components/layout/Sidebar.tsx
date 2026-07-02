@@ -33,9 +33,12 @@ import {
   Scale,
   ArrowRightLeft,
   Percent,
+  ScrollText,
   Shield,
   Undo2,
   FileSignature,
+  CheckCircle,
+  Handshake,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -86,6 +89,7 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'compras', label: 'Pedidos', icon: ShoppingCart, path: '/compras', categoria: 'compras' },
       { id: 'cotacoes', label: 'Cotações', icon: FileText, path: '/compras/cotacoes', categoria: 'compras' },
       { id: 'entradas', label: 'Entradas', icon: ArrowDownCircle, path: '/compras/entradas', categoria: 'compras' },
+      { id: 'licitacoes', label: 'Licitações', icon: ScrollText, path: '/licitacoes', categoria: 'compras' },
     ],
   },
   {
@@ -96,10 +100,12 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'products', label: 'Produtos', icon: Package, path: '/products', categoria: 'estoque' },
       { id: 'estoque', label: 'Estoque', icon: PackageCheck, path: '/estoque', categoria: 'estoque' },
       { id: 'movimentacoes', label: 'Movimentações', icon: ArrowRightLeft, path: '/estoque/movimentacoes', categoria: 'estoque' },
+      { id: 'kardex', label: 'Kardex', icon: ScrollText, path: '/estoque/kardex', categoria: 'estoque' },
       { id: 'categorias', label: 'Categorias', icon: Folder, path: '/estoque/categorias', categoria: 'estoque' },
       { id: 'unidades', label: 'Unidades', icon: Scale, path: '/estoque/unidades', categoria: 'estoque' },
       { id: 'inventario', label: 'Inventário', icon: ClipboardList, path: '/inventario', categoria: 'estoque' },
       { id: 'tabelas-preco', label: 'Tabelas de Preço', icon: Percent, path: '/tabelas-preco', categoria: 'estoque' },
+      { id: 'promocoes', label: 'Promoções', icon: Percent, path: '/promocoes', categoria: 'estoque' },
       { id: 'produtos-variacoes', label: 'Variações', icon: Package, path: '/produtos-variacoes', categoria: 'estoque' },
       { id: 'produtos-lotes', label: 'Lotes', icon: PackageCheck, path: '/produtos-lotes', categoria: 'estoque' },
     ],
@@ -127,6 +133,10 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'fluxo-caixa', label: 'Fluxo de Caixa', icon: Wallet, path: '/fluxo-caixa', categoria: 'financeiro' },
       { id: 'cheques', label: 'Cheques', icon: Landmark, path: '/cheques', categoria: 'financeiro' },
       { id: 'centros-custo', label: 'Centros de Custo', icon: Folder, path: '/centros-custo', categoria: 'financeiro' },
+      { id: 'renegociacao', label: 'Renegociação', icon: Undo2, path: '/renegociacao', categoria: 'financeiro' },
+      { id: 'conciliacao', label: 'Conciliação Bancária', icon: ArrowRightLeft, path: '/conciliacao', categoria: 'financeiro' },
+      { id: 'adiantamentos', label: 'Adiantamentos', icon: CreditCard, path: '/adiantamentos', categoria: 'financeiro' },
+      { id: 'quitacoes', label: 'Quitações', icon: CheckCircle, path: '/quitacoes', categoria: 'financeiro' },
     ],
   },
   {
@@ -136,6 +146,7 @@ const menuCategorias: CategoriaMenu[] = [
     items: [
       { id: 'sped-fiscal', label: 'SPED Fiscal', icon: FileText, path: '/sped-fiscal', categoria: 'relatorios' },
       { id: 'mdfe', label: 'MDF-e', icon: Truck, path: '/mdfe', categoria: 'relatorios' },
+      { id: 'cte', label: 'CT-e', icon: Truck, path: '/cte', categoria: 'relatorios' },
       { id: 'veiculos', label: 'Veículos', icon: Truck, path: '/veiculos', categoria: 'relatorios' },
       { id: 'condutores', label: 'Condutores', icon: UserCircle, path: '/condutores', categoria: 'relatorios' },
       { id: 'relatorios', label: 'Relatórios', icon: BarChart3, path: '/relatorios', categoria: 'relatorios' },
@@ -146,6 +157,7 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'contratos', label: 'Contratos', icon: FileSignature, path: '/contratos', categoria: 'relatorios' },
       { id: 'garantias', label: 'Garantias', icon: Shield, path: '/garantias', categoria: 'relatorios' },
       { id: 'devolucoes', label: 'Devoluções', icon: Undo2, path: '/devolucoes', categoria: 'relatorios' },
+      { id: 'convenios', label: 'Convênios', icon: Handshake, path: '/convenios', categoria: 'relatorios' },
     ],
   },
   {

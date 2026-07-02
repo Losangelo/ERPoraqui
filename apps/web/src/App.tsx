@@ -44,6 +44,7 @@ import { PedidosCompraPage } from '@/pages/compras/PedidosCompraPage';
 import { CotacoesPage } from '@/pages/compras/CotacoesPage';
 import { EntradasPage } from '@/pages/compras/EntradasPage';
 import { MovimentacoesPage } from '@/pages/estoque/MovimentacoesPage';
+import { KardexPage } from '@/pages/estoque/KardexPage';
 import { CategoriasPage } from '@/pages/estoque/CategoriasPage';
 import { UnidadesMedidaPage } from '@/pages/estoque/UnidadesMedidaPage';
 import { SpedFiscalPage } from '@/pages/fiscal/SpedFiscalPage';
@@ -53,11 +54,19 @@ import { CondutoresPage } from '@/pages/fiscal/CondutoresPage';
 import { ContratosPage } from '@/pages/fiscal/ContratosPage';
 import { GarantiasPage } from '@/pages/fiscal/GarantiasPage';
 import { DevolucoesPage } from '@/pages/fiscal/DevolucoesPage';
+import { CtePage } from '@/pages/fiscal/CtePage';
+import { ConveniosPage } from '@/pages/fiscal/ConveniosPage';
+import { LicitacoesPage } from '@/pages/compras/LicitacoesPage';
 import ContasReceberPage from '@/pages/contas-receber/ContasReceberPage';
 import ContasPagarPage from '@/pages/contas-pagar/ContasPagarPage';
 import TabelasPrecoPage from '@/pages/tabelas-preco/TabelasPrecoPage';
+import PromocoesPage from '@/pages/promocoes/PromocoesPage';
 import ChequesPage from '@/pages/cheques/ChequesPage';
 import CentrosCustoPage from '@/pages/centros-custo/CentrosCustoPage';
+import RenegociacaoPage from '@/pages/financeiro/RenegociacaoPage';
+import ConciliacaoPage from '@/pages/financeiro/ConciliacaoPage';
+import AdiantamentosPage from '@/pages/financeiro/AdiantamentosPage';
+import QuitacoesPage from '@/pages/financeiro/QuitacoesPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -89,6 +98,7 @@ function AppRoutes() {
             <Route path="/inventario" element={<InventarioPage />} />
             <Route path="/estoque" element={<EstoquePage />} />
             <Route path="/estoque/movimentacoes" element={<MovimentacoesPage />} />
+            <Route path="/estoque/kardex" element={<KardexPage />} />
             <Route path="/estoque/categorias" element={<CategoriasPage />} />
             <Route path="/estoque/unidades" element={<UnidadesMedidaPage />} />
             <Route path="/customers" element={<CustomersPage />} />
@@ -121,8 +131,13 @@ function AppRoutes() {
             <Route path="/contas-receber" element={<ContasReceberPage />} />
             <Route path="/contas-pagar" element={<ContasPagarPage />} />
             <Route path="/tabelas-preco" element={<TabelasPrecoPage />} />
+            <Route path="/promocoes" element={<PromocoesPage />} />
             <Route path="/cheques" element={<ChequesPage />} />
             <Route path="/centros-custo" element={<CentrosCustoPage />} />
+            <Route path="/renegociacao" element={<RenegociacaoPage />} />
+            <Route path="/conciliacao" element={<ConciliacaoPage />} />
+            <Route path="/adiantamentos" element={<AdiantamentosPage />} />
+            <Route path="/quitacoes" element={<QuitacoesPage />} />
             <Route path="/logs" element={<LogsPage />} />
             <Route path="/ajuda" element={<AjudaPage />} />
             <Route path="/manual" element={<ManualPage />} />
@@ -135,6 +150,9 @@ function AppRoutes() {
             <Route path="/contratos" element={<ContratosPage />} />
             <Route path="/garantias" element={<GarantiasPage />} />
             <Route path="/devolucoes" element={<DevolucoesPage />} />
+            <Route path="/cte" element={<CtePage />} />
+            <Route path="/convenios" element={<ConveniosPage />} />
+            <Route path="/licitacoes" element={<LicitacoesPage />} />
           </Routes>
         </ProtectedRoute>
       } />

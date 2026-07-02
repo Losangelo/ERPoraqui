@@ -78,8 +78,8 @@ model Empresa {
   contasReceber        ContaReceber[]
   contasPagar          ContaPagar[]
   fluxoCaixa           FluxoCaixa[]
-  cheques        Cheque[]
-   centrosCusto         CentroCusto[]
+  cheques              Cheque[]
+  centrosCusto         CentroCusto[]
   categorias           Categoria[]
   unidadesMedida       UnidadeMedida[]
   usuarios             Usuario[]
@@ -94,23 +94,31 @@ model Empresa {
   spedContribuicoes    SpedContribuicoes[]
   inventarios          Inventario[]
   contasBancarias      ContaBancaria[]
+  conciliacoes         Conciliacao[]
   planoContas          PlanoConta[]
   lancamentosContabeis LancamentoContabil[]
   notasServico         NotaServico[]
   licencas             Licenca[]
   produtoVariacoes     ProdutoVariacao[]
   produtoLotes         ProdutoLote[]
-   tabelasPreco         TabelaPreco[]
-   spedConfigs          SpedConfig[]
-   spedApuracoes        SpedApuracao[]
-   veiculos             Veiculo[]
-   condutores           Condutor[]
-   mdfes                Mdfe[]
-   reportTemplates      ReportTemplate[]
-   contratos            Contrato[]
-   garantias            Garantia[]
-   garantiaRegras       GarantiaRegra[]
-   devolucoes           Devolucao[]
+  tabelasPreco         TabelaPreco[]
+  spedConfigs          SpedConfig[]
+  spedApuracoes        SpedApuracao[]
+  veiculos             Veiculo[]
+  condutores           Condutor[]
+  mdfes                Mdfe[]
+  ctes                 Cte[]
+  reportTemplates      ReportTemplate[]
+  contratos            Contrato[]
+  garantias            Garantia[]
+  garantiaRegras       GarantiaRegra[]
+  devolucoes           Devolucao[]
+  convenios            Convenio[]
+  licitacoes           Licitacao[]
+  promocoes            Promocao[]
+  renegociacoes        Renegociacao[]
+  adiantamentos        Adiantamento[]
+  quitacoes            Quitacao[]
 
   // Multi-empresa (grupo econômico - empresas vinculadas à mesma licença)
   matrizId           String?
@@ -145,10 +153,11 @@ model Filial {
   caixas       Caixa[]
   notasFiscais NotaFiscal[]
   inventarios  Inventario[]
-   notasServico NotaServico[]
-   mdfes        Mdfe[]
+  notasServico NotaServico[]
+  mdfes        Mdfe[]
+  ctes         Cte[]
 
-   @@map("filiais")
+  @@map("filiais")
 }
 
 enum RegimeTributario {
@@ -191,10 +200,17 @@ model Cliente {
   vendasPDV     VendaPDV[]
   notasFiscais  NotaFiscal[]
   notasServico  NotaServico[]
-  cheques        Cheque[]
+  cheques       Cheque[]
   contratos      Contrato[]
   garantias      Garantia[]
   devolucoes     Devolucao[]
+  renegociacoes  Renegociacao[] @relation("ClienteRenegociacao")
+  ctesTomador    Cte[]          @relation("CteTomador")
+  ctesRemetente  Cte[]          @relation("CteRemetente")
+  ctesDestinatario Cte[]        @relation("CteDestinatario")
+  convenios      Convenio[]
+  adiantamentos  Adiantamento[]
+  quitacoes      Quitacao[]
 
   @@map("clientes")
 }
@@ -229,7 +245,10 @@ model Fornecedor {
   respostasCotacao RespostaCotacao[]
   contasPagar      ContaPagar[]
   notasFiscais     NotaFiscal[]
-  cheques           Cheque[]
+  cheques          Cheque[]
+  renegociacoes    Renegociacao[] @relation("FornecedorRenegociacao")
+  adiantamentos    Adiantamento[]
+  quitacoes        Quitacao[]
 
   @@map("fornecedores")
 }
@@ -328,9 +347,11 @@ model Produto {
   movimentacoesEstoque MovimentacaoEstoque[]
   variacoes            ProdutoVariacao[]
   lotes                ProdutoLote[]
-   tabelasPreco         TabelaPrecoItem[]
-   garantias            Garantia[]
-   devolucaoItens       DevolucaoItem[]
+  tabelasPreco         TabelaPrecoItem[]
+  garantias            Garantia[]
+  devolucaoItens       DevolucaoItem[]
+  licitacoesItens      LicitacaoItem[]
+  promocoesItens       PromocaoItem[]
 
   @@unique([empresaId, codigoInterno])
   @@map("produtos")
@@ -413,6 +434,41 @@ model TabelaPrecoItem {
   @@map("tabelas_preco_itens")
 }
 
+model Promocao {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  nome            String
+  descricao       String?
+  tipoDesconto    String   @default("PERCENTUAL")
+  valorDesconto   Float    @default(0)
+  qtdMinima       Int?
+  qtdCobrar       Int?
+  dataInicio      DateTime
+  dataFim         DateTime
+  ativo           Boolean  @default(true)
+  aplicaProdutos  String   @default("TODOS")
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa        @relation(fields: [empresaId], references: [id])
+  itens   PromocaoItem[]
+
+  @@map("promocoes")
+}
+
+model PromocaoItem {
+  id               String @id @default(cuid()) @map("_id")
+  promocaoId       String
+  produtoId        String
+  precoPromocional Float?
+
+  promocao Promocao @relation(fields: [promocaoId], references: [id], onDelete: Cascade)
+  produto  Produto  @relation(fields: [produtoId], references: [id])
+
+  @@unique([promocaoId, produtoId])
+  @@map("promocoes_itens")
+}
+
 enum OrigemMercadoria {
   NACIONAL
   ESTRANGEIRA_IMPORTACAO_DIRETA
@@ -491,8 +547,8 @@ model PedidoVenda {
   itens         ItemPedidoVenda[]
   contasReceber ContaReceber[]
   orcamento     Orcamento?
-   notaFiscal    NotaFiscal?
-   devolucoes    Devolucao[]
+  notaFiscal    NotaFiscal?
+  devolucoes    Devolucao[]
 
   @@unique([empresaId, numeroPedido, serie])
   @@map("pedidos_venda")
@@ -1119,6 +1175,7 @@ enum SituacaoConta {
   VENCIDO
   CANCELADO
   BAIXADO
+  RENEGOCIADO
 }
 
 enum FormaPagamento {
@@ -1151,7 +1208,7 @@ model ContaBancaria {
   empresa       Empresa                @relation(fields: [empresaId], references: [id])
   conciliacoes  Conciliacao[]
   movimentacoes MovimentacaoBancaria[]
-  cheques        Cheque[]
+  cheques       Cheque[]
 
   @@unique([empresaId, banco, agencia, conta])
   @@map("contas_bancarias")
@@ -1178,6 +1235,7 @@ model MovimentacaoBancaria {
 
 model Conciliacao {
   id                 String   @id @default(cuid()) @map("_id")
+  empresaId          String
   contaBancariaId    String
   periodoIni         DateTime
   periodoFin         DateTime
@@ -1188,6 +1246,7 @@ model Conciliacao {
   totalNaoConciliado Float    @default(0)
   observacoes        String?
 
+  empresa       Empresa                @relation(fields: [empresaId], references: [id])
   contaBancaria ContaBancaria          @relation(fields: [contaBancariaId], references: [id])
   movimentacoes MovimentacaoBancaria[]
 
@@ -1605,16 +1664,16 @@ model SpedConfig {
 }
 
 model SpedApuracao {
-  id           String   @id @default(cuid()) @map("_id")
-  empresaId    String
-  periodo      DateTime
-  tipo         String   // ICMS, IPI, PIS, COFINS
-  debitos      Decimal  @default(0)
-  creditos     Decimal  @default(0)
-  saldoAnterior Decimal @default(0)
-  saldoFinal   Decimal  @default(0)
-  blocos       Json?
-  dataCriacao  DateTime @default(now())
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  periodo         DateTime
+  tipo            String // ICMS, IPI, PIS, COFINS
+  debitos         Decimal  @default(0)
+  creditos        Decimal  @default(0)
+  saldoAnterior   Decimal  @default(0)
+  saldoFinal      Decimal  @default(0)
+  blocos          Json?
+  dataCriacao     DateTime @default(now())
   dataAtualizacao DateTime @updatedAt
 
   empresa Empresa @relation(fields: [empresaId], references: [id])
@@ -2095,20 +2154,20 @@ enum TipoRps {
 // =====================================================
 
 model Veiculo {
-  id              String  @id @default(cuid()) @map("_id")
+  id              String   @id @default(cuid()) @map("_id")
   empresaId       String
   placa           String
   renavam         String?
   rntrc           String?
-  tipoPropriedade String  @default("1")   // 1=Próprio, 2=Terceiro
-  tara            Decimal @default(0) @db.Decimal(10, 2)
-  capacidade      Decimal @default(0) @db.Decimal(10, 2)
+  tipoPropriedade String   @default("1") // 1=Próprio, 2=Terceiro
+  tara            Decimal  @default(0) @db.Decimal(10, 2)
+  capacidade      Decimal  @default(0) @db.Decimal(10, 2)
   tipoCarroceria  String?
   marca           String?
   modelo          String?
   anoFabricacao   Int?
   cor             String?
-  ativo           Boolean @default(true)
+  ativo           Boolean  @default(true)
   dataCriacao     DateTime @default(now())
   dataAtualizacao DateTime @updatedAt
 
@@ -2120,7 +2179,7 @@ model Veiculo {
 }
 
 model Condutor {
-  id              String   @id @default(cuid()) @map("_id")
+  id              String    @id @default(cuid()) @map("_id")
   empresaId       String
   cpf             String
   nome            String
@@ -2131,9 +2190,9 @@ model Condutor {
   telefone        String?
   email           String?
   endereco        Json?
-  ativo           Boolean  @default(true)
-  dataCriacao     DateTime @default(now())
-  dataAtualizacao DateTime @updatedAt
+  ativo           Boolean   @default(true)
+  dataCriacao     DateTime  @default(now())
+  dataAtualizacao DateTime  @updatedAt
 
   empresa Empresa @relation(fields: [empresaId], references: [id])
   mdfes   Mdfe[]
@@ -2143,35 +2202,35 @@ model Condutor {
 }
 
 model Mdfe {
-  id                String   @id @default(cuid()) @map("_id")
-  empresaId         String
-  filialId          String
-  serie             Int      @default(1)
-  numero            Int
-  chaveAcesso       String   @unique
-  modelo            String   @default("58")
-  ufCarregamento    String
-  ufDescarregamento String?
-  modal             String   @default("1")      // 1=Rodoviário
-  rntrc             String?
-  veiculoId         String?
-  condutorId        String?
-  valorTotalCarga   Decimal  @default(0) @db.Decimal(15, 2)
-  qtdTotalDocumentos Int     @default(0)
-  dataEmissao       DateTime @default(now())
-  dataAutorizacao   DateTime?
-  dataEncerramento  DateTime?
-  situacao          String   @default("EM_DIGITACAO")
-  protocolo         String?
-  xmlAutorizado     String?
-  observacoes       String?
-  dataCriacao       DateTime @default(now())
-  dataAtualizacao   DateTime @updatedAt
+  id                 String    @id @default(cuid()) @map("_id")
+  empresaId          String
+  filialId           String
+  serie              Int       @default(1)
+  numero             Int
+  chaveAcesso        String    @unique
+  modelo             String    @default("58")
+  ufCarregamento     String
+  ufDescarregamento  String?
+  modal              String    @default("1") // 1=Rodoviário
+  rntrc              String?
+  veiculoId          String?
+  condutorId         String?
+  valorTotalCarga    Decimal   @default(0) @db.Decimal(15, 2)
+  qtdTotalDocumentos Int       @default(0)
+  dataEmissao        DateTime  @default(now())
+  dataAutorizacao    DateTime?
+  dataEncerramento   DateTime?
+  situacao           String    @default("EM_DIGITACAO")
+  protocolo          String?
+  xmlAutorizado      String?
+  observacoes        String?
+  dataCriacao        DateTime  @default(now())
+  dataAtualizacao    DateTime  @updatedAt
 
-  empresa    Empresa        @relation(fields: [empresaId], references: [id])
-  filial     Filial         @relation(fields: [filialId], references: [id])
-  veiculo    Veiculo?       @relation(fields: [veiculoId], references: [id])
-  condutor   Condutor?      @relation(fields: [condutorId], references: [id])
+  empresa    Empresa         @relation(fields: [empresaId], references: [id])
+  filial     Filial          @relation(fields: [filialId], references: [id])
+  veiculo    Veiculo?        @relation(fields: [veiculoId], references: [id])
+  condutor   Condutor?       @relation(fields: [condutorId], references: [id])
   documentos MdfeDocumento[]
   eventos    MdfeEvento[]
 
@@ -2180,12 +2239,12 @@ model Mdfe {
 }
 
 model MdfeDocumento {
-  id             String  @id @default(cuid()) @map("_id")
+  id             String   @id @default(cuid()) @map("_id")
   mdfeId         String
-  tipo           String  // NFE, CTE, MDFE
+  tipo           String // NFE, CTE, MDFE
   chaveAcesso    String
-  valorDocumento Decimal @default(0) @db.Decimal(15, 2)
-  pesoTotal      Decimal @default(0) @db.Decimal(10, 2)
+  valorDocumento Decimal  @default(0) @db.Decimal(15, 2)
+  pesoTotal      Decimal  @default(0) @db.Decimal(10, 2)
   dataCriacao    DateTime @default(now())
 
   mdfe Mdfe @relation(fields: [mdfeId], references: [id], onDelete: Cascade)
@@ -2196,7 +2255,7 @@ model MdfeDocumento {
 model MdfeEvento {
   id          String   @id @default(cuid()) @map("_id")
   mdfeId      String
-  tipo        String   // CANCELAMENTO, ENCERRAMENTO, INCLUSAO_DOC, TROCA_VEICULO
+  tipo        String // CANCELAMENTO, ENCERRAMENTO, INCLUSAO_DOC, TROCA_VEICULO
   descricao   String
   dataEvento  DateTime @default(now())
   protocolo   String?
@@ -2209,20 +2268,58 @@ model MdfeEvento {
 }
 
 // =====================================================
+// CT-E - CONHECIMENTO DE TRANSPORTE ELETRÔNICO
+// =====================================================
+
+model Cte {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  filialId        String
+  numero          Int
+  serie           String   @default("1")
+  chaveAcesso     String   @unique
+  modelo          String   @default("57")
+  tomadorId       String
+  tomadorTipo     String   // REMETENTE | DESTINATARIO | OUTROS
+  remetenteId     String?
+  destinatarioId  String?
+  tipoServico     String   // NORMAL | SUBCONTRATACAO | REDESPACHO | MISTO
+  valorFrete      Float
+  valorCarga      Float
+  naturezaCarga   String?
+  especieCarga    String?
+  peso            Float?
+  volumes         Int?
+  situacao        String   @default("EM_DIGITACAO") // EM_DIGITACAO | AUTORIZADO | CANCELADO | ENCERRADO
+  dataEmissao     DateTime @default(now())
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa      Empresa  @relation(fields: [empresaId], references: [id])
+  filial       Filial   @relation(fields: [filialId], references: [id])
+  tomador      Cliente  @relation("CteTomador", fields: [tomadorId], references: [id])
+  remetente    Cliente? @relation("CteRemetente", fields: [remetenteId], references: [id])
+  destinatario Cliente? @relation("CteDestinatario", fields: [destinatarioId], references: [id])
+
+  @@unique([empresaId, numero])
+  @@map("ctes")
+}
+
+// =====================================================
 // MOTOR DE RELATÓRIOS GENÉRICO
 // =====================================================
 
 model ReportTemplate {
-  id             String   @id @default(cuid()) @map("_id")
-  empresaId      String
-  nome           String
-  descricao      String?
-  dataSource     String
-  colunas        Json
-  filtros        Json?
-  formato        String   @default("table")
-  ativo          Boolean  @default(true)
-  dataCriacao    DateTime @default(now())
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  nome            String
+  descricao       String?
+  dataSource      String
+  colunas         Json
+  filtros         Json?
+  formato         String   @default("table")
+  ativo           Boolean  @default(true)
+  dataCriacao     DateTime @default(now())
   dataAtualizacao DateTime @updatedAt
 
   empresa Empresa @relation(fields: [empresaId], references: [id])
@@ -2265,8 +2362,8 @@ model Contrato {
   dataCriacao     DateTime         @default(now())
   dataAtualizacao DateTime         @updatedAt
 
-  empresa  Empresa             @relation(fields: [empresaId], references: [id])
-  cliente  Cliente             @relation(fields: [clienteId], references: [id])
+  empresa  Empresa           @relation(fields: [empresaId], references: [id])
+  cliente  Cliente           @relation(fields: [clienteId], references: [id])
   medicoes ContratoMedicao[]
 
   @@unique([empresaId, numero])
@@ -2276,7 +2373,7 @@ model Contrato {
 model ContratoMedicao {
   id             String   @id @default(cuid()) @map("_id")
   contratoId     String
-  periodo         String   // "2026-07"
+  periodo        String // "2026-07"
   valor          Decimal  @default(0) @db.Decimal(12, 2)
   dataVencimento DateTime
   status         String   @default("PENDENTE") // PENDENTE, FATURADO, CANCELADO
@@ -2293,25 +2390,25 @@ model ContratoMedicao {
 // =====================================================
 
 model Garantia {
-  id              String   @id @default(cuid()) @map("_id")
+  id              String    @id @default(cuid()) @map("_id")
   empresaId       String
   clienteId       String
   produtoId       String
   vendaId         String?
   numero          String
-  tipo            String   @default("FABRICA") // FABRICA, ESTENDIDA, LEGAL
+  tipo            String    @default("FABRICA") // FABRICA, ESTENDIDA, LEGAL
   prazoDias       Int
   dataInicio      DateTime
   dataFim         DateTime?
-  cobertura       String?  // Descrição do que cobre
-  status          String   @default("ATIVA") // ATIVA, EXPIRADA, CANCELADA, ACIONADA
+  cobertura       String? // Descrição do que cobre
+  status          String    @default("ATIVA") // ATIVA, EXPIRADA, CANCELADA, ACIONADA
   observacoes     String?
-  dataCriacao     DateTime @default(now())
-  dataAtualizacao DateTime @updatedAt
+  dataCriacao     DateTime  @default(now())
+  dataAtualizacao DateTime  @updatedAt
 
-  empresa Empresa  @relation(fields: [empresaId], references: [id])
-  cliente Cliente  @relation(fields: [clienteId], references: [id])
-  produto Produto  @relation(fields: [produtoId], references: [id])
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  produto Produto @relation(fields: [produtoId], references: [id])
 
   @@unique([empresaId, numero])
   @@map("garantias")
@@ -2320,7 +2417,7 @@ model Garantia {
 model GarantiaRegra {
   id          String   @id @default(cuid()) @map("_id")
   empresaId   String
-  produtoId   String?  // null = regra genérica para categoria
+  produtoId   String? // null = regra genérica para categoria
   categoriaId String?
   prazoDias   Int
   tipo        String   @default("FABRICA")
@@ -2329,7 +2426,7 @@ model GarantiaRegra {
   ativo       Boolean  @default(true)
   dataCriacao DateTime @default(now())
 
-  empresa  Empresa  @relation(fields: [empresaId], references: [id])
+  empresa Empresa @relation(fields: [empresaId], references: [id])
 
   @@map("garantia_regras")
 }
@@ -2355,42 +2452,172 @@ enum DestinoDevolucao {
 }
 
 model Devolucao {
-  id              String           @id @default(cuid()) @map("_id")
+  id              String            @id @default(cuid()) @map("_id")
   empresaId       String
   clienteId       String
   pedidoVendaId   String?
   numero          String
-  motivo          String           // DEFEITO, TROCA, ARREPENDIMENTO, AVARIA
-  status          DevolucaoStatus  @default(SOLICITACAO)
+  motivo          String // DEFEITO, TROCA, ARREPENDIMENTO, AVARIA
+  status          DevolucaoStatus   @default(SOLICITACAO)
   destino         DestinoDevolucao?
   observacoes     String?
   laudoTecnico    String?
-  nfDevolucao     String?          // NF-e gerada na substituição
-  dataCriacao     DateTime         @default(now())
-  dataAtualizacao DateTime         @updatedAt
+  nfDevolucao     String? // NF-e gerada na substituição
+  dataCriacao     DateTime          @default(now())
+  dataAtualizacao DateTime          @updatedAt
 
-  empresa       Empresa        @relation(fields: [empresaId], references: [id])
-  cliente       Cliente        @relation(fields: [clienteId], references: [id])
-  pedidoVenda   PedidoVenda?   @relation(fields: [pedidoVendaId], references: [id])
-  itens         DevolucaoItem[]
+  empresa     Empresa         @relation(fields: [empresaId], references: [id])
+  cliente     Cliente         @relation(fields: [clienteId], references: [id])
+  pedidoVenda PedidoVenda?    @relation(fields: [pedidoVendaId], references: [id])
+  itens       DevolucaoItem[]
 
   @@unique([empresaId, numero])
   @@map("devolucoes")
 }
 
 model DevolucaoItem {
-  id          String         @id @default(cuid()) @map("_id")
+  id          String  @id @default(cuid()) @map("_id")
   devolucaoId String
   produtoId   String
-  quantidade  Decimal        @default(1) @db.Decimal(10, 2)
-  valor       Decimal        @default(0) @db.Decimal(12, 2)
-  condicao    String         @default("NOVO") // NOVO, DEFEITO, AVARIADO
+  quantidade  Decimal @default(1) @db.Decimal(10, 2)
+  valor       Decimal @default(0) @db.Decimal(12, 2)
+  condicao    String  @default("NOVO") // NOVO, DEFEITO, AVARIADO
   numeroSerie String?
 
   devolucao Devolucao @relation(fields: [devolucaoId], references: [id], onDelete: Cascade)
   produto   Produto   @relation(fields: [produtoId], references: [id])
 
   @@map("devolucao_itens")
+}
+
+// =====================================================
+// CONVÊNIOS
+// =====================================================
+
+model Convenio {
+  id             String   @id @default(cuid()) @map("_id")
+  empresaId      String
+  clienteId      String
+  numero         String
+  descricao      String
+  dataInicio     DateTime
+  dataFim        DateTime?
+  valorTotal     Float
+  situacao       String   @default("ATIVO") // ATIVO | SUSPENSO | ENCERRADO
+  observacoes    String?
+  dataCriacao    DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+  @@unique([empresaId, numero])
+  @@map("convenios")
+}
+
+// =====================================================
+// LICITAÇÕES
+// =====================================================
+
+model Licitacao {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  numero          String
+  orgao           String
+  descricao       String
+  tipo            String   // PREGAO | CONCORRENCIA | CONVITE | TOMADA_PRECOS
+  dataAbertura    DateTime
+  dataEncerramento DateTime?
+  valorEstimado   Float
+  situacao        String   @default("EM_ANDAMENTO") // EM_ANDAMENTO | GANHA | PERDIDA | CANCELADA
+  observacoes     String?
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa  Empresa          @relation(fields: [empresaId], references: [id])
+  itens    LicitacaoItem[]
+
+  @@unique([empresaId, numero])
+  @@map("licitacoes")
+}
+
+model LicitacaoItem {
+  id           String   @id @default(cuid()) @map("_id")
+  licitacaoId  String
+  produtoId    String
+  quantidade   Float
+  valorUnitario Float
+  marca        String?
+
+  licitacao Licitacao @relation(fields: [licitacaoId], references: [id], onDelete: Cascade)
+  produto   Produto   @relation(fields: [produtoId], references: [id])
+
+  @@map("licitacoes_itens")
+}
+
+// =====================================================
+// ADIANTAMENTOS
+// =====================================================
+
+model Adiantamento {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  clienteId       String?
+  fornecedorId    String?
+  funcionarioId   String?
+  tipo            String   // CLIENTE | FORNECEDOR | FUNCIONARIO
+  valor           Float
+  dataAdiantamento DateTime
+  dataPrevisao    DateTime?
+  situacao        String   @default("ABERTO") // ABERTO | QUITADO | CANCELADO
+  formaPagamento  String?  // DINHEIRO | PIX | CARTAO_CREDITO | CARTAO_DEBITO | BOLETO | TRANSFERENCIA | CHEQUE
+  observacoes     String?
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa   Empresa    @relation(fields: [empresaId], references: [id])
+  cliente   Cliente?   @relation(fields: [clienteId], references: [id])
+  fornecedor Fornecedor? @relation(fields: [fornecedorId], references: [id])
+
+  @@map("adiantamentos")
+}
+
+// =====================================================
+// QUITAÇÕES
+// =====================================================
+
+model Quitacao {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  clienteId       String?
+  fornecedorId    String?
+  tipo            String   // RECEBER | PAGAR
+  valorTotal      Float
+  dataQuitacao    DateTime
+  formaPagamento  String?
+  observacoes     String?
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa   Empresa          @relation(fields: [empresaId], references: [id])
+  cliente   Cliente?         @relation(fields: [clienteId], references: [id])
+  fornecedor Fornecedor?     @relation(fields: [fornecedorId], references: [id])
+  contas    QuitacaoConta[]
+
+  @@map("quitacoes")
+}
+
+model QuitacaoConta {
+  id         String @id @default(cuid()) @map("_id")
+  quitacaoId String
+  contaId    String
+  tipoConta  String // RECEBER | PAGAR
+  valorPago  Float
+
+  quitacao Quitacao @relation(fields: [quitacaoId], references: [id], onDelete: Cascade)
+
+  @@unique([quitacaoId, contaId, tipoConta])
+  @@map("quitacoes_contas")
 }
 
 // =====================================================
@@ -2781,4 +3008,60 @@ enum NotificacaoTipo {
   EMAIL
   WHATSAPP
   PUSH
+}
+
+// =====================================================
+// RENEGOCIAÇÃO DE CONTAS
+// =====================================================
+
+model Renegociacao {
+  id                 String   @id @default(cuid()) @map("_id")
+  empresaId          String
+  clienteId          String?
+  fornecedorId       String?
+  tipo               String // RECEBER | PAGAR
+  valorTotal         Float
+  valorDesconto      Float    @default(0)
+  valorJuros         Float    @default(0)
+  valorMulta         Float    @default(0)
+  valorFinal         Float
+  numeroParcelas     Int      @default(1)
+  primeiraVencimento DateTime
+  situacao           String   @default("PENDENTE") // PENDENTE | CONFIRMADA | CANCELADA
+  observacoes        String?
+  dataCriacao        DateTime @default(now())
+  dataAtualizacao    DateTime @updatedAt
+
+  empresa      Empresa                @relation(fields: [empresaId], references: [id])
+  cliente      Cliente?               @relation("ClienteRenegociacao", fields: [clienteId], references: [id])
+  fornecedor   Fornecedor?            @relation("FornecedorRenegociacao", fields: [fornecedorId], references: [id])
+  contas       RenegociacaoConta[]
+  parcelas     RenegociacaoParcela[]
+
+  @@map("renegociacoes")
+}
+
+model RenegociacaoConta {
+  id             String @id @default(cuid()) @map("_id")
+  renegociacaoId String
+  contaId        String
+  tipoConta      String // RECEBER | PAGAR
+
+  renegociacao Renegociacao @relation(fields: [renegociacaoId], references: [id], onDelete: Cascade)
+
+  @@unique([renegociacaoId, contaId, tipoConta])
+  @@map("renegociacoes_contas")
+}
+
+model RenegociacaoParcela {
+  id             String   @id @default(cuid()) @map("_id")
+  renegociacaoId String
+  numeroParcela  Int
+  dataVencimento DateTime
+  valor          Float
+  situacao       String   @default("ABERTA") // ABERTA | PAGA | VENCIDA
+
+  renegociacao Renegociacao @relation(fields: [renegociacaoId], references: [id], onDelete: Cascade)
+
+  @@map("renegociacoes_parcelas")
 }

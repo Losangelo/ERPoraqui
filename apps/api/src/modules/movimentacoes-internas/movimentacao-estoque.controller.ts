@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '@/shared/middleware/auth.middleware';
 import { MovimentacaoEstoqueService } from './movimentacao-estoque.service';
-import { MovimentacaoEstoqueSchema, MovimentacaoEstoqueFiltroSchema } from './dto/movimentacao-estoque.dto';
+import { MovimentacaoEstoqueSchema, MovimentacaoEstoqueFiltroSchema, HistoricoProdutoSchema } from './dto/movimentacao-estoque.dto';
 
 export class MovimentacaoEstoqueController {
   constructor(private readonly service: MovimentacaoEstoqueService) {}
@@ -95,11 +95,13 @@ export class MovimentacaoEstoqueController {
       }
 
       const { produtoId } = req.params;
-      const resultado = await this.service.historicoProduto(produtoId, empresaId);
+      const filtros = HistoricoProdutoSchema.parse(req.query);
+      const resultado = await this.service.historicoProduto(produtoId, empresaId, filtros);
 
       return res.json({
         success: true,
-        data: resultado,
+        data: resultado.dados,
+        meta: resultado.meta,
       });
     } catch (error: any) {
       return res.status(400).json({

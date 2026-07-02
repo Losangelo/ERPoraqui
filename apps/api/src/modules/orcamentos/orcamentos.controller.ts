@@ -9,7 +9,7 @@ import {
   AtualizarOrcamentoInput, 
   OrcamentoFiltro 
 } from './dto/orcamento.dto';
-import appLogger from '@/shared/logger/logger';
+import appLogger, { LogCategory } from '@/shared/logger/logger';
 
 export class OrcamentosController {
   private readonly service = new OrcamentosService();
@@ -33,7 +33,7 @@ export class OrcamentosController {
       });
     } catch (error: any) {
       appLogger.error('Erro ao criar orçamento', error, {
-        category: 'api',
+        category: LogCategory.API,
         action: 'orcamentos:create',
       });
       return res.status(400).json({

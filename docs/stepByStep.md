@@ -239,4 +239,18 @@
    3. SPED Fiscal — apenas registros básicos (25%)
    4. Produtos sem grades, lotes, tabelas de preço (45%)
    5. Boletos sem CNAB bancário (60%)
+## 02/07/2026 (tarde) — Renegociação de Contas
+
+- **Prisma:** Modelos Renegociacao, RenegociacaoConta, RenegociacaoParcela adicionados + valor `RENEGOCIADO` no enum SituacaoConta + relação `renegociacoes` em Empresa.
+- **API:** Módulo `renegociacao` com 5 endpoints:
+  - `GET /` — Listar renegociações com filtros (tipo, situação, data)
+  - `GET /disponiveis` — Listar contas disponíveis para renegociação (ABERTA/VENCIDO)
+  - `POST /` — Criar renegociação (seleciona contas, aplica descontos/juros/multa, gera parcelas preview)
+  - `POST /:id/confirmar` — Confirmar: marca originais como RENEGOCIADO, cria novas ContaReceber/ContaPagar
+  - `POST /:id/cancelar` — Cancelar: reverte originais para ABERTA
+- **Frontend:** RenegociacaoPage com dashboard cards (valores), tabela de renegociações, dialog criação (tipo, lookup cliente/fornecedor, checkboxes contas, descontos, parcelamento, preview parcelas), dialog detalhes (parcelas, confirmar/cancelar).
+- **Sidebar + Rotas:** "/renegociacao" adicionado ao menu Financeiro + rota App.tsx + endpoint /api/v1/renegociacao em main.ts.
+- **Ajuda:** Seção Renegociação adicionada ao AjudaPage.
+- **Features:** Kanban FEATURES.md atualizado.
+
 - Prioridade definida: NF-e > SPED > MDF-e > Produtos > Financeiro > Relatórios

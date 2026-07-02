@@ -1074,6 +1074,37 @@ Mantenha o fluxo de caixa sempre atualizado para ter uma visão real da saúde f
 4. Filtre por status para acompanhar: Abertas, Pagas, Vencidas`,
   },
   {
+    id: 'renegociacao',
+    titulo: 'Renegociação de Contas',
+    categoria: 'Financeiro',
+    conteudo: `O módulo de Renegociação permite renegociar contas a receber e a pagar que estão em aberto ou vencidas.
+
+---
+
+## Funcionalidades
+
+- Renegociação de contas a receber (clientes) e a pagar (fornecedores)
+- Aplicação de descontos, juros e multas nas renegociações
+- Parcelamento do valor final em múltiplas parcelas
+- Preview das parcelas antes de confirmar
+- Acompanhamento do status: Pendente, Confirmada, Cancelada
+- Ao confirmar, as contas originais são marcadas como Renegociadas e novas contas são geradas
+
+---
+
+## Como Usar
+
+1. Acesse o menu Financeiro > Renegociação
+2. Clique em "Nova Renegociação"
+3. Selecione o tipo (Receber ou Pagar) e o cliente/fornecedor
+4. Selecione as contas que deseja renegociar
+5. Defina descontos, juros e multa
+6. Informe o número de parcelas e o primeiro vencimento
+7. Revise o preview das parcelas
+8. Clique em "Criar Renegociação" para salvar como Pendente
+9. Na listagem, confirme a renegociação para gerar as novas contas`,
+  },
+  {
     id: 'api-rest',
     titulo: 'Usando a API REST',
     categoria: 'Desenvolvedor',

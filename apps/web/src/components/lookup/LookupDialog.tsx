@@ -200,6 +200,7 @@ export function LookupDialog({ open, source, onSelect, onClose }: LookupDialogPr
             <span>↑↓ Navegar</span>
             <span>↵ Selecionar</span>
             <span>ESC Fechar</span>
+            <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 text-xs">Ctrl+Shift+F2</kbd>
           </div>
         </div>
       </DialogContent>

@@ -41,7 +41,7 @@ export function LookupField({
             className="pr-8 cursor-pointer"
             onClick={() => !disabled && setDialogOpen(true)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === 'F2' || (e.ctrlKey && e.key === 'l')) {
+              if (e.key === 'Enter' || (e.ctrlKey && e.shiftKey && e.key === 'F2')) {
                 e.preventDefault();
                 if (!disabled) setDialogOpen(true);
               }
@@ -67,7 +67,7 @@ export function LookupField({
           onClick={() => setDialogOpen(true)}
           type="button"
           disabled={disabled}
-          title="Buscar (Enter, F2, Ctrl+L)"
+          title="Buscar (Enter, Ctrl+Shift+F2)"
         >
           <Search className="h-4 w-4" />
         </Button>

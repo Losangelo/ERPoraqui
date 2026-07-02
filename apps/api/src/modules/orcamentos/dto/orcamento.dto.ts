@@ -9,18 +9,18 @@ export const criarItemOrcamentoSchema = z.object({
 });
 
 export const criarOrcamentoSchema = z.object({
-  filialId: z.string().min(1, 'Filial é obrigatória'),
+  filialId: z.string().min(1, 'Filial é obrigatória').optional(),
   clienteId: z.string().min(1, 'Cliente é obrigatório'),
-  numeroOrcamento: z.string().min(1, 'Número do orçamento é obrigatório'),
+  numeroOrcamento: z.string().optional(),
   serie: z.string().default('1'),
-  dataValidade: z.date().min(new Date(), 'Data de validade deve ser futura'),
-  dataEmissao: z.date().optional(),
+  dataValidade: z.string().optional(),
+  dataEmissao: z.string().optional(),
   valorDesconto: z.number().min(0).default(0),
   valorFrete: z.number().min(0).default(0),
   valorOutrosAcrescimos: z.number().min(0).default(0),
   observacoes: z.string().optional(),
   observacoesInternas: z.string().optional(),
-  itens: z.array(criarItemOrcamentoSchema).min(1, 'Pelo menos um item é obrigatório'),
+  itens: z.array(criarItemOrcamentoSchema).optional().default([]),
 });
 
 export const atualizarOrcamentoSchema = z.object({

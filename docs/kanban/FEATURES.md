@@ -130,6 +130,26 @@
 | LookupField | apps/web/src/components/lookup/LookupField.tsx | Campo trigger read-only + label amigável + atalhos | ✅ |
 | lookup-sources | apps/web/src/components/lookup/lookup-sources.ts | Config centralizada (clientes, produtos, fornecedores, vendedores, transportadoras) | ✅ |
 | LookupField Orcamentos | apps/web/src/pages/OrcamentosPage.tsx | Formulário novo orçamento usa LookupField para cliente | ✅ |
+| Renegociação API | apps/api/src/modules/renegociacao | Renegociação de contas a receber/pagar | ✅ |
+| Renegociação Frontend | apps/web/src/pages/financeiro/RenegociacaoPage.tsx | Página Renegociação | ✅ |
+| Promoções API | apps/api/src/modules/promocoes | Engine promocional (datas, regras PERCENTUAL/VALOR_FIXO/LEVE_PAGUE) | ✅ |
+| Promoções Frontend | apps/web/src/pages/promocoes/PromocoesPage.tsx | Página CRUD promoções | ✅ |
+| Kardex Frontend | apps/web/src/pages/estoque/KardexPage.tsx | Saldo acumulado por produto c/ filtros | ✅ |
+| Conciliação Bancária API | apps/api/src/modules/conciliacao | Conciliação contas bancárias | ✅ |
+| Conciliação Bancária Frontend | apps/web/src/pages/financeiro/ConciliacaoPage.tsx | Página conciliação bancária | ✅ |
+| Convênios API | apps/api/src/modules/convenios | CRUD convênios | ✅ |
+| Convênios Frontend | apps/web/src/pages/fiscal/ConveniosPage.tsx | Página CRUD convênios | ✅ |
+| Licitações API | apps/api/src/modules/licitacoes | CRUD licitações + itens | ✅ |
+| Licitações Frontend | apps/web/src/pages/compras/LicitacoesPage.tsx | Página CRUD licitações | ✅ |
+| Adiantamentos API | apps/api/src/modules/adiantamentos | CRUD adiantamentos (cliente/fornecedor/funcionário) | ✅ |
+| Adiantamentos Frontend | apps/web/src/pages/financeiro/AdiantamentosPage.tsx | Página CRUD adiantamentos | ✅ |
+| Quitações API | apps/api/src/modules/quitacoes | Quitação em lote contas receber/pagar | ✅ |
+| Quitações Frontend | apps/web/src/pages/financeiro/QuitacoesPage.tsx | Página CRUD quitações | ✅ |
+| CT-e API | apps/api/src/modules/cte | CRUD CT-e modelo 57 | ✅ |
+| CT-e Frontend | apps/web/src/pages/fiscal/CtePage.tsx | Página CRUD CT-e | ✅ |
+| Auth Store Cleanup | apps/web/src/stores/authStore.ts | Removido Zustand authStore morto (nunca importado) | ✅ |
+| Pipeline CI | .github/workflows/ci.yml | GitHub Actions type-check + tests | ✅ |
+| Relatórios 10 novas fontes | apps/api/src/modules/relatorios | vendas-por-periodo, comissoes, lucratividade, fluxo-caixa, dre, estoque-geral, sped-contribuicoes, contas-vencidas, centro-custo, cheques | ✅ |
 
 ---
 
@@ -143,9 +163,9 @@
 - 🟡 Step 9 — NFSe comunicação prefeituras
 - 🟡 Step 10 — Contingência SVC/EPEC/DPEC
 
-### Melhorias Pendentes
-- 🟢 Módulos verticais — Contratos, garantias, devoluções
-- 🟢 UX + Input Hints completo (base toda)
+### Módulos Pendentes
+- 🟢 Módulo Ótica — Receituário, lentes, médicos
+- 🟢 Módulo Industrial — OP, BOM, roteiro
 
 ---
 
@@ -155,6 +175,8 @@
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.
 - **01/07/2026 (noite 2)**: Motor de Relatórios Genérico — Spec REPORT_ENGINE.md, ReportTemplate Prisma, 8 data sources (clientes, produtos, pedidos, contas, NF-e, NFSe), API executar + CRUD templates, Frontend RelatoriosPage (seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates).
 - **02/07/2026**: Lookup Field System — Spec LOOKUP.md + LookupDialog (modal busca c/ teclado + ordenação) + LookupField (trigger read-only + atalhos F2/Ctrl+L) + lookup-sources (5 fontes: clientes, produtos, fornecedores, vendedores, transportadoras) + OrcamentosPage c/ LookupField cliente.
+- **02/07/2026 (tarde)**: Renegociação — módulo completo (Prisma: Renegociacao/RenegociacaoConta/RenegociacaoParcela + SituacaoConta.RENEGOCIADO; API: criar, listar, confirmar, cancelar + contas disponíveis; Frontend: RenegociacaoPage com dashboard, criar com preview parcelas, detalhes, confirmar/cancelar; Sidebar + Rotas).
+- **02/07/2026 (blitz 2)**: Auth Store cleanup (deletado authStore.ts nunca usado) + Pipeline CI (.github/workflows/ci.yml) + Promoções (engine promocional: Prisma, API, Frontend) + Kardex (product stock ledger c/ saldo acumulado, CSV export) + Conciliação Bancária (service + frontend c/ painel esquerdo/direito, 4 dialogs) + Convênios + Licitações + Adiantamentos + Quitações + CT-e (modelo 57) + Relatórios (10 novas fontes: vendas-por-periodo, comissoes, lucratividade, fluxo-caixa, dre, estoque-geral, sped-contribuicoes, contas-vencidas, centro-custo, cheques).
 - **30/06/2026 (madrugada)**: Correção 403/400/PDV404/PlanoContas404 + Exportação (CSV, JSON, XLSX, PDF em 5 relatórios) + Input Hints em 5 páginas + Spec EXPORTACAO.md.
 - **30/06/2026 (tarde)**: Correção 12 bugs + Testes 62 testes (36 API + 26 WEB) + Temas premium.
 - **30/06/2026 (noite)**: Estoque Avançado (grades, lotes, tabelas preço), CNAB 240/400, Cheques, Centro de Custo — API + Frontend + 4 specs + Correção 30+ erros TS. Pronto para deploy.
