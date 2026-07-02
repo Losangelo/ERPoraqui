@@ -265,6 +265,7 @@ export function ParametrosPage() {
                 id="valor"
                 value={formData.valor}
                 onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+                placeholder="Valor do parâmetro"
               />
             </div>
             <div className="grid gap-2">
@@ -273,6 +274,7 @@ export function ParametrosPage() {
                 id="descricao"
                 value={formData.descricao}
                 onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
+                placeholder="Descrição do parâmetro"
               />
             </div>
           </div>

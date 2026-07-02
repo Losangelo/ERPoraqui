@@ -207,6 +207,7 @@ export function CategoriasPage() {
                 <Input
                   value={formData.descricao}
                   onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
+                  placeholder="Descrição detalhada da categoria (opcional)"
                 />
               </div>
             </div>

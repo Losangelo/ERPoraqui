@@ -193,13 +193,50 @@
 - Backend: /api/v1/relatorios registrado em main.ts
 - Frontend: /relatorios em App.tsx (aponta para RelatoriosPage)
 
+## 02/07/2026 — Lookup Field System (Busca Genérica)
+
+### Problema
+- Formulários usavam inputs de ID cegos (ex: "Cliente ID")
+- Usuário precisava decorar códigos numéricos
+- Cada página precisava reinventar busca de cliente/produto
+
+### Solução
+- **lookup-sources.ts** — Config centralizada de fontes de dados (clientes, produtos, fornecedores, vendedores, transportadoras)
+  - Cada fonte define endpoint, colunas, formatação de label
+  - Funções utilitárias: `cpfCnpj()`, `telefone()` para formatação BR
+- **LookupDialog.tsx** — Modal reutilizável com:
+  - Input de busca com debounce 300ms
+  - Tabela ordenável por coluna (toggle asc/desc)
+  - Navegação por teclado (↑↓ → Enter)
+  - Loading/empty states
+  - Footer com contagem + atalhos
+- **LookupField.tsx** — Campo de formulário que:
+  - Exibe input read-only com label formatado
+  - Botão de busca ao lado
+  - Botão de limpar (onClear)
+  - Atalhos: Enter, F2, Ctrl+L
+  - Gerencia o dialog internamente
+
+### OrcamentosPage atualizada
+- Formulário "Novo Orçamento" agora usa `<LookupField source="clientes">`
+- State inclui `clienteNome` para exibição amigável
+- Placeholder descritivo: "Buscar cliente por nome, CPF ou CNPJ..."
+
+### Spec
+- `docs/specs/LOOKUP.md` — Especificação do Lookup Field System
+
+### Build
+- `tsc --noEmit` — zero erros
+
+---
+
 - Realizado diagnóstico completo comparando fontes xHarbour originais (`fontesPRG/`, 496 arquivos) vs implementação TypeScript moderna (`apps/api/`, `apps/web/`)
 - Identificada cobertura real de ~38% (FEATURES.md e TODO.md estavam superestimados)
 - Criado `docs/plano_acao_completo.md` com 8 fases, ~413h de trabalho estimado
 - Top 5 gaps críticos:
-  1. NF-e sem transmissão SEFAZ real (apenas modelo/estrutura)
-  2. MDF-e — 0% implementado
-  3. SPED Fiscal — apenas registros básicos (25%)
-  4. Produtos sem grades, lotes, tabelas de preço (45%)
-  5. Boletos sem CNAB bancário (60%)
+   1. NF-e sem transmissão SEFAZ real (apenas modelo/estrutura)
+   2. MDF-e — 0% implementado
+   3. SPED Fiscal — apenas registros básicos (25%)
+   4. Produtos sem grades, lotes, tabelas de preço (45%)
+   5. Boletos sem CNAB bancário (60%)
 - Prioridade definida: NF-e > SPED > MDF-e > Produtos > Financeiro > Relatórios

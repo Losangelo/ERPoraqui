@@ -125,6 +125,11 @@
 | ReportTemplate Prisma | apps/api/prisma/schema.prisma | Modelo ReportTemplate (fonte, colunas, filtros, formato) | ✅ |
 | Report Engine API | apps/api/src/modules/relatorios | 8 data sources, executar, CRUD templates | ✅ |
 | Report Engine Frontend | apps/web/src/pages/relatorios/RelatoriosPage.tsx | Seletor fonte, colunas, filtros, preview, download, templates | ✅ |
+| Spec LOOKUP | docs/specs/LOOKUP.md | Especificação Lookup Field System | ✅ |
+| LookupDialog | apps/web/src/components/lookup/LookupDialog.tsx | Modal reutilizável de busca/seleção c/ teclado, ordenação, debounce | ✅ |
+| LookupField | apps/web/src/components/lookup/LookupField.tsx | Campo trigger read-only + label amigável + atalhos | ✅ |
+| lookup-sources | apps/web/src/components/lookup/lookup-sources.ts | Config centralizada (clientes, produtos, fornecedores, vendedores, transportadoras) | ✅ |
+| LookupField Orcamentos | apps/web/src/pages/OrcamentosPage.tsx | Formulário novo orçamento usa LookupField para cliente | ✅ |
 
 ---
 
@@ -138,10 +143,6 @@
 - 🟡 Step 9 — NFSe comunicação prefeituras
 - 🟡 Step 10 — Contingência SVC/EPEC/DPEC
 
-### Specs Faltantes
-- 🟡 Spec SPED Fiscal (`docs/specs/SPED.md`)
-- 🟡 Spec MDF-e (`docs/specs/MDFE.md`)
-
 ### Melhorias Pendentes
 - 🟢 Módulos verticais — Contratos, garantias, devoluções
 - 🟢 UX + Input Hints completo (base toda)
@@ -153,6 +154,7 @@
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.
 - **01/07/2026 (noite 2)**: Motor de Relatórios Genérico — Spec REPORT_ENGINE.md, ReportTemplate Prisma, 8 data sources (clientes, produtos, pedidos, contas, NF-e, NFSe), API executar + CRUD templates, Frontend RelatoriosPage (seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates).
+- **02/07/2026**: Lookup Field System — Spec LOOKUP.md + LookupDialog (modal busca c/ teclado + ordenação) + LookupField (trigger read-only + atalhos F2/Ctrl+L) + lookup-sources (5 fontes: clientes, produtos, fornecedores, vendedores, transportadoras) + OrcamentosPage c/ LookupField cliente.
 - **30/06/2026 (madrugada)**: Correção 403/400/PDV404/PlanoContas404 + Exportação (CSV, JSON, XLSX, PDF em 5 relatórios) + Input Hints em 5 páginas + Spec EXPORTACAO.md.
 - **30/06/2026 (tarde)**: Correção 12 bugs + Testes 62 testes (36 API + 26 WEB) + Temas premium.
 - **30/06/2026 (noite)**: Estoque Avançado (grades, lotes, tabelas preço), CNAB 240/400, Cheques, Centro de Custo — API + Frontend + 4 specs + Correção 30+ erros TS. Pronto para deploy.

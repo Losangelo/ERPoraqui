@@ -181,12 +181,37 @@
 - [x] **ReportTemplate Prisma:** Modelo no schema (nome, dataSource, colunas, filtros, formato)
 - [x] **Report Engine API:** /api/v1/relatorios — 8 data sources, POST /executar, CRUD /templates
 - [x] **Report Engine Frontend:** RelatoriosPage com seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates
+- [x] **Spec CONTRATOS_GARANTIAS_DEVOLUCOES.md:** docs/specs/CONTRATOS_GARANTIAS_DEVOLUCOES.md — Contratos/Garantias/Devoluções (ciclo vida, elegibilidade, RMA)
+- [x] **Contratos — Prisma Models:** Contrato + ContratoMedicao + enums + reverse relations + unique(empresaId, numero)
+- [x] **Contratos — API:** CRUD + ciclo vida (ativar/suspender/encerrar) + medições (criar/listar/faturar)
+- [x] **Contratos — Frontend:** ContratosPage com cards status, tabela, ações ciclo vida, medições inline
+- [x] **Garantias — Prisma Models:** Garantia + GarantiaRegra + reverse relations + unique(empresaId, numero)
+- [x] **Garantias — API:** CRUD + regras CRUD + verificar elegibilidade (produto + cliente)
+- [x] **Garantias — Frontend:** GarantiasPage com aba garantias/regras, CRUD completo
+- [x] **Devoluções — Prisma Models:** Devolucao + DevolucaoItem + enums + reverse relations + unique(empresaId, numero)
+- [x] **Devoluções — API:** CRUD + fluxo (solicitação→inspeção→aprovar/rejeitar→destinar)
+- [x] **Devoluções — Frontend:** DevolucoesPage com cards dashboard, tabela, detalhes, ações fluxo, diálogo destinação
+- [x] **Sidebar:** Itens Contratos, Garantias, Devoluções adicionados ao menu Fiscal
+- [x] **Rotas:** /contratos, /garantias, /devolucoes registradas em App.tsx + main.ts
+- [x] **Spec LOOKUP.md:** docs/specs/LOOKUP.md — Especificação Lookup Field System
+- [x] **LookupDialog:** Componente modal reutilizável de busca/seleção com tabela ordenável, navegação por teclado, debounce
+- [x] **LookupField:** Componente trigger com input read-only + label amigável + atalhos (F2, Ctrl+L)
+- [x] **lookup-sources.ts:** Config centralizada com 5 fontes (clientes, produtos, fornecedores, vendedores, transportadoras)
+- [x] **OrcamentosPage:** Formulário de novo orçamento agora usa LookupField para seleção de cliente
+
+---
+
+### ✅ Concluídos (Fase 5 — Contratos/Garantias/Devoluções)
+
+- [x] **API + Frontend Contratos/Garantias/Devoluções completos**
+- [x] **Sidebar + Rotas registradas**
+- [x] **Cobertura Fase 5: 100%**
 
 ---
 
 ### 🔴 Em Andamento
 
-1. Contratos + Garantias + Devoluções
+Nenhum — Fase 5 concluída.
 
 ---
 

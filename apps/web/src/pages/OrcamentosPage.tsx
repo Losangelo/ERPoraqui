@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label"
 import { Plus, Search, FileBarChart, Check, X } from "lucide-react"
 import { orcamentosService, Orcamento } from "@/services/orcamentos"
+import { LookupField } from "@/components/lookup/LookupField"
 
 export function OrcamentosPage() {
   const [orcamentos, setOrcamentos] = useState<Orcamento[]>([])
@@ -16,6 +17,7 @@ export function OrcamentosPage() {
   const [filtroStatus, setFiltroStatus] = useState("")
   const [formData, setFormData] = useState({
     clienteId: "",
+    clienteNome: "",
     observacoes: "",
   })
 
@@ -71,7 +73,7 @@ export function OrcamentosPage() {
         observacoes: formData.observacoes,
       })
       setDialogOpen(false)
-      setFormData({ clienteId: "", observacoes: "" })
+      setFormData({ clienteId: "", clienteNome: "", observacoes: "" })
       loadOrcamentos()
     } catch (error) {
       console.error("Erro ao criar:", error)
@@ -205,12 +207,14 @@ export function OrcamentosPage() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="cliente">Cliente ID</Label>
-              <Input
-                id="cliente"
+              <Label htmlFor="cliente">Cliente</Label>
+              <LookupField
+                source="clientes"
                 value={formData.clienteId}
-                onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })}
-                placeholder="ID do cliente"
+                selectedLabel={formData.clienteNome}
+                onChange={(item) => setFormData({ ...formData, clienteId: item.id, clienteNome: item.nome })}
+                onClear={() => setFormData({ ...formData, clienteId: "", clienteNome: "" })}
+                placeholder="Buscar cliente por nome, CPF ou CNPJ..."
               />
             </div>
             <div className="grid gap-2">

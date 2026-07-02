@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { CommandPalette } from '@/components/CommandPalette';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ export function Layout({ children }: LayoutProps) {
         <Header onMenuToggle={() => setCollapsed(!collapsed)} />
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
+      <CommandPalette />
     </div>
   );
 }

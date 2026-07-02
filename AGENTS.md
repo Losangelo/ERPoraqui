@@ -360,6 +360,19 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Frontend RelatoriosPage: seletor fonte, checkboxes colunas, filtros, preview tabela, download CSV/XLSX, templates
 - ✅ Rotas: /api/v1/relatorios registrado em main.ts + /relatorios em App.tsx
 
+### Status Atual Contratos + Garantias + Devoluções
+- ✅ Spec CONTRATOS_GARANTIAS_DEVOLUCOES.md criada
+- ✅ Prisma: Contrato, ContratoMedicao, Garantia, GarantiaRegra, Devolucao, DevolucaoItem + enums + reverse relations + unique(empresaId, numero)
+- ✅ API Contratos: CRUD + ciclo vida (ativar/suspender/encerrar) + medições (criar/listar/faturar)
+- ✅ API Garantias: CRUD + regras CRUD + verificar elegibilidade (produto+cliente)
+- ✅ API Devoluções: CRUD + fluxo (solicitação→inspeção→aprovar/rejeitar→destinar)
+- ✅ Frontend ContratosPage (cards status, tabela, ciclo vida, medições inline)
+- ✅ Frontend GarantiasPage (aba garantias/regras, CRUD completo)
+- ✅ Frontend DevolucoesPage (dashboard, tabela, detalhes, ações fluxo, destinação dialog)
+- ✅ Sidebar: Contratos, Garantias, Devoluções no menu Fiscal
+- ✅ Rotas /api/v1/contratos, /api/v1/garantias, /api/v1/devolucoes registradas em main.ts
+- ✅ Rotas /contratos, /garantias, /devolucoes registradas em App.tsx
+
 ### Status Atual PDV
 - ✅ PDV completo (PdvPage + pdv.ts service)
 - ✅ Carrinho funcional: busca por código de barras, busca por nome, grid de resultados
@@ -378,9 +391,19 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Spec FILIAIS.md criada
 - ✅ Item "Filiais" adicionado à sidebar
 
+### Status Atual Lookup Field
+- ✅ Spec LOOKUP.md criada (lookup field system genérico)
+- ✅ LookupDialog: modal reutilizável de busca/seleção com teclado, ordenação, debounce
+- ✅ LookupField: campo trigger read-only + label amigável + atalhos (F2, Ctrl+L)
+- ✅ lookup-sources: config centralizada com 5 fontes (clientes, produtos, fornecedores, vendedores, transportadoras)
+- ✅ OrcamentosPage: formulário novo orçamento agora usa LookupField para cliente
+
 ### Status Atual Manuais
 - ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
 - ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
+
+### Novidades (02/07/2026)
+- Lookup Field System: Spec LOOKUP.md + LookupDialog (modal busca c/ teclado + ordenação) + LookupField (trigger read-only + atalhos F2/Ctrl+L) + lookup-sources (5 fontes) + OrcamentosPage atualizada com LookupField cliente
 
 ### Novidades (01/07/2026 tarde)
 - Specs SPED.md + MDFE.md + plano_acao_futuro.md criadas
@@ -404,6 +427,16 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - Backend: /api/v1/relatorios (data sources, executar, templates CRUD)
 - Frontend: RelatoriosPage com seletor fonte, checkboxes colunas, filtros, preview tabela, download CSV/XLSX, templates salvos
 - Sidebar: Relatórios atualizado para o novo motor
+- db push executado
+
+### Novidades (02/07/2026)
+- Spec CONTRATOS_GARANTIAS_DEVOLUCOES.md criada
+- Prisma: Contrato, ContratoMedicao, Garantia, GarantiaRegra, Devolucao, DevolucaoItem + enums + reverse relations + unique(empresaId,numero)
+- API Contratos: CRUD + ciclo vida (ativar/suspender/encerrar) + medições
+- API Garantias: CRUD + regras CRUD + verificar elegibilidade
+- API Devoluções: CRUD + fluxo (solicitação→inspeção→aprovar/rejeitar→destinar)
+- Frontend ContratosPage, GarantiasPage, DevolucoesPage
+- Sidebar + Rotas registradas
 - db push executado
 
 ### Correções Recentes (01/07/2026)

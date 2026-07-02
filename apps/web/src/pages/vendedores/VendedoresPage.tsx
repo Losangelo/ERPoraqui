@@ -185,6 +185,8 @@ export function VendedoresPage() {
                 type="text"
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                placeholder="Nome completo do vendedor"
+                title="Nome completo"
                 required
               />
             </div>
@@ -195,6 +197,8 @@ export function VendedoresPage() {
                 type="text"
                 value={formData.cpf}
                 onChange={(e) => setFormData({ ...formData, cpf: e.target.value })}
+                placeholder="000.000.000-00"
+                title="CPF do vendedor"
                 required
               />
             </div>
@@ -205,6 +209,8 @@ export function VendedoresPage() {
                 type="text"
                 value={formData.telefone}
                 onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+                placeholder="(99) 99999-9999"
+                title="Telefone com DDD"
               />
             </div>
             <div className="grid gap-2">
@@ -214,6 +220,8 @@ export function VendedoresPage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="vendedor@exemplo.com"
+                title="E-mail corporativo"
               />
             </div>
             <div className="grid gap-2">
@@ -224,6 +232,8 @@ export function VendedoresPage() {
                 step="0.1"
                 value={formData.comissao}
                 onChange={(e) => setFormData({ ...formData, comissao: e.target.value })}
+                placeholder="0,00"
+                title="Percentual de comissão (ex: 5.0 para 5%)"
               />
             </div>
             <div className="flex items-center gap-2">

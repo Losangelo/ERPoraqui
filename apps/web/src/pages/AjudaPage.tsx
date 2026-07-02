@@ -1316,6 +1316,130 @@ Parâmetros importantes:
       },
     ],
   },
+  {
+    id: 'command-palette',
+    titulo: 'Command Palette (Ctrl+K)',
+    categoria: 'Geral',
+    conteudo: `A Command Palette permite buscar rapidamente qualquer funcionalidade do sistema.
+
+Atalho: Ctrl+K (ou Cmd+K no Mac)
+
+Funcionalidades:
+- Busca por páginas: digite o nome da página para navegar
+- Busca por clientes: localiza clientes pelo nome
+- Busca por produtos: localiza produtos pelo nome ou código
+- Busca por pedidos: localiza pedidos pelo número
+- Navegação por setas: use ↑↓ para selecionar
+- Enter para abrir a página selecionada
+- ESC para fechar`,
+    exemplos: [],
+  },
+  {
+    id: 'sped-fiscal',
+    titulo: 'SPED Fiscal',
+    categoria: 'Fiscal',
+    conteudo: `O SPED Fiscal gera arquivos TXT para entrega ao Fisco.
+
+Blocos disponíveis:
+- Bloco 0: Abertura, parceiros, produtos, unidades, contador
+- Bloco C: Documentos fiscais NF-e (C100, C170, C190)
+- Bloco D: Documentos fiscais NFSe (D100)
+- Bloco E: Apuração ICMS/IPI (E100, E200, E300, E500)
+- Bloco G: CIAP - Controle de crédito ICMS (G110, G140)
+- Bloco H: Inventário (H010, H020)
+
+Como usar:
+1. Acesse o módulo SPED Fiscal no menu Fiscal
+2. Selecione os blocos desejados
+3. Defina o período de apuração
+4. Clique em "Gerar Arquivo"
+5. Faça o download do .txt e importe no PVA`,
+    exemplos: [],
+  },
+  {
+    id: 'mdfe',
+    titulo: 'Manifesto Eletrônico (MDF-e)',
+    categoria: 'Fiscal',
+    conteudo: `O MDF-e (Modelo 58) é o documento fiscal para transporte de cargas.
+
+Fluxo:
+1. Cadastre veículos (placa, RNTRC, tipo)
+2. Cadastre condutores (CPF, CNH, antifurto)
+3. Crie o MDF-e informando origem/destino
+4. Vincule os documentos fiscais NF-e/CT-e
+5. Transmita para SEFAZ
+6. Encerre ao finalizar a viagem
+
+Status:
+- EM_DIGITACAO: rascunho
+- AUTORIZADO: transmitido com sucesso
+- ENCERRADO: viagem finalizada
+- CANCELADO: manifesto cancelado`,
+    exemplos: [],
+  },
+  {
+    id: 'contratos',
+    titulo: 'Contratos',
+    categoria: 'Vendas',
+    conteudo: `Gestão de contratos de serviços e planos recorrentes.
+
+Ciclo de vida:
+- Rascunho → Ativo → Suspenso → Encerrado
+
+Funcionalidades:
+- Criar contratos com vigência definida ou indeterminada
+- Tipos de reajuste: IGPM, IPCA, NF ou nenhum
+- Medições mensais: crie medições para contratos ativos
+- Faturamento: ao faturar a medição, um pedido pode ser gerado
+- Cadastro de garantias vinculadas a produtos
+
+Ações:
+- Ativar: apenas contratos em rascunho
+- Suspender: apenas contratos ativos
+- Encerrar: contratos ativos ou suspensos`,
+    exemplos: [],
+  },
+  {
+    id: 'garantias',
+    titulo: 'Garantias',
+    categoria: 'Vendas',
+    conteudo: `Controle de garantias de produtos vendidos.
+
+Tipos de garantia:
+- Fábrica: garantia original do fabricante
+- Estendida: garantia adicional contratada
+- Legal: garantia obrigatória por lei
+
+Regras de elegibilidade:
+- Configure regras por produto ou categoria
+- Defina prazo padrão, cobertura e termos
+- A elegibilidade verifica se o produto está dentro do prazo
+
+Status: Ativa, Expirada, Cancelada, Acionada`,
+    exemplos: [],
+  },
+  {
+    id: 'devolucoes',
+    titulo: 'Devoluções / RMA',
+    categoria: 'Vendas',
+    conteudo: `Gestão de devoluções e assistência técnica.
+
+Fluxo RMA:
+1. Solicitação: cliente solicita devolução
+2. Inspeção: análise do produto
+3. Aprovação ou rejeição
+4. Destinação: reparo, substituição, crédito ou descarte
+
+Motivos:
+- Defeito, Troca, Arrependimento, Avaria
+
+Destinos:
+- Reparo: produto retorna para assistência
+- Substituição: gera NF-e de devolução e novo pedido
+- Crédito: crédito automático em conta a receber
+- Descarte: produto sem condição de uso`,
+    exemplos: [],
+  },
 ];
 
 const categorias = [...new Set(itensAjuda.map((item) => item.categoria))];

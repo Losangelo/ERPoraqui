@@ -241,6 +241,7 @@ export function CotacoesPage() {
                   type="date"
                   value={formData.dataValidade}
                   onChange={(e) => setFormData({ ...formData, dataValidade: e.target.value })}
+                  title="Data de validade da cotação"
                 />
               </div>
 
@@ -267,14 +268,14 @@ export function CotacoesPage() {
                       <div className="w-20">
                         <Input
                           type="number"
-                          placeholder="Qtd"
+                          placeholder="Quantidade de unidades"
                           value={item.quantidade}
                           onChange={(e) => updateItem(index, 'quantidade', parseFloat(e.target.value) || 0)}
                         />
                       </div>
                       <div className="w-20">
                         <Input
-                          placeholder="UN"
+                          placeholder="Unidade (ex: KG, UN, LT)"
                           value={item.unidadeMedida}
                           onChange={(e) => updateItem(index, 'unidadeMedida', e.target.value)}
                         />
@@ -297,6 +298,7 @@ export function CotacoesPage() {
                   id="observacoes"
                   value={formData.observacoes}
                   onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
+                  placeholder="Observações adicionais sobre a cotação"
                 />
               </div>
             </div>

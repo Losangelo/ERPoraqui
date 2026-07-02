@@ -57,7 +57,7 @@ export const produtosLotesService = {
     params.append('limite', String(filtros.limite || 100));
 
     const response = await api.get<ProdutosLotesResponse>(`/produtos-lotes?${params}`);
-    return response.data?.data || [];
+    return response.data?.dados || [];
   },
 
   buscarPorId: async (id: string) => {

@@ -288,7 +288,7 @@ export function RelatoriosPage() {
                       </select>
                       <Input
                         className="h-8 text-xs"
-                        placeholder="Valor"
+                        placeholder="Valor do filtro"
                         value={f.valor}
                         onChange={e => updateFilter(i, 'valor', e.target.value)}
                       />

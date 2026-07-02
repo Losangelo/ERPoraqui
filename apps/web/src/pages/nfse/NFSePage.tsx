@@ -416,6 +416,7 @@ export default function NFSePage() {
                       id="tomadorNome"
                       value={formData.tomadorNome}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorNome: e.target.value }))}
+                      placeholder="Nome completo do tomador"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -424,6 +425,7 @@ export default function NFSePage() {
                       id="tomadorDoc"
                       value={formData.tomadorCnpjCpf}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorCnpjCpf: e.target.value }))}
+                      placeholder="000.000.000-00 ou 00.000.000/0000-00"
                     />
                   </div>
                 </div>
@@ -435,6 +437,7 @@ export default function NFSePage() {
                       id="tomadorEnd"
                       value={formData.tomadorEndereco}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorEndereco: e.target.value }))}
+                      placeholder="Rua, Avenida, Travessa..."
                     />
                   </div>
                   <div className="grid gap-2">
@@ -443,6 +446,7 @@ export default function NFSePage() {
                       id="tomadorNum"
                       value={formData.tomadorNumero}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorNumero: e.target.value }))}
+                      placeholder="Número do endereço"
                     />
                   </div>
                 </div>
@@ -454,6 +458,7 @@ export default function NFSePage() {
                       id="tomadorBairro"
                       value={formData.tomadorBairro}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorBairro: e.target.value }))}
+                      placeholder="Nome do bairro"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -462,6 +467,7 @@ export default function NFSePage() {
                       id="tomadorCep"
                       value={formData.tomadorCep}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorCep: e.target.value }))}
+                      placeholder="00000-000"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -470,6 +476,7 @@ export default function NFSePage() {
                       id="tomadorTel"
                       value={formData.tomadorTelefone}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorTelefone: e.target.value }))}
+                      placeholder="(99) 99999-9999"
                     />
                   </div>
                 </div>
@@ -481,6 +488,7 @@ export default function NFSePage() {
                       id="tomadorCidade"
                       value={formData.tomadorCidade}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorCidade: e.target.value }))}
+                      placeholder="Nome da cidade"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -489,6 +497,7 @@ export default function NFSePage() {
                       id="tomadorUf"
                       value={formData.tomadorUf}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorUf: e.target.value }))}
+                      placeholder="UF (ex: SP)"
                       maxLength={2}
                     />
                   </div>
@@ -499,6 +508,7 @@ export default function NFSePage() {
                       type="email"
                       value={formData.tomadorEmail}
                       onChange={(e) => setFormData(prev => ({ ...prev, tomadorEmail: e.target.value }))}
+                      placeholder="tomador@exemplo.com"
                     />
                   </div>
                 </div>
@@ -514,25 +524,25 @@ export default function NFSePage() {
                   <CardContent>
                     <div className="grid grid-cols-6 gap-2">
                       <Input
-                        placeholder="Código"
+                        placeholder="Código do serviço"
                         value={itemCodigo}
                         onChange={(e) => setItemCodigo(e.target.value)}
                       />
                       <Input
-                        placeholder="Descrição"
+                        placeholder="Descrição detalhada do serviço"
                         value={itemDesc}
                         onChange={(e) => setItemDesc(e.target.value)}
                         className="col-span-2"
                       />
                       <Input
                         type="number"
-                        placeholder="Qtd"
+                        placeholder="Quantidade de unidades"
                         value={itemQtd}
                         onChange={(e) => setItemQtd(e.target.value)}
                       />
                       <Input
                         type="number"
-                        placeholder="Valor"
+                        placeholder="Valor unitário (R$)"
                         value={itemValor}
                         onChange={(e) => setItemValor(e.target.value)}
                       />

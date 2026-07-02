@@ -78,8 +78,8 @@ model Empresa {
   contasReceber        ContaReceber[]
   contasPagar          ContaPagar[]
   fluxoCaixa           FluxoCaixa[]
-  cheques              Cheque[]
-  centrosCusto         CentroCusto[]
+  cheques        Cheque[]
+   centrosCusto         CentroCusto[]
   categorias           Categoria[]
   unidadesMedida       UnidadeMedida[]
   usuarios             Usuario[]
@@ -107,6 +107,10 @@ model Empresa {
    condutores           Condutor[]
    mdfes                Mdfe[]
    reportTemplates      ReportTemplate[]
+   contratos            Contrato[]
+   garantias            Garantia[]
+   garantiaRegras       GarantiaRegra[]
+   devolucoes           Devolucao[]
 
   // Multi-empresa (grupo econômico - empresas vinculadas à mesma licença)
   matrizId           String?
@@ -188,6 +192,9 @@ model Cliente {
   notasFiscais  NotaFiscal[]
   notasServico  NotaServico[]
   cheques        Cheque[]
+  contratos      Contrato[]
+  garantias      Garantia[]
+  devolucoes     Devolucao[]
 
   @@map("clientes")
 }
@@ -321,7 +328,9 @@ model Produto {
   movimentacoesEstoque MovimentacaoEstoque[]
   variacoes            ProdutoVariacao[]
   lotes                ProdutoLote[]
-  tabelasPreco         TabelaPrecoItem[]
+   tabelasPreco         TabelaPrecoItem[]
+   garantias            Garantia[]
+   devolucaoItens       DevolucaoItem[]
 
   @@unique([empresaId, codigoInterno])
   @@map("produtos")
@@ -482,7 +491,8 @@ model PedidoVenda {
   itens         ItemPedidoVenda[]
   contasReceber ContaReceber[]
   orcamento     Orcamento?
-  notaFiscal    NotaFiscal?
+   notaFiscal    NotaFiscal?
+   devolucoes    Devolucao[]
 
   @@unique([empresaId, numeroPedido, serie])
   @@map("pedidos_venda")
@@ -2218,6 +2228,169 @@ model ReportTemplate {
   empresa Empresa @relation(fields: [empresaId], references: [id])
 
   @@map("report_templates")
+}
+
+// =====================================================
+// CONTRATOS
+// =====================================================
+
+enum SituacaoContrato {
+  RASCUNHO
+  ATIVO
+  SUSPENSO
+  ENCERRADO
+}
+
+enum TipoReajuste {
+  IGPM
+  IPCA
+  INCC
+  NF
+  NENHUM
+}
+
+model Contrato {
+  id              String           @id @default(cuid()) @map("_id")
+  empresaId       String
+  clienteId       String
+  numero          String
+  descricao       String?
+  dataInicio      DateTime
+  dataFim         DateTime?
+  valor           Decimal          @default(0) @db.Decimal(12, 2)
+  tipoReajuste    TipoReajuste     @default(NENHUM)
+  periodicidade   String           @default("MENSAL")
+  status          SituacaoContrato @default(RASCUNHO)
+  observacoes     String?
+  dataCriacao     DateTime         @default(now())
+  dataAtualizacao DateTime         @updatedAt
+
+  empresa  Empresa             @relation(fields: [empresaId], references: [id])
+  cliente  Cliente             @relation(fields: [clienteId], references: [id])
+  medicoes ContratoMedicao[]
+
+  @@unique([empresaId, numero])
+  @@map("contratos")
+}
+
+model ContratoMedicao {
+  id             String   @id @default(cuid()) @map("_id")
+  contratoId     String
+  periodo         String   // "2026-07"
+  valor          Decimal  @default(0) @db.Decimal(12, 2)
+  dataVencimento DateTime
+  status         String   @default("PENDENTE") // PENDENTE, FATURADO, CANCELADO
+  pedidoGerado   String?
+  dataCriacao    DateTime @default(now())
+
+  contrato Contrato @relation(fields: [contratoId], references: [id], onDelete: Cascade)
+
+  @@map("contrato_medicoes")
+}
+
+// =====================================================
+// GARANTIAS
+// =====================================================
+
+model Garantia {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  clienteId       String
+  produtoId       String
+  vendaId         String?
+  numero          String
+  tipo            String   @default("FABRICA") // FABRICA, ESTENDIDA, LEGAL
+  prazoDias       Int
+  dataInicio      DateTime
+  dataFim         DateTime?
+  cobertura       String?  // Descrição do que cobre
+  status          String   @default("ATIVA") // ATIVA, EXPIRADA, CANCELADA, ACIONADA
+  observacoes     String?
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+
+  empresa Empresa  @relation(fields: [empresaId], references: [id])
+  cliente Cliente  @relation(fields: [clienteId], references: [id])
+  produto Produto  @relation(fields: [produtoId], references: [id])
+
+  @@unique([empresaId, numero])
+  @@map("garantias")
+}
+
+model GarantiaRegra {
+  id          String   @id @default(cuid()) @map("_id")
+  empresaId   String
+  produtoId   String?  // null = regra genérica para categoria
+  categoriaId String?
+  prazoDias   Int
+  tipo        String   @default("FABRICA")
+  cobertura   String?
+  termos      String?
+  ativo       Boolean  @default(true)
+  dataCriacao DateTime @default(now())
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id])
+
+  @@map("garantia_regras")
+}
+
+// =====================================================
+// DEVOLUÇÕES / RMA
+// =====================================================
+
+enum DevolucaoStatus {
+  SOLICITACAO
+  INSPECAO
+  APROVADO
+  REJEITADO
+  DESTINADO
+  CANCELADO
+}
+
+enum DestinoDevolucao {
+  REPARO
+  SUBSTITUICAO
+  CREDITO
+  DESCARTE
+}
+
+model Devolucao {
+  id              String           @id @default(cuid()) @map("_id")
+  empresaId       String
+  clienteId       String
+  pedidoVendaId   String?
+  numero          String
+  motivo          String           // DEFEITO, TROCA, ARREPENDIMENTO, AVARIA
+  status          DevolucaoStatus  @default(SOLICITACAO)
+  destino         DestinoDevolucao?
+  observacoes     String?
+  laudoTecnico    String?
+  nfDevolucao     String?          // NF-e gerada na substituição
+  dataCriacao     DateTime         @default(now())
+  dataAtualizacao DateTime         @updatedAt
+
+  empresa       Empresa        @relation(fields: [empresaId], references: [id])
+  cliente       Cliente        @relation(fields: [clienteId], references: [id])
+  pedidoVenda   PedidoVenda?   @relation(fields: [pedidoVendaId], references: [id])
+  itens         DevolucaoItem[]
+
+  @@unique([empresaId, numero])
+  @@map("devolucoes")
+}
+
+model DevolucaoItem {
+  id          String         @id @default(cuid()) @map("_id")
+  devolucaoId String
+  produtoId   String
+  quantidade  Decimal        @default(1) @db.Decimal(10, 2)
+  valor       Decimal        @default(0) @db.Decimal(12, 2)
+  condicao    String         @default("NOVO") // NOVO, DEFEITO, AVARIADO
+  numeroSerie String?
+
+  devolucao Devolucao @relation(fields: [devolucaoId], references: [id], onDelete: Cascade)
+  produto   Produto   @relation(fields: [produtoId], references: [id])
+
+  @@map("devolucao_itens")
 }
 
 // =====================================================

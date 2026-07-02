@@ -96,7 +96,7 @@ export function PedidosCompraPage() {
     (newItens[index] as any)[field] = value;
     
     if (field === 'produtoId') {
-      const produto = produtos?.find(p => p.id === value);
+      const produto = produtos?.find((p: any) => p.id === value);
       if (produto) {
         newItens[index].valorUnitario = produto.precoVenda || 0;
       }
@@ -299,6 +299,7 @@ export function PedidosCompraPage() {
                     type="date"
                     value={formData.dataEntrega}
                     onChange={(e) => setFormData({ ...formData, dataEntrega: e.target.value })}
+                    title="Data prevista de entrega"
                   />
                 </div>
               </div>
@@ -343,7 +344,7 @@ export function PedidosCompraPage() {
                       <div className="w-20">
                         <Input
                           type="number"
-                          placeholder="Qtd"
+                          placeholder="Quantidade de unidades"
                           value={item.quantidade}
                           onChange={(e) => updateItem(index, 'quantidade', parseFloat(e.target.value) || 0)}
                         />
@@ -351,7 +352,7 @@ export function PedidosCompraPage() {
                       <div className="w-24">
                         <Input
                           type="number"
-                          placeholder="R$"
+                          placeholder="Valor unitário (R$)"
                           value={item.valorUnitario}
                           onChange={(e) => updateItem(index, 'valorUnitario', parseFloat(e.target.value) || 0)}
                         />
@@ -377,6 +378,7 @@ export function PedidosCompraPage() {
                   id="observacoes"
                   value={formData.observacoes}
                   onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
+                  placeholder="Observações do pedido"
                 />
               </div>
             </div>

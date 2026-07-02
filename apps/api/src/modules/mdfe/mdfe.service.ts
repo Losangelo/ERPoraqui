@@ -1,4 +1,4 @@
-import { prisma } from '@/shared/database/prisma-client';
+import { prisma } from '@/database/prisma.service';
 import type {
   VeiculoInput,
   VeiculoUpdate,

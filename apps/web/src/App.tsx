@@ -1,6 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/stores/AuthContext';
 import { Layout } from '@/components/layout/Layout';
+import { HelpProvider } from '@/contexts/HelpContext';
+import { HelpOverlay } from '@/components/HelpOverlay';
+import { useHelpHotkey } from '@/hooks/useHelpHotkey';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { CustomersPage } from '@/pages/customers/CustomersPage';
 import { ProductsPage } from '@/pages/products/ProductsPage';
@@ -47,6 +50,9 @@ import { SpedFiscalPage } from '@/pages/fiscal/SpedFiscalPage';
 import { MdfePage } from '@/pages/fiscal/MdfePage';
 import { VeiculosPage } from '@/pages/fiscal/VeiculosPage';
 import { CondutoresPage } from '@/pages/fiscal/CondutoresPage';
+import { ContratosPage } from '@/pages/fiscal/ContratosPage';
+import { GarantiasPage } from '@/pages/fiscal/GarantiasPage';
+import { DevolucoesPage } from '@/pages/fiscal/DevolucoesPage';
 import ContasReceberPage from '@/pages/contas-receber/ContasReceberPage';
 import ContasPagarPage from '@/pages/contas-pagar/ContasPagarPage';
 import TabelasPrecoPage from '@/pages/tabelas-preco/TabelasPrecoPage';
@@ -65,6 +71,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
+  useHelpHotkey();
   
   return (
     <Routes>
@@ -125,6 +132,9 @@ function AppRoutes() {
             <Route path="/filiais" element={<FiliaisPage />} />
             <Route path="/produtos-variacoes" element={<ProdutosVariacoesPage />} />
             <Route path="/produtos-lotes" element={<ProdutosLotesPage />} />
+            <Route path="/contratos" element={<ContratosPage />} />
+            <Route path="/garantias" element={<GarantiasPage />} />
+            <Route path="/devolucoes" element={<DevolucoesPage />} />
           </Routes>
         </ProtectedRoute>
       } />
@@ -132,10 +142,19 @@ function AppRoutes() {
   );
 }
 
+function AppWithHelp() {
+  return (
+    <HelpProvider>
+      <AppRoutes />
+      <HelpOverlay />
+    </HelpProvider>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <AppWithHelp />
     </AuthProvider>
   );
 }

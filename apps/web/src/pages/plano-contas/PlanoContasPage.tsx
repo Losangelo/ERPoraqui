@@ -154,7 +154,7 @@ export default function PlanoContasPage() {
                 id="codigo"
                 value={formData.codigo}
                 onChange={(e) => setFormData({ ...formData, codigo: e.target.value })}
-                placeholder="1.1.1"
+                placeholder="Código da conta (ex: 1.1.1)"
               />
             </div>
             <div className="grid gap-2">
@@ -163,7 +163,7 @@ export default function PlanoContasPage() {
                 id="nome"
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                placeholder="Caixa"
+                placeholder="Nome da conta contábil"
               />
             </div>
             <div className="grid gap-2">

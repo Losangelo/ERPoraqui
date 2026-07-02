@@ -177,6 +177,8 @@ export function TransportadorasPage() {
                 type="text"
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                placeholder="Nome ou Razão Social da transportadora"
+                title="Nome completo"
                 required
               />
             </div>
@@ -187,6 +189,8 @@ export function TransportadorasPage() {
                 type="text"
                 value={formData.cnpj}
                 onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
+                placeholder="00.000.000/0000-00"
+                title="CNPJ da transportadora"
                 required
               />
             </div>
@@ -197,6 +201,8 @@ export function TransportadorasPage() {
                 type="text"
                 value={formData.telefone}
                 onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+                placeholder="(99) 99999-9999"
+                title="Telefone com DDD"
               />
             </div>
             <div className="grid gap-2">
@@ -206,6 +212,8 @@ export function TransportadorasPage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="transportadora@exemplo.com"
+                title="E-mail de contato"
               />
             </div>
             <div className="flex items-center gap-2">

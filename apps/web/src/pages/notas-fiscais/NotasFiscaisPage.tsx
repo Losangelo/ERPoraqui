@@ -438,11 +438,11 @@ export function NotasFiscaisPage() {
                 </div>
                 <div className="w-20 grid gap-2">
                   <Label>Qtd</Label>
-                  <Input type="number" value={itemQtd} onChange={(e) => setItemQtd(e.target.value)} />
+                  <Input type="number" value={itemQtd} onChange={(e) => setItemQtd(e.target.value)} placeholder="Quantidade de unidades" title="Qtd de itens" />
                 </div>
                 <div className="w-32 grid gap-2">
                   <Label>Valor Unit.</Label>
-                  <Input type="number" step="0.01" value={itemValor} onChange={(e) => setItemValor(e.target.value)} />
+                  <Input type="number" step="0.01" value={itemValor} onChange={(e) => setItemValor(e.target.value)} placeholder="Valor unitário (R$)" />
                 </div>
                 <Button onClick={handleAddItem}>Adicionar</Button>
               </div>

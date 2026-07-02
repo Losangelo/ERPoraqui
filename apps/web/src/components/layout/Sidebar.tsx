@@ -33,6 +33,9 @@ import {
   Scale,
   ArrowRightLeft,
   Percent,
+  Shield,
+  Undo2,
+  FileSignature,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -140,6 +143,9 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'nfce', label: 'NFC-e', icon: FileText, path: '/nfce', categoria: 'relatorios' },
       { id: 'nfse', label: 'NFSe', icon: FileText, path: '/nfse', categoria: 'relatorios' },
       { id: 'ecf', label: 'ECF', icon: Printer, path: '/ecf', categoria: 'relatorios' },
+      { id: 'contratos', label: 'Contratos', icon: FileSignature, path: '/contratos', categoria: 'relatorios' },
+      { id: 'garantias', label: 'Garantias', icon: Shield, path: '/garantias', categoria: 'relatorios' },
+      { id: 'devolucoes', label: 'Devoluções', icon: Undo2, path: '/devolucoes', categoria: 'relatorios' },
     ],
   },
   {

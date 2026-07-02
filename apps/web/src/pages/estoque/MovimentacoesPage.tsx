@@ -220,6 +220,7 @@ export function MovimentacoesPage() {
                   type="number"
                   value={formData.quantidade}
                   onChange={(e) => setFormData({ ...formData, quantidade: parseFloat(e.target.value) || 0 })}
+                  placeholder="Quantidade movimentada"
                 />
               </div>
               <div className="grid gap-2">

@@ -240,6 +240,8 @@ export function EntradasPage() {
                     id="numeroNota"
                     value={formData.numeroNota}
                     onChange={(e) => setFormData({ ...formData, numeroNota: e.target.value })}
+                    placeholder="Número da nota fiscal"
+                    title="Número da NF do fornecedor"
                     required
                   />
                 </div>
@@ -250,6 +252,7 @@ export function EntradasPage() {
                     type="date"
                     value={formData.dataEmissao}
                     onChange={(e) => setFormData({ ...formData, dataEmissao: e.target.value })}
+                    title="Data de emissão da nota fiscal"
                   />
                 </div>
               </div>
@@ -261,6 +264,8 @@ export function EntradasPage() {
                     type="number"
                     value={formData.valorFrete}
                     onChange={(e) => setFormData({ ...formData, valorFrete: parseFloat(e.target.value) || 0 })}
+                    placeholder="0,00"
+                    title="Valor do frete (R$)"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -270,6 +275,8 @@ export function EntradasPage() {
                     type="number"
                     value={formData.valorDesconto}
                     onChange={(e) => setFormData({ ...formData, valorDesconto: parseFloat(e.target.value) || 0 })}
+                    placeholder="0,00"
+                    title="Valor do desconto (R$)"
                   />
                 </div>
               </div>
