@@ -8,6 +8,7 @@
 | [Orçamentos de Vendas](orcamentos-vendas.md) | Pré-pedidos, aprovação e conversão |
 | [PDV (Ponto de Venda)](pdv.md) | Vendas rápidas no balcão |
 | [CRM](crm.md) | Gestão de relacionamento com cliente, pipeline e oportunidades |
+| [Promoções](promocoes.md) | Campanhas promocionais (descontos, leve-pague) |
 
 ### Módulos Fiscais
 | Guia | Descrição |
@@ -16,16 +17,22 @@
 | [NFSe](nfse.md) | Nota Fiscal de Serviços Eletrônica |
 | [SPED Fiscal](sped-fiscal.md) | Escrituração Fiscal Digital |
 | [MDF-e](mdfe.md) | Manifesto Eletrônico de Documentos Fiscais |
+| [CT-e](cte.md) | Conhecimento de Transporte Eletrônico |
 
 ### Módulos de Estoque e Produtos
 | Guia | Descrição |
 |------|-----------|
-| [Estoque Avançado](estoque-avancado.md) | Variações (grades), lotes e tabelas de preço |
+| [Estoque Avançado](estoque-avancado.md) | Variações (grades), lotes, kardex, tabelas de preço |
+| [Kardex](estoque-avancado.md#kardex) | Saldo acumulado e histórico por produto |
 
 ### Módulos Financeiros
 | Guia | Descrição |
 |------|-----------|
 | [Financeiro (Contas R/P, Fluxo Caixa, DRE)](financeiro.md) | Gestão financeira completa |
+| [Renegociação](financeiro.md#renegociacao) | Renegociação de contas a receber/pagar |
+| [Conciliação Bancária](financeiro.md#conciliacao-bancaria) | Conciliação de extratos bancários |
+| [Adiantamentos](adiantamentos-quitacoes.md) | Adiantamentos a clientes, fornecedores e funcionários |
+| [Quitações](adiantamentos-quitacoes.md) | Quitação em lote de contas |
 | [Cheques](cheques.md) | Ciclo de vida de cheques |
 | [Boletos / CNAB](boletos-cnab.md) | Emissão de boletos e arquivos bancários |
 | [Centro de Custo](centro-custo.md) | Organização financeira por departamento |
@@ -43,6 +50,7 @@
 | [Relatórios (Report Engine)](relatorios.md) | Relatórios personalizados |
 | [Automação](automacao.md) | Regras automáticas |
 | [Exportação de Dados](exportacao.md) | Formatos CSV, XLSX, JSON, PDF |
+| [Convênios / Licitações](convenios-licitacoes.md) | Convênios com clientes e licitações públicas |
 
 ---
 

@@ -114,6 +114,73 @@ Use a DRE mensalmente para saber se sua empresa está **lucrando ou perdendo din
 
 ---
 
+## 5. Renegociação
+
+### O que é?
+Permite renegociar contas a receber ou a pagar aplicando **descontos, juros ou multas** e gerando novas parcelas.
+
+### Como Funciona
+1. Acesse **Financeiro > Renegociação** ou busque "Renegociação" no Ctrl+K
+2. Clique em **Nova Renegociação**
+3. Selecione **Cliente** ou **Fornecedor** com LookupField
+4. Escolha as **contas** que serão renegociadas (checkboxes)
+5. Configure:
+   - **Desconto**: % ou valor de abatimento
+   - **Juros**: % de juros sobre o total
+   - **Multa**: % de multa sobre o total
+   - **Número de Parcelas**: nova forma de pagamento
+   - **Primeiro Vencimento**: data da primeira parcela
+   - **Dias entre parcelas**: intervalo
+6. Visualize o **preview** das novas parcelas
+7. Confirme — as contas antigas viram RENEGOCIADO, novas parcelas são criadas
+
+### Situação das Contas Originais
+Após a renegociação, as contas antigas recebem situação **RENEGOCIADO** e as novas contas são geradas com as condições acordadas.
+
+### Ações
+- **Confirmar**: efetiva a renegociação
+- **Cancelar**: desfaz a renegociação e restaura as contas originais
+
+### Dicas
+- Aplique **juros apenas em atrasos reais**
+- Conceda **desconto** como incentivo para quitação antecipada
+- Renegocie **antes do vencimento** para evitar inadimplência
+
+---
+
+## 6. Conciliação Bancária
+
+### O que é?
+Processo de conferência entre os **registros do sistema** e o **extrato bancário** para garantir que tudo está correto.
+
+### Estrutura
+```
+Conciliação Bancária
+├── Contas Bancárias (cadastro)
+├── Movimentações (extrato lançado manualmente)
+└── Conciliações (conferência entre sistema e extrato)
+```
+
+### Como Usar
+1. **Cadastre as contas bancárias** da empresa
+2. **Registre movimentações** manuais (taxas, rendimentos, transferências)
+3. **Crie uma conciliação**: selecione contas do sistema + movimentações manuais
+4. O sistema calcula automaticamente se os valores **conferem**
+
+### Painel
+| Painel Esquerdo | Painel Direito |
+|-----------------|----------------|
+| Lista de contas bancárias | Aba "Movimentações": extrato manual |
+| Saldo por conta | Aba "Conciliações": histórico de conciliações |
+
+### Dicas
+- **Concilie semanalmente** para manter o financeiro sempre atualizado
+- **Registre toda taxa bancária** como movimentação manual
+- **Diferenças pequenas** podem ser tarifas ou arredondamentos — investigue
+- Conciliação fechada = sistema confere com o banco
+
+---
+
 ## Dicas e Truques Gerais
 
 ### Geração Automática de Contas

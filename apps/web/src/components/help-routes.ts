@@ -25,6 +25,12 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/veiculos':                        { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
   '/condutores':                      { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
 
+  // Promoções
+  '/promocoes':                       { file: 'promocoes', title: 'Promoções' },
+
+  // CT-e
+  '/cte':                             { file: 'cte', title: 'CT-e (Conhecimento de Transporte Eletrônico)' },
+
   // Contratos / Garantias / Devoluções
   '/contratos':                       { file: 'contratos-garantias-devolucoes', title: 'Contratos, Garantias e Devoluções' },
   '/garantias':                       { file: 'contratos-garantias-devolucoes', title: 'Contratos, Garantias e Devoluções' },
@@ -39,6 +45,10 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/boletos':                         { file: 'boletos-cnab', title: 'Boletos / CNAB' },
   '/cheques':                         { file: 'cheques', title: 'Cheques' },
   '/centros-custo':                   { file: 'centro-custo', title: 'Centro de Custo' },
+  '/renegociacao':                    { file: 'financeiro', title: 'Financeiro (Renegociação)' },
+  '/conciliacao':                     { file: 'financeiro', title: 'Financeiro (Conciliação Bancária)' },
+  '/adiantamentos':                   { file: 'adiantamentos-quitacoes', title: 'Adiantamentos' },
+  '/quitacoes':                       { file: 'adiantamentos-quitacoes', title: 'Quitações' },
 
   // Estoque e Produtos
   '/products':                        { file: 'estoque-avancado', title: 'Estoque Avançado' },
@@ -49,7 +59,12 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/estoque/movimentacoes':           { file: 'estoque-avancado', title: 'Estoque Avançado' },
   '/estoque/categorias':              { file: 'estoque-avancado', title: 'Estoque Avançado' },
   '/estoque/unidades':                { file: 'estoque-avancado', title: 'Estoque Avançado' },
+  '/estoque/kardex':                  { file: 'estoque-avancado', title: 'Estoque Avançado (Kardex)' },
   '/inventario':                      { file: 'estoque-avancado', title: 'Estoque Avançado' },
+
+  // Convênios / Licitações
+  '/convenios':                       { file: 'convenios-licitacoes', title: 'Convênios' },
+  '/licitacoes':                      { file: 'convenios-licitacoes', title: 'Licitações' },
 
   // Compras
   '/compras':                         { file: 'financeiro', title: 'Financeiro' },

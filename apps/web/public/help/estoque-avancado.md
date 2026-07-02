@@ -94,6 +94,40 @@ Tabelas de preço permitem definir **preços diferentes para diferentes canais o
 
 ---
 
+## 4. Kardex (Saldo Acumulado)
+
+### O que é?
+O Kardex mostra o **histórico completo de movimentação** de um produto com saldo acumulado. Permite rastrear cada entrada e saída e ver como o saldo evoluiu ao longo do tempo.
+
+### Como Acessar
+1. Acesse **Estoque > Kardex** ou busque "Kardex" no Ctrl+K
+2. Selecione o **produto** com o LookupField
+3. Escolha o **período** (datas início e fim)
+4. Visualize a tabela com todas as movimentações ordenadas por data
+
+### Informações Exibidas
+| Coluna | Descrição |
+|--------|-----------|
+| Data/Hora | Quando ocorreu a movimentação |
+| Tipo | Entrada, Saída, Ajuste, Transferência |
+| Documento | Número do pedido/nota vinculado |
+| Quantidade | Unidades movimentadas |
+| Saldo Acumulado | Saldo após esta movimentação |
+| Observação | Motivo ou referência |
+
+### Recursos
+- **Filtro por data**: análise diária, semanal ou mensal
+- **Filtro por produto**: histórico de um produto específico
+- **Exportar CSV**: download para análise em Excel
+- **Saldo inicial/final**: cards de resumo no topo da página
+
+### Dicas
+- Use o Kardex para **auditoria de estoque** — confira se o saldo lógico corresponde ao físico
+- Investigue **divergências** filtrando por período e tipo de movimentação
+- Exporte o CSV mensalmente para **conferência com inventário físico**
+
+---
+
 ## Boas Práticas Gerais
 
 ### Variações
@@ -135,3 +169,4 @@ Tabelas de preço permitem definir **preços diferentes para diferentes canais o
 | **Variações** | O produto tem múltiplas cores, tamanhos ou versões |
 | **Lotes** | O produto tem validade ou precisa de rastreabilidade |
 | **Tabelas de Preço** | Você tem diferentes canais de venda com preços diferentes |
+| **Kardex** | Precisa ver o histórico de movimentação de um produto |
