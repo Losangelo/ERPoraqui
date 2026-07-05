@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const criarFilialSchema = z.object({
-  empresaId: z.string().min(1, 'Empresa é obrigatória'),
+  empresaId: z.string().optional(),
   razaoSocial: z.string().min(1, 'Razão social é obrigatória'),
   nomeFantasia: z.string().optional(),
   cnpj: z.string().min(14, 'CNPJ inválido').max(18),

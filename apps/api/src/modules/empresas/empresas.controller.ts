@@ -51,7 +51,7 @@ export class EmpresasController {
 
   criarFilial = async (req: Request, res: Response) => {
     try {
-      const dados = criarFilialSchema.parse(req.body);
+      const dados = criarFilialSchema.parse({ ...req.body, empresaId: req.params.id });
       const resultado = await this.service.criarFilial(dados);
       return res.status(201).json(resultado);
     } catch (error: any) {
