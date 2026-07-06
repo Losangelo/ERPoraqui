@@ -5,6 +5,7 @@
 ### Módulos Comerciais
 | Guia | Descrição |
 |------|-----------|
+| [Pedidos de Venda](pedidos-venda.md) | Fluxo completo: criação, aprovação, envio e entrega |
 | [Orçamentos de Vendas](orcamentos-vendas.md) | Pré-pedidos, aprovação e conversão (guia completo) |
 | [Orçamentos](orcamentos.md) | Guia rápido de orçamentos |
 | [PDV (Ponto de Venda)](pdv.md) | Vendas rápidas no balcão |

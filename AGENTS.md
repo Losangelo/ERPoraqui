@@ -466,6 +466,17 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - Todos os arquivos de controle atualizados (FEATURES.md, TODO.md, stepByStep.md, AGENTS.md)
 - Manuais Técnico e Usuário atualizados com novos módulos
 
+### Novidades (06/07/2026 noite — OrdersPage Reescrita)
+- LookupField para cliente, vendedor, transportadora (antes input ID simples)
+- Multi-itens: array dinâmico com LookupField produto + qtd + unitário + desconto + total
+- Sheet lateral grid produtos estilo PDV (nome, preço, estoque, código barras, NCM)
+- Parcelamento condicional: select + campos qtdeParcelas/intervalo/primeiraParcelaDias
+- Cálculo automático de subtotal, frete, desconto, acréscimos, total
+- Observações + observações internas como textarea
+- Hints descritivos em todos os campos
+- Validação com toast para dados obrigatórios
+- Committed (d4d8c97) + deployed (todos containers healthy)
+
 ### Correções Recentes (30/06/2026)
 - Crash 502: 7 controllers com `.parse()` fora de try/catch → movido para dentro + `process.on('unhandledRejection')`
 - OrcamentosPage: `response.data?.data || response.data?.dados`

@@ -21,6 +21,7 @@
 | Vendedores CRUD | apps/api/src/modules/vendedores | Cadastro vendedores | ✅ |
 | Transportadoras CRUD | apps/api/src/modules/transportadoras | Cadastro transportadoras | ✅ |
 | Pedidos Venda | apps/api/src/modules/pedidos-venda | CRUD pedidos venda | ✅ |
+| Pedidos Venda Frontend | apps/web/src/pages/orders/OrdersPage.tsx | LookupField cliente/vendedor/transportadora, multi-itens, grid produtos, parcelamento, hints | ✅ |
 | Pedidos Compra | apps/api/src/modules/pedidos-compra | CRUD pedidos compra | ✅ |
 | Cotações Compra | apps/api/src/modules/cotacoes-compra | Cotação fornecedores | ✅ |
 | Entradas Mercadoria | apps/api/src/modules/entradas-mercadoria | Entrada NF compra | ✅ |
@@ -210,6 +211,7 @@
 ## Histórico de Atualizações
 
 - **06/07/2026**: Gerados 38 specs faltantes (cobertura total: 56 specs) + Correção controller orçamentos (status codes 404/409/500) + Toast errors no frontend + Atualização completa de docs/controle
+- **06/07/2026 (noite)**: OrdersPage reescrita — LookupField cliente/vendedor/transportadora, multi-itens com LookupField produto, Sheet grid produtos estilo PDV, parcelamento condicional, textarea, hints, cálculo automático total
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.
 - **01/07/2026 (noite 2)**: Motor de Relatórios Genérico — Spec REPORT_ENGINE.md, ReportTemplate Prisma, 8 data sources (clientes, produtos, pedidos, contas, NF-e, NFSe), API executar + CRUD templates, Frontend RelatoriosPage (seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates).

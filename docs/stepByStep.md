@@ -281,3 +281,19 @@
 - 55 rotas API
 - 64 páginas frontend
 - 40 serviços frontend
+
+## 06/07/2026 (noite) — OrdersPage Reescrita (LookupField + Multi-itens + Grid Produtos)
+
+### Melhorias na Tela Novo Pedido
+- **Cliente**: Input de ID substituído por LookupField com busca por nome/CPF/CNPJ
+- **Vendedor + Transportadora**: Novos campos com LookupField
+- **Data de Entrega**: Input type="date"
+- **Multi-itens**: Sistema de array dinâmico — cada linha com LookupField produto + qtd + unitário + desconto + total
+- **Grid de Produtos**: Sheet lateral com cards (nome, preço, estoque, código barras, NCM) — mesmo estilo do PDV
+- **Parcelamento**: Select condicaoPagamento + campos condicionais (quantidadeParcelas, intervalo, primeiraParcelaDias)
+- **Valores**: Subtotal, frete, desconto, acréscimos com cálculo automático ao vivo
+- **Observações**: Input → textarea com placeholder descritivo
+- **Observações Internas**: Novo campo textarea
+- **Hints**: placeholder + title descritivos em todos os inputs
+- **Validação**: Toast para filial, cliente, itens, e dados de item incompletos
+- **Build**: tsc --noEmit zero erros, deploy realizado

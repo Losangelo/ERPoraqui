@@ -162,18 +162,39 @@ Sempre preencha o NCM corretamente. Se souber, consulte seu contador ou utilize 
 
 1. Clique em **Vendas** > **Pedidos**
 2. Clique em **+ Novo Pedido**
-3. Selecione o **cliente** (comece a digitar o nome e selecione)
-4. Adicione os produtos:
-   - Clique em "Adicionar Item"
-   - Busque o produto pelo nome ou codigo
-   - Informe a quantidade
-   - O sistema calcula o total automaticamente
-5. Aplique desconto se necessario
-6. Escolha a **condicao de pagamento**:
-   - A Vista (pagamento unico)
-   - A Prazo (parcelado)
-   - Parcelado (define numero de parcelas)
-7. Clique em **Salvar**
+
+### Preenchendo os Dados do Pedido
+
+3. **Cliente**: Comece a digitar nome, CPF ou CNPJ no campo de busca. Selecione o cliente na lista.
+4. **Vendedor** (opcional): Busque pelo nome do vendedor responsavel.
+5. **Transportadora** (opcional): Busque pelo nome ou CNPJ da transportadora.
+6. **Data de Entrega** (opcional): Informe a data prevista para entrega.
+
+### Adicionando Itens
+
+7. Clique em **Adicionar Item** para incluir um produto:
+   - Busque o produto pelo nome ou codigo de barras
+   - O sistema exibe cards com nome, preco, estoque, codigo de barras e NCM
+   - Informe a quantidade, valor unitario e desconto (se houver)
+   - O total do item e calculado automaticamente
+8. Repita para adicionar mais itens
+
+### Condicao de Pagamento e Valores
+
+9. Escolha a **condicao de pagamento**:
+   - **A Vista**: pagamento unico
+   - **A Prazo**: informa numero de parcelas, intervalo (dias) e primeira parcela em dias
+   - **Parcelado**: define numero de parcelas, intervalo e primeira parcela
+10. Ajuste os valores totais se necessario:
+    - **Frete**: valor do frete (opcional)
+    - **Desconto**: desconto sobre o total (opcional)
+    - **Acrescimos**: taxas adicionais (opcional)
+    - O sistema recalcula o total automaticamente
+
+### Observacoes e Finalizacao
+
+11. Preencha **observacoes** (visiveis ao cliente) e **observacoes internas** (uso da equipe)
+12. Clique em **Salvar**
 
 ---
 

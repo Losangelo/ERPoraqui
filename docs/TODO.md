@@ -137,6 +137,7 @@
 - [x] **Financeiro — Centro Custo:** Schema + API CRUD + árvore hierárquica + Frontend
 - [x] **Specs criadas:** ESTOQUE_AVANCADO.md, BOLETOS_CNAB.md, CHEQUES.md, CENTRO_CUSTO.md
 - [x] **Correções TypeScript:** 30+ erros pré-existentes corrigidos no frontend, build limpo
+- [x] **OrdersPage reescrita:** LookupField cliente/vendedor/transportadora, multi-itens c/ LookupField produto + Sheet grid, parcelamento condicional, textarea, hints, cálculo total automático
 - [x] **PDV buscarCaixaAberto:** 404 eliminado — service retorna null em vez de throw
 - [x] **403 licença:** Seed automático de licenças para empresas sem licença + moduloCrm=true no BASIC
 - [x] **400 validação:** z.coerce.number() em 4 DTOs + ativo boolean conversion + inventario args fix

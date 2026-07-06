@@ -563,17 +563,21 @@ Preencha o NCM corretamente para garantir o cálculo certo dos impostos na nota 
     id: 'pedidos-venda',
     titulo: 'Pedidos de Venda',
     categoria: 'Vendas',
-    conteudo: `O fluxo de vendas funciona da seguinte forma:
+    conteudo: `Gera pedidos de venda com fluxo de aprovação (EM_ABERTO → CONFIRMADO → EM_PRODUCAO → ENVIADO → ENTREGUE).
 
 ---
 
 ## Como Criar um Pedido
 
-1. Crie um novo pedido de venda
-2. Selecione o cliente
-3. Adicione os produtos com quantidade e preço
-4. Aplique descontos se necessário
-5. Finalize o pedido
+1. Acesse **Vendas** > **Pedidos** > **+ Novo Pedido**
+2. **Cliente**: digite nome, CPF ou CNPJ e selecione (LookupField)
+3. **Vendedor** (opcional): busque pelo nome
+4. **Transportadora** (opcional): busque pelo nome ou CNPJ
+5. **Itens**: clique "Adicionar Item", busque produto (cards com nome/preço/estoque/barras/NCM), informe qtd/valor/desconto
+6. **Condicao Pagamento**: A Vista, A Prazo (parcelas + intervalo) ou Parcelado
+7. **Valores**: frete, desconto, acrescimos — calculo automatico
+8. **Observacoes**: texto visivel ao cliente + observacoes internas
+9. **Salvar**
 
 ---
 
@@ -581,7 +585,7 @@ Preencha o NCM corretamente para garantir o cálculo certo dos impostos na nota 
 
 - Calcula totais e impostos
 - Abate do estoque
-- Gera financeiro (contas a receber)`,
+- Gera financeiro (contas a receber) ao aprovar`,
     exemplos: [
       {
         titulo: 'Criando pedido via API',
