@@ -262,6 +262,7 @@ export function ProdutosLotesPage() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          title="Editar lote"
                           onClick={() => handleEdit(lote)}
                           className="text-gray-600 hover:text-primary"
                         >
@@ -270,6 +271,7 @@ export function ProdutosLotesPage() {
                         <Button
                           variant="ghost"
                           size="sm"
+                          title="Ajustar estoque do lote"
                           onClick={() => openAjusteEstoque(lote)}
                           className="text-gray-600 hover:text-primary gap-1"
                         >
@@ -299,7 +301,7 @@ export function ProdutosLotesPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingLote ? 'Editar Lote' : 'Novo Lote'}
@@ -418,7 +420,7 @@ export function ProdutosLotesPage() {
       </Dialog>
 
       <Dialog open={showAjusteModal} onOpenChange={setShowAjusteModal}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Ajustar Estoque</DialogTitle>
           </DialogHeader>

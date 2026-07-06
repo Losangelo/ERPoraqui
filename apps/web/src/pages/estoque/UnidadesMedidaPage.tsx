@@ -212,7 +212,7 @@ export function UnidadesMedidaPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar' : 'Nova'} Unidade</DialogTitle>
           </DialogHeader>

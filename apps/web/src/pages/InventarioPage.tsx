@@ -215,10 +215,10 @@ export function InventarioPage() {
                       <div className="flex gap-2 justify-end">
                         {inventario.situacao !== "CONCLUIDO" && inventario.situacao !== "CANCELADO" && (
                           <>
-                            <Button variant="ghost" size="sm" onClick={() => concluir(inventario.id)}>
+                            <Button variant="ghost" size="sm" title="Concluir inventário" onClick={() => concluir(inventario.id)}>
                               <Check className="w-4 h-4 text-green-600" />
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={() => cancelar(inventario.id)}>
+                            <Button variant="ghost" size="sm" title="Cancelar inventário" onClick={() => cancelar(inventario.id)}>
                               <AlertTriangle className="w-4 h-4 text-red-600" />
                             </Button>
                           </>
@@ -234,7 +234,7 @@ export function InventarioPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Novo Inventário</DialogTitle>
           </DialogHeader>

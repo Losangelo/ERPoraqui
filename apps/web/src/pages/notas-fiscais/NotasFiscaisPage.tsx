@@ -320,30 +320,30 @@ export function NotasFiscaisPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-1 justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => openDetail(nota)}>
+                        <Button variant="ghost" size="sm" title="Visualizar nota fiscal" onClick={() => openDetail(nota)}>
                           <Eye className="w-4 h-4" />
                         </Button>
                         {nota.situacao === "EM_DIGITACAO" && (
-                          <Button variant="ghost" size="sm" onClick={() => handleAssinar(nota.id)}>
+                          <Button variant="ghost" size="sm" title="Assinar NF-e" onClick={() => handleAssinar(nota.id)}>
                             <FileSignature className="w-4 h-4 text-blue-600" />
                           </Button>
                         )}
                         {nota.situacao === "ASSINADA" && (
-                          <Button variant="ghost" size="sm" onClick={() => handleEnviar(nota.id)}>
+                          <Button variant="ghost" size="sm" title="Enviar NF-e" onClick={() => handleEnviar(nota.id)}>
                             <Send className="w-4 h-4 text-yellow-600" />
                           </Button>
                         )}
                         {(nota.situacao === "AUTORIZADA" || nota.situacao === "ASSINADA" || nota.situacao === "ENVIADA") && (
-                          <Button variant="ghost" size="sm" onClick={() => { setNotaSelecionada(nota); setAcaoDialog("cancelar") }}>
+                          <Button variant="ghost" size="sm" title="Cancelar NF-e" onClick={() => { setNotaSelecionada(nota); setAcaoDialog("cancelar") }}>
                             <X className="w-4 h-4 text-red-600" />
                           </Button>
                         )}
                         {nota.situacao === "AUTORIZADA" && (
                           <>
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" title="Baixar XML da NF-e">
                               <Download className="w-4 h-4 text-green-600" />
                             </Button>
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" title="Enviar NF-e por e-mail">
                               <Mail className="w-4 h-4 text-blue-600" />
                             </Button>
                           </>
@@ -360,7 +360,7 @@ export function NotasFiscaisPage() {
 
       {/* Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Nova Nota Fiscal Eletrônica</DialogTitle>
           </DialogHeader>
@@ -506,7 +506,7 @@ export function NotasFiscaisPage() {
 
       {/* Detail Dialog */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="max-w-3xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Detalhes da NF-e</DialogTitle>
           </DialogHeader>
@@ -548,7 +548,7 @@ export function NotasFiscaisPage() {
 
       {/* Cancel Dialog */}
       <Dialog open={acaoDialog === "cancelar"} onOpenChange={(open) => { if (!open) setAcaoDialog(null); }}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Cancelar Nota Fiscal</DialogTitle>
           </DialogHeader>

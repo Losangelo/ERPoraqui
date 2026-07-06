@@ -42,7 +42,9 @@ export class EmpresasController {
     const { id } = req.params;
 
     try {
-      const resultado = await this.service.listarFiliais(id);
+      const { ativo } = req.query;
+      const filtro = ativo !== undefined ? { ativo: ativo === 'true' } : undefined;
+      const resultado = await this.service.listarFiliais(id, filtro);
       return res.json(resultado);
     } catch (error) {
       return res.status(400).json({ error: (error as Error).message });

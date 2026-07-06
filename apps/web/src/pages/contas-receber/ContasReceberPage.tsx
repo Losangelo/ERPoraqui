@@ -299,12 +299,12 @@ export default function ContasReceberPage() {
                     <TableCell className="text-right">
                       <div className="flex gap-1 justify-end">
                         {conta.situacao === 'ABERTA' && (
-                          <Button variant="ghost" size="sm" onClick={() => handleBaixar(conta.id)}>
+                          <Button variant="ghost" size="sm" title="Baixar conta a receber" onClick={() => handleBaixar(conta.id)}>
                             <CheckCircle className="h-4 w-4 text-green-600" />
                           </Button>
                         )}
                         {conta.situacao !== 'PAGO' && (
-                          <Button variant="ghost" size="sm" onClick={() => handleExcluir(conta.id)}>
+                          <Button variant="ghost" size="sm" title="Excluir conta a receber" onClick={() => handleExcluir(conta.id)}>
                             <Trash2 className="h-4 w-4 text-red-600" />
                           </Button>
                         )}
@@ -319,7 +319,7 @@ export default function ContasReceberPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Nova Conta a Receber</DialogTitle>
           </DialogHeader>

@@ -230,7 +230,7 @@ export function LicitacoesPage() {
                     <TableCell>R$ {(Number(item.quantidade) * Number(item.valorUnitario)).toFixed(2)}</TableCell>
                     <TableCell>{item.marca ?? '-'}</TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="icon" onClick={() => removerItem(item.id)}><Trash2 className="h-4 w-4 text-red-600" /></Button>
+                      <Button variant="ghost" size="icon" title="Remover item da licitação" onClick={() => removerItem(item.id)}><Trash2 className="h-4 w-4 text-red-600" /></Button>
                     </TableCell>
                   </TableRow>
                 ))}

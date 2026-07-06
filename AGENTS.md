@@ -402,6 +402,10 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
 - ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
 
+### Status Atual Specs (56 specs — cobertura 100%)
+- ✅ **18 originais:** NFE, NFCE, NFSE, PDV, SPED, MDFE, BOLETOS_CNAB, CHEQUES, CENTRO_CUSTO, ESTOQUE_AVANCADO, CRM, AUTOMACAO, MULTI_EMPRESA, LOOKUP, REPORT_ENGINE, CONTRATOS_GARANTIAS_DEVOLUCOES, FILIAIS, EXPORTACAO
+- ✅ **38 adicionados (06/07/2026):** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS
+
 ### Novidades (02/07/2026 — Blitz 2)
 - Auth Store: authStore.ts deletado (nunca importado)
 - Pipeline CI: .github/workflows/ci.yml (type-check + tests c/ PostgreSQL)
@@ -454,6 +458,13 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - Filial CRUD completo (backend + frontend + componente reutilizável)
 - FilialSelect integrado nas 3 páginas de nota (NFCe, NFSe, NF-e)
 - Deploy realizado via rsync + docker compose build/up
+
+### Novidades (06/07/2026 — Documentação Completa)
+- 38 novas specs técnicas geradas (total: 56 specs, 100% dos módulos)
+- Controller orçamentos: catch agora retorna 404/409/500 em vez de 400 genérico
+- Frontend orçamentos: toast.error() em vez de console.error()
+- Todos os arquivos de controle atualizados (FEATURES.md, TODO.md, stepByStep.md, AGENTS.md)
+- Manuais Técnico e Usuário atualizados com novos módulos
 
 ### Correções Recentes (30/06/2026)
 - Crash 502: 7 controllers com `.parse()` fora de try/catch → movido para dentro + `process.on('unhandledRejection')`

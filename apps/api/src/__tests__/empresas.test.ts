@@ -129,6 +129,7 @@ describe('Empresas', () => {
 
       const response = await request(app)
         .get('/empresas/emp-1/filiais')
+        .query({ ativo: 'true' })
         .set(gerarHeaders());
 
       expect(response.status).toBe(200);

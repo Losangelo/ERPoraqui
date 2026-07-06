@@ -216,7 +216,7 @@ export function RelatoriosPage() {
                     <TableCell>
                       <div className="flex gap-1">
                         <Button variant="ghost" size="sm" onClick={() => carregarTemplate(t)}>Carregar</Button>
-                        <Button variant="ghost" size="icon" onClick={() => excluirTemplate(t.id)}>
+                        <Button variant="ghost" size="icon" title="Excluir template" onClick={() => excluirTemplate(t.id)}>
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </Button>
                       </div>
@@ -292,7 +292,7 @@ export function RelatoriosPage() {
                         value={f.valor}
                         onChange={e => updateFilter(i, 'valor', e.target.value)}
                       />
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => removeFilter(i)}>
+                      <Button variant="ghost" size="icon" title="Remover filtro" className="h-8 w-8" onClick={() => removeFilter(i)}>
                         <Trash2 className="h-3 w-3 text-red-500" />
                       </Button>
                     </div>

@@ -10,6 +10,82 @@ describe('PedidosVenda', () => {
     mockLicencaAtiva();
   });
 
+  describe('A_VISTA → fluxoCaixa', () => {
+    it('deve criar fluxoCaixa ao confirmar pedido A_VISTA', async () => {
+      (mockPrisma.pedidoVenda.findFirst as any).mockResolvedValue({
+        id: 'ped-av-1',
+        empresaId: 'emp-1',
+        situacao: 'EM_ABERTO',
+        condicaoPagamento: 'A_VISTA',
+      });
+
+      (mockPrisma.pedidoVenda.update as any).mockResolvedValue({
+        id: 'ped-av-1',
+        empresaId: 'emp-1',
+        situacao: 'CONFIRMADO',
+        numeroPedido: 'PV000010',
+        valorTotal: 2500,
+        clienteId: 'cli-1',
+      });
+
+      (mockPrisma.fluxoCaixa.create as any).mockResolvedValue({
+        id: 'fc-av-1',
+        tipo: 'ENTRADA',
+      });
+
+      const app = criarApp((app) => {
+        app.use('/pedidos-venda', pedidosVendaRoutes);
+      });
+
+      const response = await request(app)
+        .patch('/pedidos-venda/ped-av-1/aprovar')
+        .set(gerarHeaders());
+
+      expect(response.status).toBe(200);
+      expect(mockPrisma.fluxoCaixa.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            tipo: 'ENTRADA',
+            categoria: 'VENDAS_PEDIDO',
+            referenciaTipo: 'PEDIDO_VENDA',
+          }),
+        }),
+      );
+    });
+
+    it('não deve criar fluxoCaixa para pedido A_PRAZO (já gera contasReceber)', async () => {
+      (mockPrisma.pedidoVenda.findFirst as any).mockResolvedValue({
+        id: 'ped-ap-1',
+        empresaId: 'emp-1',
+        situacao: 'EM_ABERTO',
+        condicaoPagamento: 'A_PRAZO',
+      });
+
+      (mockPrisma.pedidoVenda.update as any).mockResolvedValue({
+        id: 'ped-ap-1',
+        empresaId: 'emp-1',
+        situacao: 'CONFIRMADO',
+        numeroPedido: 'PV000011',
+        valorTotal: 3000,
+        clienteId: 'cli-1',
+        quantidadeParcelas: 3,
+        intervaloParcelas: 30,
+      });
+
+      const app = criarApp((app) => {
+        app.use('/pedidos-venda', pedidosVendaRoutes);
+      });
+
+      const response = await request(app)
+        .patch('/pedidos-venda/ped-ap-1/aprovar')
+        .set(gerarHeaders());
+
+      expect(response.status).toBe(200);
+      expect(mockPrisma.fluxoCaixa.create).not.toHaveBeenCalled();
+    });
+  });
+
+
   describe('PATCH /pedidos-venda/:id/aprovar', () => {
     it('deve aprovar pedido com PATCH', async () => {
       (mockPrisma.pedidoVenda.findFirst as any).mockResolvedValue({

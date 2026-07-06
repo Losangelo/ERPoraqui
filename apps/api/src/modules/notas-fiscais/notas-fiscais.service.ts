@@ -358,7 +358,7 @@ export class NotasFiscaisService {
 
     const result = await sefaz.consultarRecibo(codigoRecibo);
 
-    return prisma.notaFiscal.update({
+    const notaAtualizada = await prisma.notaFiscal.update({
       where: { id },
       data: {
         situacao: result.sucesso ? 'AUTORIZADA' : 'DENEGADA',
@@ -370,6 +370,25 @@ export class NotasFiscaisService {
         xmlRetorno: result.xmlRetorno,
       },
     });
+
+    if (result.sucesso && notaFiscal.clienteId && !notaFiscal.pedidoVendaId) {
+      await prisma.contaReceber.create({
+        data: {
+          empresaId,
+          clienteId: notaFiscal.clienteId,
+          pedidoVendaId: null,
+          numeroDocumento: notaFiscal.chaveAcesso,
+          numeroParcela: 1,
+          totalParcelas: 1,
+          dataVencimento: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          valorOriginal: notaFiscal.valorTotal,
+          formaPagamento: 'BOLETO',
+          observacoes: `NF-e ${notaFiscal.modelo} nº ${notaFiscal.numero} - ${notaFiscal.chaveAcesso}`,
+        },
+      });
+    }
+
+    return notaAtualizada;
   }
 
   async cancelar(id: string, data: CancelarNotaFiscalInput, empresaId: string) {

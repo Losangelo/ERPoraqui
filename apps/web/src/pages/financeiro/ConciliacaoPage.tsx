@@ -472,7 +472,7 @@ export default function ConciliacaoPage() {
 
       {/* Dialog: Nova Conta */}
       <Dialog open={contaDialogOpen} onOpenChange={setContaDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Nova Conta Bancária</DialogTitle>
           </DialogHeader>
@@ -544,7 +544,7 @@ export default function ConciliacaoPage() {
 
       {/* Dialog: Nova Movimentação */}
       <Dialog open={movDialogOpen} onOpenChange={setMovDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Nova Movimentação Bancária</DialogTitle>
           </DialogHeader>
@@ -614,7 +614,7 @@ export default function ConciliacaoPage() {
 
       {/* Dialog: Nova Conciliação */}
       <Dialog open={concDialogOpen} onOpenChange={setConcDialogOpen}>
-        <DialogContent className="max-w-lg" aria-describedby={undefined}>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Nova Conciliação Bancária</DialogTitle>
           </DialogHeader>
@@ -692,7 +692,7 @@ export default function ConciliacaoPage() {
 
       {/* Dialog: Detalhes Conciliação */}
       <Dialog open={concDetalheOpen} onOpenChange={setConcDetalheOpen}>
-        <DialogContent className="max-w-2xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Detalhes da Conciliação</DialogTitle>
           </DialogHeader>

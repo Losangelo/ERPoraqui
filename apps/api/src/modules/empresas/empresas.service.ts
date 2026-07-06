@@ -34,9 +34,9 @@ export class EmpresasService {
     });
   }
 
-  async listarFiliais(empresaId: string) {
+  async listarFiliais(empresaId: string, filtro?: { ativo?: boolean }) {
     return prisma.filial.findMany({
-      where: { empresaId },
+      where: { empresaId, ...filtro },
       orderBy: { razaoSocial: 'asc' },
       include: { empresa: { select: { razaoSocial: true, nomeFantasia: true } } },
     });
@@ -90,6 +90,7 @@ export class EmpresasService {
     const [dados, total] = await Promise.all([
       prisma.empresa.findMany({
         orderBy: { razaoSocial: 'asc' },
+        include: { filiais: true },
       }),
       prisma.empresa.count(),
     ]);

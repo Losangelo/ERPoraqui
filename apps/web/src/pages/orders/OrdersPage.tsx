@@ -6,7 +6,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ShoppingCart, Search, Plus, Check, X, Send } from "lucide-react"
+import { ShoppingCart, Search, Plus, Check, X, Send, Eye, FileText, CreditCard, Package } from "lucide-react"
 import { pedidosService, PedidoVenda } from "@/services/pedidos"
 import { empresasService, Filial } from "@/services/estoque"
 import toast from "react-hot-toast"
@@ -41,6 +41,9 @@ export function OrdersPage() {
   const [pedidos, setPedidos] = useState<PedidoVenda[]>([])
   const [loading, setLoading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false)
+  const [selectedPedido, setSelectedPedido] = useState<any>(null)
+  const [detailLoading, setDetailLoading] = useState(false)
   const [busca, setBusca] = useState("")
   const [filtroStatus, setFiltroStatus] = useState("")
   const [filiais, setFiliais] = useState<Filial[]>([])
@@ -90,6 +93,28 @@ export function OrdersPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  async function verDetalhes(pedido: PedidoVenda) {
+    setDetailLoading(true)
+    setDetailDialogOpen(true)
+    try {
+      const result = await pedidosService.buscarPorId(pedido.id)
+      setSelectedPedido(result?.data || result)
+    } catch {
+      setSelectedPedido(pedido)
+    } finally {
+      setDetailLoading(false)
+    }
+  }
+
+  function formatValor(v: number) {
+    return `R$ ${(v || 0).toFixed(2)}`
+  }
+
+  function getCondicaoLabel(c: string) {
+    const map: Record<string, string> = { A_VISTA: "À Vista", A_PRAZO: "A Prazo", PARCELADO: "Parcelado" }
+    return map[c] || c
   }
 
   async function criarPedido() {
@@ -287,7 +312,7 @@ export function OrdersPage() {
                 </TableRow>
               ) : (
                 pedidos.map((pedido) => (
-                  <TableRow key={pedido.id}>
+                  <TableRow key={pedido.id} className="cursor-pointer hover:bg-muted/50" onClick={() => verDetalhes(pedido)}>
                     <TableCell className="font-medium">{pedido.numeroPedido}</TableCell>
                     <TableCell>{(pedido as any).cliente?.nome || "-"}</TableCell>
                     <TableCell>{pedido.dataEmissao ? new Date(pedido.dataEmissao).toLocaleDateString("pt-BR") : "-"}</TableCell>
@@ -299,18 +324,21 @@ export function OrdersPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-1 justify-end">
+                        <Button variant="ghost" size="sm" title="Visualizar detalhes" onClick={(e) => { e.stopPropagation(); verDetalhes(pedido) }}>
+                          <Eye className="w-4 h-4" />
+                        </Button>
                         {pedido.situacao === "PENDENTE" && (
                           <>
-                            <Button variant="ghost" size="sm" onClick={() => aprovar(pedido.id)}>
+                            <Button variant="ghost" size="sm" title="Aprovar pedido" onClick={() => aprovar(pedido.id)}>
                               <Check className="w-4 h-4 text-green-600" />
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={() => cancelar(pedido.id)}>
+                            <Button variant="ghost" size="sm" title="Cancelar pedido" onClick={() => cancelar(pedido.id)}>
                               <X className="w-4 h-4 text-red-600" />
                             </Button>
                           </>
                         )}
                         {pedido.situacao === "APROVADO" && (
-                          <Button variant="ghost" size="sm" onClick={() => enviar(pedido.id)}>
+                          <Button variant="ghost" size="sm" title="Enviar pedido" onClick={() => enviar(pedido.id)}>
                             <Send className="w-4 h-4 text-blue-600" />
                           </Button>
                         )}
@@ -324,8 +352,151 @@ export function OrdersPage() {
         </CardContent>
       </Card>
 
+      <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Pedido #{selectedPedido?.numeroPedido || ""}
+              {selectedPedido?.situacao && (
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getSituacaoBadge(selectedPedido.situacao)}`}>
+                  {selectedPedido.situacao}
+                </span>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          {detailLoading ? (
+            <div className="text-center py-12 text-muted-foreground">Carregando detalhes...</div>
+          ) : selectedPedido ? (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label className="text-muted-foreground text-xs">Cliente</Label>
+                  <p className="font-medium">{selectedPedido.cliente?.nome || selectedPedido.clienteId || "-"}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-muted-foreground text-xs">Filial</Label>
+                  <p className="font-medium">{selectedPedido.filial?.nomeFantasia || selectedPedido.filial?.razaoSocial || selectedPedido.filial?.nome || "-"}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-muted-foreground text-xs">Data de Emissão</Label>
+                  <p className="font-medium">{selectedPedido.dataEmissao ? new Date(selectedPedido.dataEmissao).toLocaleDateString("pt-BR") : "-"}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-muted-foreground text-xs">Condição de Pagamento</Label>
+                  <p className="font-medium">{getCondicaoLabel(selectedPedido.condicaoPagamento)}</p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h3 className="font-semibold mb-2 flex items-center gap-2">
+                  <Package className="w-4 h-4" />
+                  Itens do Pedido
+                </h3>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Produto</TableHead>
+                      <TableHead className="text-right">Qtd</TableHead>
+                      <TableHead className="text-right">Valor Unit.</TableHead>
+                      <TableHead className="text-right">Desconto</TableHead>
+                      <TableHead className="text-right">Total</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedPedido.itens?.length > 0 ? selectedPedido.itens.map((item: any, i: number) => (
+                      <TableRow key={item.id || i}>
+                        <TableCell>{item.produto?.nome || item.produtoId}</TableCell>
+                        <TableCell className="text-right">{item.quantidade}</TableCell>
+                        <TableCell className="text-right">{formatValor(item.valorUnitario)}</TableCell>
+                        <TableCell className="text-right">{formatValor(item.valorDesconto)}</TableCell>
+                        <TableCell className="text-right font-medium">{formatValor(item.valorTotal)}</TableCell>
+                      </TableRow>
+                    )) : (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground py-4">Nenhum item</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+
+              <div className="border-t pt-4 space-y-1 text-right">
+                <div className="flex justify-between text-sm">
+                  <span>Subtotal</span>
+                  <span>{formatValor(selectedPedido.valorSubtotal ?? selectedPedido.valorTotal)}</span>
+                </div>
+                {selectedPedido.valorDesconto > 0 && (
+                  <div className="flex justify-between text-sm text-red-600">
+                    <span>Desconto</span>
+                    <span>-{formatValor(selectedPedido.valorDesconto)}</span>
+                  </div>
+                )}
+                {selectedPedido.valorFrete > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span>Frete</span>
+                    <span>{formatValor(selectedPedido.valorFrete)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold text-lg border-t pt-2">
+                  <span>Total</span>
+                  <span>{formatValor(selectedPedido.valorTotal)}</span>
+                </div>
+              </div>
+
+              {selectedPedido.contasReceber?.length > 0 && (
+                <div className="border-t pt-4">
+                  <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <CreditCard className="w-4 h-4" />
+                    Parcelas / Contas a Receber
+                  </h3>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Parcela</TableHead>
+                        <TableHead>Vencimento</TableHead>
+                        <TableHead className="text-right">Valor</TableHead>
+                        <TableHead>Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {selectedPedido.contasReceber.map((cr: any) => (
+                        <TableRow key={cr.id}>
+                          <TableCell>{cr.numeroParcela}/{cr.totalParcelas}</TableCell>
+                          <TableCell>{cr.dataVencimento ? new Date(cr.dataVencimento).toLocaleDateString("pt-BR") : "-"}</TableCell>
+                          <TableCell className="text-right">{formatValor(cr.valorOriginal)}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${cr.situacao === "PAGO" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
+                              {cr.situacao === "PAGO" ? "Pago" : "Pendente"}
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+
+              {selectedPedido.observacoes && (
+                <div className="border-t pt-4">
+                  <Label className="text-muted-foreground text-xs">Observações</Label>
+                  <p className="text-sm mt-1">{selectedPedido.observacoes}</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-muted-foreground">Pedido não encontrado</div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDetailDialogOpen(false)}>Fechar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg" aria-describedby={undefined}>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Novo Pedido</DialogTitle>
           </DialogHeader>

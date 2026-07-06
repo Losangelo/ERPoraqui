@@ -54,6 +54,7 @@ export function LookupField({
           <Button
             variant="ghost"
             size="icon"
+            title="Limpar seleção"
             onClick={onClear}
             type="button"
             className="shrink-0"

@@ -17,6 +17,23 @@ import {
   BuscarProdutoInput 
 } from './dto/pdv.dto';
 
+const FORMAS_PAGAMENTO_A_VISTA = ['DINHEIRO', 'PIX', 'CARTAO_DEBITO'] as const;
+const FORMAS_PAGAMENTO_A_PRAZO = ['CARTAO_CREDITO', 'CARTAO_CREDITO_PARCELADO', 'BOLETO', 'CHEQUE', 'CREDITO_LOJA'] as const;
+
+function mapFormaPagamentoPDV(forma: string): string {
+  const mapa: Record<string, string> = {
+    DINHEIRO: 'DINHEIRO',
+    PIX: 'PIX',
+    CARTAO_CREDITO: 'CARTAO_CREDITO',
+    CARTAO_CREDITO_PARCELADO: 'CARTAO_CREDITO',
+    CARTAO_DEBITO: 'CARTAO_DEBITO',
+    BOLETO: 'BOLETO',
+    CHEQUE: 'CHEQUE',
+    CREDITO_LOJA: 'CHEQUE',
+  };
+  return mapa[forma] || 'DINHEIRO';
+}
+
 interface ItemCarrinho {
   produtoId: string;
   codigoBarras?: string;
@@ -275,6 +292,8 @@ export class PdvService {
       });
     }
 
+    await this.gerarFinanceiroVenda(empresaId, vendaFinalizada, parsed.formaPagamento);
+
     this.carrinhos.delete(vendaId);
 
     appLogger.business('finalizar_venda_pdv', { empresaId, vendaId, valor: vendaFinalizada.valorTotal });
@@ -470,6 +489,41 @@ export class PdvService {
     });
   }
 
+  private async gerarFinanceiroVenda(empresaId: string, venda: any, formaPagamento: string) {
+    const isAVista = (FORMAS_PAGAMENTO_A_VISTA as readonly string[]).includes(formaPagamento);
+
+    if (isAVista) {
+      await prisma.fluxoCaixa.create({
+        data: {
+          empresaId,
+          tipo: 'ENTRADA',
+          categoria: 'VENDAS_PDV',
+          descricao: `Venda PDV - Cupom ${venda.numeroCupom}`,
+          valor: venda.valorTotal,
+          formaPagamento: mapFormaPagamentoPDV(formaPagamento) as any,
+          dataMovimentacao: new Date(),
+          referenciaId: venda.id,
+          referenciaTipo: 'VENDA_PDV',
+        },
+      });
+    } else {
+      await prisma.contaReceber.create({
+        data: {
+          empresaId,
+          clienteId: venda.clienteId || '',
+          pedidoVendaId: null,
+          numeroDocumento: `PDV${venda.numeroCupom}`,
+          numeroParcela: 1,
+          totalParcelas: 1,
+          dataVencimento: new Date(),
+          valorOriginal: venda.valorTotal,
+          formaPagamento: mapFormaPagamentoPDV(formaPagamento) as any,
+          observacoes: `Venda PDV - Cupom ${venda.numeroCupom}`,
+        },
+      });
+    }
+  }
+
   async fecharCaixa(empresaId: string, caixaId: string, data: FecharCaixaInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
 
@@ -495,7 +549,7 @@ export class PdvService {
     const totalEntradas = vendasDoCaixa.reduce((acc, v) => acc + v.valorTotal, 0);
     const saldoFinal = caixa.saldoInicial + totalEntradas;
 
-    return prisma.caixa.update({
+    const resultado = await prisma.caixa.update({
       where: { id: caixaId },
       data: {
         dataFechamento: new Date(),
@@ -506,6 +560,24 @@ export class PdvService {
       },
       include: { operador: true, filial: true },
     });
+
+    if (totalEntradas > 0) {
+      await prisma.fluxoCaixa.create({
+        data: {
+          empresaId,
+          tipo: 'ENTRADA',
+          categoria: 'FECHAMENTO_CAIXA',
+          descricao: `Fechamento de caixa - ${caixa.id}`,
+          valor: totalEntradas,
+          formaPagamento: 'DINHEIRO',
+          dataMovimentacao: new Date(),
+          referenciaId: caixaId,
+          referenciaTipo: 'FECHAMENTO_CAIXA',
+        },
+      });
+    }
+
+    return resultado;
   }
 
   async buscarCaixaAberto(empresaId: string, filialId: string) {

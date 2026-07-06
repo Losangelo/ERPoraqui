@@ -4,7 +4,7 @@ export const criarFilialSchema = z.object({
   empresaId: z.string().optional(),
   razaoSocial: z.string().min(1, 'Razão social é obrigatória'),
   nomeFantasia: z.string().optional(),
-  cnpj: z.string().min(14, 'CNPJ inválido').max(18),
+  cnpj: z.string().min(14, 'CNPJ deve ter no mínimo 14 dígitos').max(18, 'CNPJ deve ter no máximo 18 caracteres'),
   inscricaoEstadual: z.string().optional(),
   inscricaoMunicipal: z.string().optional(),
   telefone: z.string().optional(),

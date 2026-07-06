@@ -1471,6 +1471,365 @@ Destinos:
 - Descarte: produto sem condição de uso`,
     exemplos: [],
   },
+  {
+    id: 'adiantamentos-ajuda',
+    titulo: 'Adiantamentos Financeiros',
+    categoria: 'Financeiro',
+    conteudo: `# Adiantamentos Financeiros
+
+O módulo de Adiantamentos permite registrar valores pagos ou recebidos antes da conclusão da operação.
+
+---
+
+## Tipos
+
+- **Adiantamento a Fornecedor**: pré-pagamento de compras
+- **Adiantamento de Cliente**: sinal ou entrada recebida
+
+---
+
+## Fluxo
+
+1. Cadastre o adiantamento com cliente/fornecedor, valor e data
+2. Quando a operação for concluída, baixe o adiantamento
+3. O valor é automaticamente vinculado à conta a receber/pagar
+
+---
+
+## Como Usar
+
+Acesse **Financeiro > Adiantamentos** e clique em **+ Novo Adiantamento**.`,
+  },
+  {
+    id: 'quitacoes-ajuda',
+    titulo: 'Quitações em Lote',
+    categoria: 'Financeiro',
+    conteudo: `# Quitações em Lote
+
+Baixe múltiplas contas a receber ou a pagar de uma só vez.
+
+---
+
+## Quando Usar
+
+- Fechamento do caixa do PDV (todas as vendas do dia)
+- Pagamento de múltiplos boletos do mesmo fornecedor
+- Conciliação bancária
+
+---
+
+## Como Usar
+
+Acesse **Financeiro > Quitações**, filtre as contas, marque as desejadas e clique em **Quitar Selecionadas**.`,
+  },
+  {
+    id: 'conciliacao-ajuda',
+    titulo: 'Conciliação Bancária',
+    categoria: 'Financeiro',
+    conteudo: `# Conciliação Bancária
+
+Compare o extrato bancário com as contas registradas no sistema.
+
+---
+
+## Funcionalidades
+
+- Importação de extratos OFX, CSV e XLSX
+- Correspondência automática por valor/data
+- Conciliação manual (arrastar lançamentos)
+- Identificação de divergências (tarifas, valores diferentes)
+- Finalização do período com relatório
+
+---
+
+## Como Usar
+
+Acesse **Financeiro > Conciliação Bancária**, importe o extrato e concilie os lançamentos.`,
+  },
+  {
+    id: 'cte-ajuda',
+    titulo: 'CT-e (Conhecimento de Transporte)',
+    categoria: 'Fiscal',
+    conteudo: `# CT-e (Modelo 57)
+
+Documento fiscal digital obrigatório para contratação de serviço de transporte de cargas.
+
+---
+
+## Funcionalidades
+
+- Cadastro de veículos e condutores
+- Vinculação de NF-e ao CT-e
+- Transmissão para SEFAZ
+- Encerramento e cancelamento
+
+---
+
+## Como Usar
+
+Acesse **Fiscal > CT-e** para criar e gerenciar conhecimentos de transporte.`,
+  },
+  {
+    id: 'licitacoes-ajuda',
+    titulo: 'Licitações',
+    categoria: 'Vendas',
+    conteudo: `# Licitações
+
+Gerencie a participação da sua empresa em processos licitatórios públicos.
+
+---
+
+## Funcionalidades
+
+- Cadastro de licitações com modalidade e objeto
+- Itens do edital vinculados a produtos
+- Acompanhamento de status (Rascunho a Homologada)
+- Registro de resultado
+
+---
+
+## Como Usar
+
+Acesse **Vendas > Licitações** e cadastre cada processo licitatório.`,
+  },
+  {
+    id: 'convenios-ajuda',
+    titulo: 'Convênios',
+    categoria: 'Vendas',
+    conteudo: `# Convênios
+
+Gerencie parcerias e acordos comerciais com descontos especiais.
+
+---
+
+## Funcionalidades
+
+- Cadastro de convênios com vigência
+- Descontos percentuais ou valor fixo
+- Aplicação automática nas vendas
+- Controle de ativação/desativação
+
+---
+
+## Como Usar
+
+Acesse **Vendas > Convênios** para criar e gerenciar parcerias.`,
+  },
+  {
+    id: 'promocoes-ajuda',
+    titulo: 'Promoções',
+    categoria: 'Vendas',
+    conteudo: `# Promoções
+
+Crie ofertas temporárias com preços especiais para impulsionar vendas.
+
+---
+
+## Tipos de Promoção
+
+- **Percentual**: desconto % sobre o preço
+- **Valor Fixo**: preço promocional definido
+- **Leve X Pague Y**: compre quantidade, ganhe desconto
+
+---
+
+## Como Usar
+
+Acesse **Estoque > Promoções**, defina período, produtos e valores. A promoção é aplicada automaticamente no PDV e pedidos.`,
+  },
+  {
+    id: 'kardex-ajuda',
+    titulo: 'Kardex (Ficha de Estoque)',
+    categoria: 'Estoque',
+    conteudo: `# Kardex
+
+Registro detalhado de todas as movimentações de cada produto: entradas, saídas e saldo acumulado.
+
+---
+
+## Funcionalidades
+
+- Consulta por produto e período
+- Tipos: Compra, Venda, Devolução, Ajuste, Transferência
+- Saldo acumulado por movimentação
+- Exportação para CSV e PDF
+
+---
+
+## Como Usar
+
+Acesse **Estoque > Kardex**, selecione o produto e período para visualizar o histórico completo.`,
+  },
+  {
+    id: 'dashboard-ajuda',
+    titulo: 'Dashboard',
+    categoria: 'Geral',
+    conteudo: `# Dashboard
+
+O painel inicial mostra indicadores, gráficos e atalhos para as principais funções.
+
+---
+
+## Indicadores
+
+- Vendas do Dia
+- Contas a Receber
+- Contas Vencidas
+- Estoque Baixo
+- Saldo em Caixa
+
+---
+
+## Gráficos
+
+- Vendas por período (7/30 dias)
+- Contas a Receber vs Pagar
+- Produtos mais vendidos
+
+---
+
+## Personalização
+
+Clique em **Personalizar** para escolher quais indicadores aparecem no seu dashboard.`,
+  },
+  {
+    id: 'movimentacoes-ajuda',
+    titulo: 'Movimentações Internas',
+    categoria: 'Estoque',
+    conteudo: `# Movimentações Internas
+
+Transferências de produtos entre filiais e ajustes manuais de estoque.
+
+---
+
+## Tipos
+
+- **Transferência**: entre filiais
+- **Ajuste de Entrada**: corrige para mais
+- **Ajuste de Saída**: corrige para menos
+- **Consumo Interno**: uso administrativo
+
+---
+
+## Como Usar
+
+Acesse **Estoque > Movimentações** para transferir ou ajustar estoque manualmente.`,
+  },
+  {
+    id: 'categorias-ajuda',
+    titulo: 'Categorias de Produtos',
+    categoria: 'Estoque',
+    conteudo: `# Categorias
+
+Organize produtos em grupos hierárquicos para facilitar buscas e relatórios.
+
+---
+
+## Funcionalidades
+
+- Hierarquia (pai/filho)
+- Ativação/desativação
+- Vinculação automática aos produtos
+
+---
+
+## Como Usar
+
+Acesse **Estoque > Categorias** para criar e gerenciar grupos de produtos.`,
+  },
+  {
+    id: 'unidades-medida-ajuda',
+    titulo: 'Unidades de Medida',
+    categoria: 'Estoque',
+    conteudo: `# Unidades de Medida
+
+Defina como os produtos são medidos e vendidos (UN, KG, L, etc.).
+
+---
+
+## Unidades Padrão
+
+UN (Unidade), KG (Quilograma), G (Grama), L (Litro), ML (Mililitro), M (Metro), M2 (Metro Quadrado), CX (Caixa), PC (Peça), PCT (Pacote), TON (Tonelada)
+
+---
+
+## Como Usar
+
+Acesse **Estoque > Unidades de Medida** para cadastrar novas unidades ou gerenciar as existentes.`,
+  },
+  {
+    id: 'logs-ajuda',
+    titulo: 'Logs do Sistema',
+    categoria: 'Sistema',
+    conteudo: `# Logs do Sistema
+
+Registros de todas as ações importantes realizadas no sistema.
+
+---
+
+## Categorias
+
+- **AUTH**: Login, logout, tentativas
+- **API**: Requisições HTTP
+- **DATABASE**: Operações de banco
+- **BUSINESS**: Regras de negócio
+- **VALIDATION**: Erros de validação
+- **SECURITY**: Eventos de segurança
+- **SYSTEM**: Eventos gerais
+
+---
+
+## Como Usar
+
+Acesse **Gestão > Logs do Sistema**. Use filtros por período, usuário, categoria e status para localizar rapidamente.`,
+  },
+  {
+    id: 'usuarios-ajuda',
+    titulo: 'Gerenciamento de Usuários',
+    categoria: 'Sistema',
+    conteudo: `# Gerenciamento de Usuários
+
+Controle quem acessa o sistema e quais permissões cada um possui.
+
+---
+
+## Perfis de Acesso
+
+- **Administrador**: acesso total
+- **Gerente**: vendas, estoque, financeiro
+- **Operador**: PDV e consultas
+- **Visualizador**: apenas consulta
+
+---
+
+## Como Usar
+
+Acesse **Gestão > Usuários** para criar, editar ou desativar usuários.`,
+  },
+  {
+    id: 'parametros-ajuda',
+    titulo: 'Parâmetros do Sistema',
+    categoria: 'Sistema',
+    conteudo: `# Parâmetros do Sistema
+
+Configure o comportamento do sistema: regras de negócio, dados fiscais e preferências.
+
+---
+
+## Categorias
+
+- **Gerais**: nome da empresa, CNPJ, regime tributário
+- **Vendas**: desconto máximo, bloquear sem estoque
+- **Fiscal**: ambiente NF-e, série, certificado
+- **Financeiro**: dias vencimento, juros, multa
+- **Estoque**: alerta mínimo, método de custo
+
+---
+
+## Como Usar
+
+Acesse **Gestão > Parâmetros** para visualizar e alterar configurações.`,
+  },
 ];
 
 const categorias = [...new Set(itensAjuda.map((item) => item.categoria))];

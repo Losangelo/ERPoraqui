@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import toast from "react-hot-toast"
 import { Plus, Search, FileBarChart, Check, X } from "lucide-react"
 import { orcamentosService, Orcamento } from "@/services/orcamentos"
 import { LookupField } from "@/components/lookup/LookupField"
@@ -43,8 +44,8 @@ export function OrcamentosPage() {
     try {
       await orcamentosService.aprovar(id)
       loadOrcamentos()
-    } catch (error) {
-      console.error("Erro ao aprovar:", error)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error?.message || error.message || 'Erro ao aprovar')
     }
   }
 
@@ -52,8 +53,8 @@ export function OrcamentosPage() {
     try {
       await orcamentosService.reprovar(id)
       loadOrcamentos()
-    } catch (error) {
-      console.error("Erro ao reprovar:", error)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error?.message || error.message || 'Erro ao reprovar')
     }
   }
 
@@ -61,8 +62,8 @@ export function OrcamentosPage() {
     try {
       await orcamentosService.converter(id)
       loadOrcamentos()
-    } catch (error) {
-      console.error("Erro ao converter:", error)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error?.message || error.message || 'Erro ao converter')
     }
   }
 
@@ -177,16 +178,16 @@ export function OrcamentosPage() {
                       <div className="flex gap-2 justify-end">
                         {orcamento.situacao === "ABERTO" && (
                           <>
-                            <Button variant="ghost" size="sm" onClick={() => aprovar(orcamento.id)}>
+                            <Button variant="ghost" size="sm" title="Aprovar orçamento" onClick={() => aprovar(orcamento.id)}>
                               <Check className="w-4 h-4 text-green-600" />
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={() => reprovar(orcamento.id)}>
+                            <Button variant="ghost" size="sm" title="Reprovar orçamento" onClick={() => reprovar(orcamento.id)}>
                               <X className="w-4 h-4 text-red-600" />
                             </Button>
                           </>
                         )}
                         {(orcamento.situacao === "ABERTO" || orcamento.situacao === "APROVADO") && (
-                          <Button variant="ghost" size="sm" onClick={() => converter(orcamento.id)}>
+                          <Button variant="ghost" size="sm" title="Converter em pedido" onClick={() => converter(orcamento.id)}>
                             <FileBarChart className="w-4 h-4 text-blue-600" />
                           </Button>
                         )}

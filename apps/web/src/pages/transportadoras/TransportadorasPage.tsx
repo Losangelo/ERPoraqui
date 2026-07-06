@@ -141,10 +141,10 @@ export function TransportadorasPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => openEdit(item)}>
+                        <Button variant="ghost" size="icon" title="Editar transportadora" onClick={() => openEdit(item)}>
                           <Edit className="h-4 w-4 text-gray-600" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)}>
+                        <Button variant="ghost" size="icon" title="Excluir transportadora" onClick={() => handleDelete(item.id)}>
                           <Trash2 className="h-4 w-4 text-red-600" />
                         </Button>
                       </div>
@@ -165,7 +165,7 @@ export function TransportadorasPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar' : 'Nova'} Transportadora</DialogTitle>
           </DialogHeader>

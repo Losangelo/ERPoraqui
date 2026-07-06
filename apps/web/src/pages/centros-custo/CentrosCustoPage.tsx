@@ -234,7 +234,7 @@ export default function CentrosCustoPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar Centro de Custo' : 'Novo Centro de Custo'}</DialogTitle>
           </DialogHeader>

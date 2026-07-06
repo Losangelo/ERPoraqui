@@ -170,7 +170,11 @@ export const empresasService = {
   },
 
   async criarFilial(empresaId: string, data: any): Promise<Filial> {
-    const response = await api.post(`/empresas/${empresaId}/filiais`, data);
+    const sanitized = { ...data, cnpj: data.cnpj?.replace(/\D/g, '') };
+    for (const key of ['logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'cep', 'inscricaoEstadual', 'inscricaoMunicipal', 'telefone', 'email', 'nomeFantasia']) {
+      if (sanitized[key] === '') sanitized[key] = undefined;
+    }
+    const response = await api.post(`/empresas/${empresaId}/filiais`, sanitized);
     return response.data;
   },
 
@@ -180,7 +184,11 @@ export const empresasService = {
   },
 
   async atualizarFilial(empresaId: string, filialId: string, data: any): Promise<Filial> {
-    const response = await api.put(`/empresas/${empresaId}/filiais/${filialId}`, data);
+    const sanitized = { ...data, cnpj: data.cnpj?.replace(/\D/g, '') };
+    for (const key of ['logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'cep', 'inscricaoEstadual', 'inscricaoMunicipal', 'telefone', 'email', 'nomeFantasia']) {
+      if (sanitized[key] === '') sanitized[key] = undefined;
+    }
+    const response = await api.put(`/empresas/${empresaId}/filiais/${filialId}`, sanitized);
     return response.data;
   },
 

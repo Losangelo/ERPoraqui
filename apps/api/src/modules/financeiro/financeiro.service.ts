@@ -113,7 +113,7 @@ export class FinanceiroService {
     const valorRecebido = parsed.valorRecebido || conta.valorOriginal;
     const valorTotal = valorRecebido - parsed.valorDesconto + parsed.valorJuros + parsed.valorMulta;
 
-    return prisma.contaReceber.update({
+    const contaAtualizada = await prisma.contaReceber.update({
       where: { id },
       data: {
         valorRecebido: valorTotal,
@@ -125,6 +125,22 @@ export class FinanceiroService {
         dataRecebimento: parsed.dataRecebimento || new Date(),
       },
     });
+
+    await prisma.fluxoCaixa.create({
+      data: {
+        empresaId,
+        tipo: 'ENTRADA',
+        categoria: 'RECEBIMENTO_CONTA',
+        descricao: `Recebimento - ${conta.numeroDocumento}`,
+        valor: valorTotal,
+        formaPagamento: parsed.formaPagamento,
+        dataMovimentacao: parsed.dataRecebimento || new Date(),
+        referenciaId: id,
+        referenciaTipo: 'CONTA_RECEBER',
+      },
+    });
+
+    return contaAtualizada;
   }
 
   async buscarContaReceber(id: string, empresaId: string) {
@@ -273,7 +289,7 @@ export class FinanceiroService {
     const valorPago = parsed.valorPago || conta.valorOriginal;
     const valorTotal = valorPago - parsed.valorDesconto + parsed.valorJuros + parsed.valorMulta;
 
-    return prisma.contaPagar.update({
+    const contaAtualizada = await prisma.contaPagar.update({
       where: { id },
       data: {
         valorPago: valorTotal,
@@ -285,6 +301,22 @@ export class FinanceiroService {
         dataPagamento: parsed.dataPagamento || new Date(),
       },
     });
+
+    await prisma.fluxoCaixa.create({
+      data: {
+        empresaId,
+        tipo: 'SAIDA',
+        categoria: 'PAGAMENTO_CONTA',
+        descricao: `Pagamento - ${conta.numeroDocumento}`,
+        valor: valorTotal,
+        formaPagamento: parsed.formaPagamento,
+        dataMovimentacao: parsed.dataPagamento || new Date(),
+        referenciaId: id,
+        referenciaTipo: 'CONTA_PAGAR',
+      },
+    });
+
+    return contaAtualizada;
   }
 
   async buscarContaPagar(id: string, empresaId: string) {

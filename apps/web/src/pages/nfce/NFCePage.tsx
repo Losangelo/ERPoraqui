@@ -287,7 +287,7 @@ export default function NFCePage() {
                       )}
                       {nota.situacao === 'AUTORIZADA' && (
                         <>
-                          <Button variant="outline" size="sm" className="mr-2">
+                          <Button variant="outline" size="sm" title="Visualizar QR Code da NFC-e" className="mr-2">
                             <QrCode className="h-4 w-4" />
                           </Button>
                           <Button variant="destructive" size="sm" onClick={() => handleCancelar(nota.id)}>
@@ -306,7 +306,7 @@ export default function NFCePage() {
 
       {/* Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-4xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>Nova NFC-e</DialogTitle>
           </DialogHeader>

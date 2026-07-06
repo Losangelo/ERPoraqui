@@ -293,7 +293,7 @@ export default function PromocoesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar Promoção' : 'Nova Promoção'}</DialogTitle>
           </DialogHeader>

@@ -254,3 +254,30 @@
 - **Features:** Kanban FEATURES.md atualizado.
 
 - Prioridade definida: NF-e > SPED > MDF-e > Produtos > Financeiro > Relatórios
+
+## 06/07/2026 — Geração de 38 Specs + Documentação Completa + Correção Orçamentos
+
+### Specs Geradas (38 arquivos)
+- **Core Cadastros:** CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS
+- **Sistema:** AUTH, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA
+- **Vendas+Compras:** PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA
+- **Financeiro:** FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES
+- **Estoque:** ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX
+- **Fiscal+Blitz2:** ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS
+- **Total:** 56 specs — cobertura de 100% dos módulos
+
+### Correções
+- Controller orçamentos: catch agora retorna 404 (não encontrado), 409 (status inválido), 401 (não autorizado), 500 (outros)
+- Frontend orçamentos: toast.error() substitui console.error() em aprovar/reprovar/converter
+
+### Documentação
+- FEATURES.md: +38 entries de specs + histórico
+- TODO.md: secao specs completas + correcoes
+- stepByStep.md: registro desta etapa
+- AGENTS.md: status de specs atualizado
+
+### Cobertura
+- 56 specs técnicas (100% dos módulos documentados)
+- 55 rotas API
+- 64 páginas frontend
+- 40 serviços frontend

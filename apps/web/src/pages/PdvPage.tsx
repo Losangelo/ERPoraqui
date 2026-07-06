@@ -10,7 +10,8 @@ import { pdvService, type VendaPDV, type Caixa, type ProdutoPDV } from "@/servic
 import { clientesService } from "@/services/clientes"
 import { empresasService, type Filial } from "@/services/estoque"
 import { useAuth } from "@/stores/AuthContext"
-import { Search, ShoppingBasket, DollarSign, ShoppingCart, Plus, Minus, Trash2, Barcode, User } from "lucide-react"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Search, ShoppingBasket, DollarSign, ShoppingCart, Plus, Minus, Trash2, Barcode, User, Package, ChevronLeft, ChevronRight } from "lucide-react"
 import toast from "react-hot-toast"
 
 interface ItemCarrinho {
@@ -54,7 +55,19 @@ export function PdvPage() {
   const [valorPago, setValorPago] = useState("")
   const [finalizando, setFinalizando] = useState(false)
   const [vendaFinalizada, setVendaFinalizada] = useState<VendaPDV | null>(null)
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [selectedProdIndex, setSelectedProdIndex] = useState(0)
+  const [produtosSheetOpen, setProdutosSheetOpen] = useState(false)
+  const [sheetProdutos, setSheetProdutos] = useState<ProdutoPDV[]>([])
+  const [sheetSearchTerm, setSheetSearchTerm] = useState("")
+  const [sheetPage, setSheetPage] = useState(1)
+  const [sheetTotalPages, setSheetTotalPages] = useState(1)
+  const [sheetLoading, setSheetLoading] = useState(false)
   const barcodeRef = useRef<HTMLInputElement>(null)
+  const buscaRef = useRef<HTMLInputElement>(null)
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const clientTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const sheetSearchTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
   const totalCarrinho = carrinho.reduce((acc, item) => acc + item.valorTotal, 0)
 
@@ -115,7 +128,7 @@ export function PdvPage() {
     try {
       const r = await pdvService.iniciarVenda({ filialId: caixaAberto.filialId })
       if (r.success) {
-        setVendaAtual(r.data)
+        setVendaAtual(r.data?.venda || r.data)
         setCarrinho([])
         setClienteSelecionado(null)
         setBuscaProduto("")
@@ -129,13 +142,38 @@ export function PdvPage() {
 
   async function buscarProdutos(termo: string) {
     setBuscaProduto(termo)
-    if (termo.length < 2) { setProdutosBusca([]); setMostrarProdutos(false); return }
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current)
+    if (termo.length < 2) { setProdutosBusca([]); setMostrarProdutos(false); setSearchLoading(false); return }
+    setSearchLoading(true)
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const r = await pdvService.listarProdutos(termo)
+        const lista = r?.data?.data || r?.data?.dados || r?.dados || (Array.isArray(r) ? r : [])
+        setProdutosBusca(Array.isArray(lista) ? lista : [])
+        setMostrarProdutos(true)
+        setSelectedProdIndex(0)
+      } catch { setProdutosBusca([]) }
+      finally { setSearchLoading(false) }
+    }, 300)
+  }
+
+  async function carregarSheetProdutos(termo: string, pagina: number) {
+    setSheetLoading(true)
     try {
-      const r = await pdvService.listarProdutos(termo)
-      const lista = r?.data || r?.dados || []
-      setProdutosBusca(Array.isArray(lista) ? lista : [])
-      setMostrarProdutos(true)
-    } catch { setProdutosBusca([]) }
+      const r = await pdvService.listarProdutos(termo || undefined, pagina, 20)
+      const lista = r?.data?.data || r?.data?.dados || r?.dados || []
+      setSheetProdutos(Array.isArray(lista) ? lista : [])
+      const meta = r?.data?.meta || r?.meta
+      setSheetTotalPages(meta?.totalPaginas || 1)
+    } catch { setSheetProdutos([]) }
+    finally { setSheetLoading(false) }
+  }
+
+  function abrirSheetProdutos() {
+    setSheetSearchTerm(buscaProduto)
+    setSheetPage(1)
+    setProdutosSheetOpen(true)
+    carregarSheetProdutos(buscaProduto, 1)
   }
 
   async function handleBarcode(codigo: string) {
@@ -168,8 +206,7 @@ export function PdvPage() {
       }])
     }
     setMostrarProdutos(false)
-    setBuscaProduto("")
-    setTimeout(() => barcodeRef.current?.focus(), 100)
+    setTimeout(() => buscaRef.current?.focus(), 100)
   }
 
   function alterarQuantidade(produtoId: string, delta: number) {
@@ -186,12 +223,15 @@ export function PdvPage() {
 
   async function buscarClientes(termo: string) {
     setClientesBusca(termo)
+    if (clientTimeoutRef.current) clearTimeout(clientTimeoutRef.current)
     if (termo.length < 2) { setClientesLista([]); return }
-    try {
-      const r = await clientesService.listar({ nome: termo, pagina: 1, limite: 10 })
-      const lista = Array.isArray(r) ? r : []
-      setClientesLista(lista)
-    } catch { setClientesLista([]) }
+    clientTimeoutRef.current = setTimeout(async () => {
+      try {
+        const r = await clientesService.listar({ nome: termo, pagina: 1, limite: 10 })
+        const lista = Array.isArray(r) ? r : []
+        setClientesLista(lista)
+      } catch { setClientesLista([]) }
+    }, 300)
   }
 
   async function handleFinalizarVenda() {
@@ -214,7 +254,7 @@ export function PdvPage() {
         clienteId: clienteSelecionado?.id,
       })
       if (r2.success) {
-        setVendaFinalizada(r2.data)
+        setVendaFinalizada(r2.data?.venda || r2.data)
         setConfirmarVendaOpen(false)
         setFormaPagamento("DINHEIRO")
         setValorPago("")
@@ -336,7 +376,7 @@ export function PdvPage() {
                     <TableCell>{venda.cliente?.nome || "-"}</TableCell>
                     <TableCell>{venda.operador?.nome || "-"}</TableCell>
                     <TableCell>{venda.formaPagamento}</TableCell>
-                    <TableCell>R$ {venda.valorTotal.toFixed(2)}</TableCell>
+                    <TableCell>R$ {(venda.valorTotal ?? 0).toFixed(2)}</TableCell>
                     <TableCell>{new Date(venda.dataVenda).toLocaleString("pt-BR")}</TableCell>
                     <TableCell>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSituacaoBadge(venda.situacao)}`}>
@@ -353,7 +393,7 @@ export function PdvPage() {
 
       {/* Dialog Abrir Caixa */}
       <Dialog open={caixaDialogOpen} onOpenChange={setCaixaDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader><DialogTitle>Abrir Caixa</DialogTitle></DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -382,8 +422,8 @@ export function PdvPage() {
       </Dialog>
 
       {/* Dialog Nova Venda */}
-      <Dialog open={vendaDialogOpen} onOpenChange={vendaDialogOpen ? undefined : undefined}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
+      <Dialog open={vendaDialogOpen} onOpenChange={(open) => { if (!open) { setVendaDialogOpen(false); setVendaAtual(null); setCarrinho([]); setClienteSelecionado(null); setVendaFinalizada(null) } }}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Nova Venda {vendaAtual ? `- Cupom ${vendaAtual.numeroCupom}` : ""}</DialogTitle>
           </DialogHeader>
@@ -404,28 +444,60 @@ export function PdvPage() {
             <div className="relative flex-[2]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
+                ref={buscaRef}
                 placeholder="Buscar produto por nome..."
                 value={buscaProduto}
                 onChange={e => buscarProdutos(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault()
+                    setSelectedProdIndex(i => Math.min(i + 1, produtosBusca.length - 1))
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault()
+                    setSelectedProdIndex(i => Math.max(i - 1, 0))
+                  } else if (e.key === "Enter") {
+                    e.preventDefault()
+                    if (produtosBusca[selectedProdIndex]) {
+                      adicionarAoCarrinho(produtosBusca[selectedProdIndex])
+                    } else {
+                      abrirSheetProdutos()
+                    }
+                  }
+                }}
                 className="pl-10"
               />
             </div>
           </div>
 
           {/* Grid de produtos sugeridos */}
-          {mostrarProdutos && produtosBusca.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border rounded-lg p-2">
-              {produtosBusca.map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => adicionarAoCarrinho(p)}
-                  className="text-left p-2 rounded hover:bg-accent border text-sm"
-                >
-                  <p className="font-medium truncate">{p.nome}</p>
-                  <p className="text-xs text-muted-foreground">R$ {p.precoVenda.toFixed(2)}</p>
-                  <p className="text-xs text-muted-foreground">Estoque: {p.quantidadeEstoque}</p>
-                </button>
-              ))}
+          {mostrarProdutos && (
+            <div className="min-h-[60px]">
+              {searchLoading && (
+                <p className="text-sm text-muted-foreground text-center py-4">Buscando produtos...</p>
+              )}
+              {!searchLoading && produtosBusca.length > 0 && (
+                <div className="space-y-2">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border rounded-lg p-2">
+                    {produtosBusca.map((p, i) => (
+                      <button
+                        key={p.id}
+                        onClick={() => adicionarAoCarrinho(p)}
+                        className={`text-left p-2 rounded border text-sm ${i === selectedProdIndex ? 'bg-accent border-primary' : 'hover:bg-accent'}`}
+                      >
+                        <p className="font-medium truncate">{p.nome}</p>
+                        <p className="text-xs text-muted-foreground">R$ {p.precoVenda.toFixed(2)}</p>
+                        <p className="text-xs text-muted-foreground">Estoque: {p.quantidadeEstoque}</p>
+                      </button>
+                    ))}
+                  </div>
+                  <Button variant="link" size="sm" className="w-full" onClick={abrirSheetProdutos}>
+                    Ver mais produtos...
+                  </Button>
+                </div>
+              )}
+              {!searchLoading && produtosBusca.length === 0 && buscaProduto.length >= 2 && (
+                <p className="text-sm text-muted-foreground text-center py-4">Nenhum produto encontrado</p>
+              )}
             </div>
           )}
 
@@ -458,11 +530,11 @@ export function PdvPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center justify-center gap-1">
-                          <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => alterarQuantidade(item.produtoId, -1)}>
+                          <Button variant="outline" size="icon" title="Diminuir quantidade" className="h-7 w-7" onClick={() => alterarQuantidade(item.produtoId, -1)}>
                             <Minus className="h-3 w-3" />
                           </Button>
                           <span className="w-8 text-center text-sm font-medium">{item.quantidade}</span>
-                          <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => alterarQuantidade(item.produtoId, 1)}>
+                          <Button variant="outline" size="icon" title="Aumentar quantidade" className="h-7 w-7" onClick={() => alterarQuantidade(item.produtoId, 1)}>
                             <Plus className="h-3 w-3" />
                           </Button>
                         </div>
@@ -470,7 +542,7 @@ export function PdvPage() {
                       <TableCell className="text-right">R$ {item.valorUnitario.toFixed(2)}</TableCell>
                       <TableCell className="text-right font-medium">R$ {item.valorTotal.toFixed(2)}</TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500" onClick={() => removerDoCarrinho(item.produtoId)}>
+                        <Button variant="ghost" size="icon" title="Remover item do carrinho" className="h-8 w-8 text-red-500" onClick={() => removerDoCarrinho(item.produtoId)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </TableCell>
@@ -530,7 +602,7 @@ export function PdvPage() {
 
       {/* Dialog Confirmar Pagamento */}
       <Dialog open={confirmarVendaOpen} onOpenChange={setConfirmarVendaOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader><DialogTitle>Finalizar Venda</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
             <div className="bg-muted p-4 rounded-lg space-y-1">
@@ -572,26 +644,108 @@ export function PdvPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setConfirmarVendaOpen(false)}>Voltar</Button>
-            <Button onClick={handleFinalizarVenda} disabled={finalizando || !valorPago}>
+            <Button onClick={handleFinalizarVenda} disabled={finalizando || !valorPago || Number(valorPago) <= 0}>
               {finalizando ? "Processando..." : "Confirmar Pagamento"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
+      {/* Sheet Produtos */}
+      <Sheet open={produtosSheetOpen} onOpenChange={setProdutosSheetOpen}>
+        <SheetContent side="right" className="w-full max-w-2xl p-0 flex flex-col">
+          <SheetHeader className="px-6 pt-6 pb-2">
+            <SheetTitle>
+              <div className="flex items-center gap-2">
+                <Package className="w-5 h-5" />
+                Produtos
+              </div>
+            </SheetTitle>
+          </SheetHeader>
+
+          <div className="px-6 pb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                placeholder="Buscar produto..."
+                value={sheetSearchTerm}
+                onChange={e => {
+                  setSheetSearchTerm(e.target.value)
+                  setSheetPage(1)
+                  if (sheetSearchTimeoutRef.current) clearTimeout(sheetSearchTimeoutRef.current)
+                  sheetSearchTimeoutRef.current = setTimeout(() => carregarSheetProdutos(e.target.value, 1), 300)
+                }}
+                onKeyDown={e => { if (e.key === "Enter") carregarSheetProdutos(sheetSearchTerm, 1) }}
+                className="pl-10"
+                autoFocus
+              />
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-6 pb-4">
+            {sheetLoading ? (
+              <p className="text-center text-muted-foreground py-8">Carregando produtos...</p>
+            ) : sheetProdutos.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">Nenhum produto encontrado</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {sheetProdutos.map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => { adicionarAoCarrinho(p); setProdutosSheetOpen(false) }}
+                    className="text-left p-4 rounded-lg border hover:bg-accent hover:border-primary transition-all"
+                  >
+                    <p className="font-medium truncate">{p.nome}</p>
+                    <div className="flex justify-between items-center mt-2">
+                      <p className="text-lg font-bold text-primary">R$ {p.precoVenda.toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">Estoque: {p.quantidadeEstoque}</p>
+                    </div>
+                    {p.codigoBarras && (
+                      <p className="text-xs text-muted-foreground mt-1">Cód: {p.codigoBarras}</p>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {sheetTotalPages > 1 && (
+            <div className="flex items-center justify-between px-6 py-4 border-t">
+              <Button
+                variant="outline" size="sm"
+                disabled={sheetPage <= 1}
+                onClick={() => { const p = sheetPage - 1; setSheetPage(p); carregarSheetProdutos(sheetSearchTerm, p) }}
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" /> Anterior
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Página {sheetPage} de {sheetTotalPages}
+              </span>
+              <Button
+                variant="outline" size="sm"
+                disabled={sheetPage >= sheetTotalPages}
+                onClick={() => { const p = sheetPage + 1; setSheetPage(p); carregarSheetProdutos(sheetSearchTerm, p) }}
+              >
+                Próxima <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+
       {/* Dialog Venda Finalizada */}
       <Dialog open={!!vendaFinalizada} onOpenChange={() => { setVendaFinalizada(null); setVendaDialogOpen(false); setVendaAtual(null) }}>
-        <DialogContent className="max-w-sm" aria-describedby={undefined}>
+        <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="text-center text-green-600">Venda Finalizada!</DialogTitle>
           </DialogHeader>
           {vendaFinalizada && (
             <div className="text-center space-y-3 py-4">
-              <p className="text-3xl font-bold">R$ {vendaFinalizada.valorTotal.toFixed(2)}</p>
+              <p className="text-3xl font-bold">R$ {(vendaFinalizada.valorTotal ?? 0).toFixed(2)}</p>
               <p className="text-muted-foreground">{vendaFinalizada.formaPagamento}</p>
               <p className="text-sm">Cupom: {vendaFinalizada.numeroCupom}</p>
-              {vendaFinalizada.valorTroco > 0 && (
-                <p className="text-green-600 font-medium">Troco: R$ {vendaFinalizada.valorTroco.toFixed(2)}</p>
+              {(vendaFinalizada.valorTroco ?? 0) > 0 && (
+                <p className="text-green-600 font-medium">Troco: R$ {(vendaFinalizada.valorTroco ?? 0).toFixed(2)}</p>
               )}
             </div>
           )}

@@ -45,8 +45,13 @@ export function mockSemLicenca() {
 export function limparMocks() {
   for (const key of Object.keys(mockPrisma)) {
     const model = (mockPrisma as any)[key];
-    if (model && typeof model === 'object' && 'mockClear' in model) {
-      model.mockClear();
+    if (model && typeof model === 'object') {
+      for (const methodKey of Object.keys(model)) {
+        const fn = model[methodKey];
+        if (fn && typeof fn === 'function' && 'mockReset' in fn) {
+          fn.mockReset();
+        }
+      }
     }
   }
 }

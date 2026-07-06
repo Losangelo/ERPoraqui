@@ -210,7 +210,7 @@ export function FiliaisPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editando ? "Editar Filial" : "Nova Filial"}</DialogTitle>
           </DialogHeader>

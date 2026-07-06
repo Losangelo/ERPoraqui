@@ -112,8 +112,9 @@ export const pdvService = {
     return response.data;
   },
 
-  listarProdutos: async (termo?: string) => {
-    const params = termo ? `?termo=${encodeURIComponent(termo)}&pagina=1&limite=20` : '?pagina=1&limite=20';
+  listarProdutos: async (termo?: string, pagina = 1, limite = 20) => {
+    let params = `?pagina=${pagina}&limite=${limite}`;
+    if (termo) params += `&termo=${encodeURIComponent(termo)}`;
     const response = await api.get(`/pdv/produtos${params}`);
     return response.data;
   },

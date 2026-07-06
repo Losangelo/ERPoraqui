@@ -260,7 +260,7 @@ export default function NFSePage() {
                             <Button size="sm" variant="outline" onClick={() => handleAssinar(nota.id)}>
                               Assinar
                             </Button>
-                            <Button size="sm" variant="destructive" onClick={() => handleExcluir(nota.id)}>
+                            <Button size="sm" variant="destructive" title="Excluir NFSe" onClick={() => handleExcluir(nota.id)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </>
@@ -286,7 +286,7 @@ export default function NFSePage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Nova NFSe - Nota Fiscal de Serviços</DialogTitle>
           </DialogHeader>

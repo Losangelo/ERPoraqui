@@ -221,6 +221,7 @@ export function ProductsPage() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        title="Editar produto"
                         onClick={() => handleEdit(produto)}
                         className="text-gray-600 hover:text-primary"
                       >
@@ -236,7 +237,7 @@ export function ProductsPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingProduto ? 'Editar Produto' : 'Novo Produto'}

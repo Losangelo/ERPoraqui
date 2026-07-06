@@ -191,12 +191,14 @@ export class OrcamentosController {
         data: resultado,
       });
     } catch (error: any) {
-      return res.status(400).json({
+      const message = error.message || 'Erro ao aprovar orçamento';
+      let status = 400;
+      if (message.includes('não encontrado')) status = 404;
+      else if (message.includes('não é permitido')) status = 409;
+      else if (message.includes('não identificada')) status = 401;
+      return res.status(status).json({
         success: false,
-        error: {
-          code: 'ERROR',
-          message: error.message || 'Erro ao aprovar orçamento',
-        },
+        error: { code: 'ERROR', message },
       });
     }
   };
@@ -220,12 +222,14 @@ export class OrcamentosController {
         data: resultado,
       });
     } catch (error: any) {
-      return res.status(400).json({
+      const message = error.message || 'Erro ao reprovar orçamento';
+      let status = 400;
+      if (message.includes('não encontrado')) status = 404;
+      else if (message.includes('não é permitido')) status = 409;
+      else if (message.includes('não identificada')) status = 401;
+      return res.status(status).json({
         success: false,
-        error: {
-          code: 'ERROR',
-          message: error.message || 'Erro ao reprovar orçamento',
-        },
+        error: { code: 'ERROR', message },
       });
     }
   };
@@ -249,12 +253,14 @@ export class OrcamentosController {
         data: resultado,
       });
     } catch (error: any) {
-      return res.status(400).json({
+      const message = error.message || 'Erro ao converter orçamento em pedido';
+      let status = 400;
+      if (message.includes('não encontrado')) status = 404;
+      else if (message.includes('deve estar ABERTO')) status = 409;
+      else if (message.includes('não identificada')) status = 401;
+      return res.status(status).json({
         success: false,
-        error: {
-          code: 'ERROR',
-          message: error.message || 'Erro ao converter orçamento em pedido',
-        },
+        error: { code: 'ERROR', message },
       });
     }
   };

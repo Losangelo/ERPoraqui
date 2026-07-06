@@ -301,6 +301,7 @@ export function CRMPage() {
                         <Button 
                           size="sm" 
                           variant="ghost" 
+                          title="Avançar oportunidade para próximo estágio"
                           className="h-6 text-xs"
                           onClick={() => {
                             const proximoPipeline = pipelines.find(p => p.ordem === pipeline.ordem + 1);
@@ -314,6 +315,7 @@ export function CRMPage() {
                         <Button 
                           size="sm" 
                           variant="ghost" 
+                          title="Marcar oportunidade como ganha"
                           className="h-6 text-xs text-green-600"
                           onClick={() => marcarGanhaMutation.mutate(opp.id)}
                         >
@@ -361,6 +363,7 @@ export function CRMPage() {
                       <Button 
                         size="sm" 
                         variant="outline"
+                        title="Concluir tarefa"
                         onClick={() => concluirTarefaMutation.mutate(tarefa.id)}
                       >
                         <CheckCircle className="h-4 w-4" />
@@ -380,7 +383,7 @@ export function CRMPage() {
       </Tabs>
 
       <Dialog open={dialogAberto && tipoDialog === 'oportunidade'} onOpenChange={setDialogAberto}>
-        <DialogContent className="max-w-md" aria-describedby={undefined}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Nova Oportunidade</DialogTitle>
           </DialogHeader>
@@ -444,7 +447,7 @@ export function CRMPage() {
       </Dialog>
 
       <Dialog open={dialogAberto && tipoDialog === 'tarefa'} onOpenChange={setDialogAberto}>
-        <DialogContent className="max-w-md" aria-describedby={undefined}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Nova Tarefa</DialogTitle>
           </DialogHeader>

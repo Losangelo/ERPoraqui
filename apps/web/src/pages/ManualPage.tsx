@@ -1847,8 +1847,531 @@ Use **Excel (XLSX)** para analisar os dados com graficos e filtros.`,
 O sistema esta em constante melhoria.
 Envie sugestoes para o departamento de TI ou suporte.`,
   },
-];
+  {
+    id: 'dashboard',
+    titulo: 'Dashboard - Tela Inicial',
+    categoria: 'Inicio',
+    conteudo: `Aprenda a usar o painel inicial do sistema.
 
+---
+
+## O que e o Dashboard?
+
+O Dashboard e a primeira tela apos o login. Ele mostra indicadores importantes, graficos e atalhos.
+
+---
+
+## Indicadores (KPIs)
+
+- **Vendas do Dia**: total vendido hoje
+- **Contas a Receber**: em aberto
+- **Contas Vencidas**: atrasadas
+- **Estoque Baixo**: produtos abaixo do minimo
+- **Saldo em Caixa**: dinheiro disponivel
+
+---
+
+## Graficos
+
+- Vendas por periodo (7/30 dias)
+- Contas a Receber vs Pagar
+- Produtos mais vendidos
+
+---
+
+## Atalhos Rapidos
+
+Links diretos para: Novo Pedido, Nova Conta, Novo Produto, PDV.
+
+---
+
+## Personalizacao
+
+Clique em "Personalizar" para escolher quais indicadores aparecem.`,
+  },
+  {
+    id: 'adiantamentos',
+    titulo: 'Como Gerenciar Adiantamentos',
+    categoria: 'Financeiro',
+    conteudo: `Aprenda a controlar adiantamentos financeiros.
+
+---
+
+## O que sao Adiantamentos?
+
+Valores pagos ou recebidos antes da conclusao da operacao:
+- **Adiantamento a Fornecedor**: pre-pagamento de compras
+- **Adiantamento de Cliente**: sinal recebido do cliente
+
+---
+
+## Registrando um Adiantamento
+
+1. Va em **Financeiro** > **Adiantamentos**
+2. Clique em **+ Novo Adiantamento**
+3. Selecione o tipo (Cliente ou Fornecedor)
+4. Escolha o cliente/fornecedor
+5. Informe valor, data e descricao
+6. Salve
+
+---
+
+## Baixando o Adiantamento
+
+1. Na lista, clique em **Baixar**
+2. Vincule a conta a receber/pagar
+3. Confirme
+
+---
+
+## Dica
+
+Registre todo adiantamento para controle financeiro preciso.`,
+  },
+  {
+    id: 'quitacoes',
+    titulo: 'Quitacoes em Lote',
+    categoria: 'Financeiro',
+    conteudo: `Aprenda a quitar multiplas contas de uma vez.
+
+---
+
+## O que e Quitacao em Lote?
+
+Permite baixar varias contas a receber ou a pagar simultaneamente.
+
+---
+
+## Quando usar?
+
+- Fechamento do caixa do PDV
+- Pagamento de varias faturas do mesmo fornecedor
+- Conciliacao bancaria
+
+---
+
+## Passo a Passo
+
+1. Va em **Financeiro** > **Quitacoes**
+2. Selecione a aba Contas a Receber ou Contas a Pagar
+3. Filtre as contas desejadas
+4. Marque as contas (checkbox)
+5. Clique em **Quitar Selecionadas**
+6. Escolha a forma de pagamento
+7. Confirme
+
+---
+
+## Dica
+
+Use filtros para nao quitar contas erradas. Quitacoes sao irreversiveis.`,
+  },
+  {
+    id: 'conciliacao-bancaria',
+    titulo: 'Conciliacao Bancaria',
+    categoria: 'Financeiro',
+    conteudo: `Aprenda a conciliar o extrato bancario com o sistema.
+
+---
+
+## O que e?
+
+Compara os lancamentos do banco com as contas registradas no sistema para identificar divergencias.
+
+---
+
+## Passo a Passo
+
+1. Va em **Financeiro** > **Conciliacao Bancaria**
+2. Importe o extrato (OFX, CSV ou XLSX)
+3. O sistema sugere correspondencias
+4. Arraste lancamentos para conciliar manualmente
+5. Finalize o periodo
+
+---
+
+## Divergencias Comuns
+
+- **Tarifa bancaria**: crie uma conta a pagar avulsa
+- **Lancamento sem correspondencia**: investigue
+- **Valor diferente**: verifique juros/multas
+
+---
+
+## Dica
+
+Concilie semanalmente para evitar acumulo de trabalho no fim do mes.`,
+  },
+  {
+    id: 'renegociacao-manual',
+    titulo: 'Renegociacao de Contas',
+    categoria: 'Financeiro',
+    conteudo: `Aprenda a renegociar contas a receber e a pagar.
+
+---
+
+## O que e?
+
+Permite renegociar contas em aberto ou vencidas, aplicando descontos, juros e parcelamento.
+
+---
+
+## Passo a Passo
+
+1. Va em **Financeiro** > **Renegociacao**
+2. Clique em **+ Nova Renegociacao**
+3. Selecione tipo (Receber ou Pagar) e cliente/fornecedor
+4. Escolha as contas
+5. Defina descontos, juros, multa e parcelas
+6. Revise o preview
+7. Crie e depois confirme
+
+---
+
+## Status
+
+- **Pendente**: aguardando confirmacao
+- **Confirmada**: novas contas geradas
+- **Cancelada**: renegociacao desfeita
+
+---
+
+## Dica
+
+Ofereca desconto para pagamento a vista em vez de parcelar.`,
+  },
+  {
+    id: 'kardex',
+    titulo: 'Kardex - Ficha de Estoque',
+    categoria: 'Estoque',
+    conteudo: `Aprenda a consultar o historico de movimentacoes dos produtos.
+
+---
+
+## O que e Kardex?
+
+Registro detalhado de todas as movimentacoes de cada produto: entradas, saidas e saldo acumulado.
+
+---
+
+## Acessando o Kardex
+
+1. Va em **Estoque** > **Kardex**
+2. Selecione o produto
+3. Defina o periodo
+4. Visualize todas as movimentacoes
+
+---
+
+## Informacoes Exibidas
+
+- Data da movimentacao
+- Tipo (Compra, Venda, Devolucao, Ajuste)
+- Documento vinculado
+- Quantidade de entrada e saida
+- Saldo atual
+
+---
+
+## Exportacao
+
+Clique em **Exportar** para CSV ou PDF.
+
+---
+
+## Dica
+
+Consulte o Kardex sempre que desconfiar de divergencia no estoque.`,
+  },
+  {
+    id: 'cte-uso',
+    titulo: 'CT-e - Conhecimento de Transporte',
+    categoria: 'Fiscal',
+    conteudo: `Aprenda a emitir Conhecimento de Transporte Eletronico.
+
+---
+
+## O que e CT-e?
+
+Documento fiscal digital (modelo 57) obrigatorio para contratacao de servico de transporte de cargas.
+
+---
+
+## Quando emitir?
+
+- Transporte de carga entre filiais
+- Venda com frete contratado
+- Devolucao com transporte
+- Transporte interestadual
+
+---
+
+## Passo a Passo
+
+1. Va em **Fiscal** > **CT-e**
+2. Clique em **+ Novo CT-e**
+3. Selecione tomador e destinatario
+4. Vincule as NF-e transportadas
+5. Informe veiculo e condutor
+6. Informe valores (frete, pedagio)
+7. Salve e transmita para SEFAZ
+
+---
+
+## Encerramento
+
+Apos o transporte, encerre o CT-e.
+
+---
+
+## Dica
+
+Sempre vincule as NF-e corretas — CT-e com documento errado gera multa.`,
+  },
+  {
+    id: 'licitacoes-uso',
+    titulo: 'Licitacoes',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a gerenciar participacao em processos licitatorios.
+
+---
+
+## O que sao Licitacoes?
+
+Processos pelos quais orgaos publicos compram produtos ou servicos. Sua empresa participa como fornecedora.
+
+---
+
+## Passo a Passo
+
+1. Va em **Vendas** > **Licitacoes**
+2. Clique em **+ Nova Licitacao**
+3. Preencha: numero/ano, orgao, modalidade, objeto
+4. Adicione os itens do edital
+5. Acompanhe o status: Rascunho, Publicada, Em Andamento
+6. Registre o resultado (Venceu/Perdeu)
+
+---
+
+## Modalidades
+
+- Pregao, Concorrencia, Tomada de Precos, Convite, Concurso
+
+---
+
+## Dica
+
+Documente tudo e anexe o edital em PDF para consulta futura.`,
+  },
+  {
+    id: 'convenios-uso',
+    titulo: 'Convenios',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a gerenciar convenios e parcerias.
+
+---
+
+## O que sao Convenios?
+
+Acordos com clientes, fornecedores ou instituicoes para descontos especiais ou condicoes diferenciadas.
+
+---
+
+## Tipos
+
+- Comercial, Governamental, Institucional, Fornecedor
+
+---
+
+## Passo a Passo
+
+1. Va em **Vendas** > **Convenios**
+2. Clique em **+ Novo Convenio**
+3. Selecione o parceiro (lookup)
+4. Informe vigencia, tipo e descricao
+5. Defina descontos e condicoes de pagamento
+6. Salve
+
+---
+
+## Aplicacao nas Vendas
+
+Ao criar pedido para cliente com convenio, o sistema aplica automaticamente os descontos configurados.
+
+---
+
+## Dica
+
+Mantenha prazos de vigencia atualizados para nao aplicar beneficios vencidos.`,
+  },
+  {
+    id: 'promocoes-uso',
+    titulo: 'Promocoes',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a criar ofertas temporarias com precos especiais.
+
+---
+
+## Tipos de Promocao
+
+- **Percentual**: desconto % sobre o preco
+- **Valor Fixo**: preco promocional definido
+- **Leve X Pague Y**: compre quantidade, ganhe desconto
+
+---
+
+## Passo a Passo
+
+1. Va em **Estoque** > **Promocoes**
+2. Clique em **+ Nova Promocao**
+3. Defina nome, tipo e periodo de vigencia
+4. Selecione os produtos participantes
+5. Configure valores
+6. Ative a promocao
+
+---
+
+## Funcionamento
+
+- So e aplicada dentro do periodo definido
+- Fora do periodo, o preco normal e restaurado
+- Em caso de conflito, maior desconto prevalece
+
+---
+
+## Dica
+
+Planeje com antecedencia e teste antes de ativar para o publico.`,
+  },
+  {
+    id: 'contratos-manual',
+    titulo: 'Contratos',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a gerenciar contratos de servicos e planos recorrentes.
+
+---
+
+## Ciclo de Vida
+
+Rascunho → Ativo → Suspenso → Encerrado
+
+---
+
+## Passo a Passo
+
+1. Va em **Vendas** > **Contratos**
+2. Clique em **+ Novo Contrato**
+3. Selecione cliente, vigencia e tipo de reajuste
+4. Defina os servicos e valores
+5. Ative o contrato
+
+---
+
+## Medicoes
+
+Para contratos ativos, crie medicoes mensais:
+1. No contrato, va em medicoes
+2. Clique em **+ Nova Medicao**
+3. Informe o periodo e valor medido
+4. Fatore para gerar pedido
+
+---
+
+## Dica
+
+Configure o tipo de reajuste (IGPM, IPCA) para correcao automatica.`,
+  },
+  {
+    id: 'garantias-manual',
+    titulo: 'Garantias',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a controlar garantias de produtos vendidos.
+
+---
+
+## Tipos de Garantia
+
+- **Fabrica**: garantia original do fabricante
+- **Estendida**: garantia adicional contratada
+- **Legal**: garantia obrigatoria por lei
+
+---
+
+## Passo a Passo
+
+1. Va em **Vendas** > **Garantias**
+2. Clique em **+ Nova Garantia**
+3. Selecione o produto e cliente
+4. Defina o prazo e tipo
+5. Salve
+
+---
+
+## Regras de Elegibilidade
+
+Configure regras por produto ou categoria:
+- Prazo padrao
+- Cobertura
+- Termos e condicoes
+
+---
+
+## Status
+
+Ativa, Expirada, Cancelada, Acionada
+
+---
+
+## Dica
+
+Configure regras de elegibilidade para verificar automaticamente se o produto esta na garantia.`,
+  },
+  {
+    id: 'devolucoes-manual',
+    titulo: 'Devolucoes / RMA',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a gerenciar devolucoes de produtos.
+
+---
+
+## Fluxo RMA
+
+Solicitacao → Inspecao → Aprovacao/Rejeicao → Destinacao
+
+---
+
+## Motivos de Devolucao
+
+- Defeito, Troca, Arrependimento, Avaria
+
+---
+
+## Passo a Passo
+
+1. Va em **Vendas** > **Devolucoes**
+2. Clique em **+ Nova Devolucao**
+3. Selecione o cliente e produto
+4. Informe motivo e quantidade
+5. Registre a inspecao
+6. Aprove ou rejeite
+7. Defina a destinacao
+
+---
+
+## Destinos
+
+- **Reparo**: produto vai para assistencia
+- **Substituicao**: gera nova NF-e
+- **Credito**: credito em conta
+- **Descarte**: produto sem condicao de uso
+
+---
+
+## Dica
+
+Sempre registre fotos na inspecao para documentacao.`,
+  },
+];
 const categorias = [...new Set(itensManual.map((item) => item.categoria))];
 
 function ManualPage() {

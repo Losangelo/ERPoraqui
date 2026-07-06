@@ -285,7 +285,7 @@ export function DevolucoesPage() {
                   </Select>
                   <div className="flex gap-1">
                     <Input placeholder="Número de série do produto" title="Número de série (opcional)" value={item.numeroSerie} onChange={(e) => updateItem(idx, 'numeroSerie', e.target.value)} />
-                    {form.itens.length > 1 && <Button variant="ghost" size="icon" onClick={() => removeItem(idx)}><Trash2 className="h-4 w-4 text-red-600" /></Button>}
+                    {form.itens.length > 1 && <Button variant="ghost" size="icon" title="Remover item da devolução" onClick={() => removeItem(idx)}><Trash2 className="h-4 w-4 text-red-600" /></Button>}
                   </div>
                 </div>
               ))}

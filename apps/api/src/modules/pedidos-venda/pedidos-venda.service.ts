@@ -53,6 +53,7 @@ export class PedidosVendaService {
         },
         cliente: true,
         filial: true,
+        contasReceber: true,
       },
     });
   }
@@ -136,6 +137,8 @@ export class PedidosVendaService {
       
       if (condicaoPagamento !== 'A_VISTA') {
         await this.gerarContasReceber(updatedPedido, empresaId);
+      } else {
+        await this.gerarFluxoCaixaAVista(updatedPedido, empresaId);
       }
     }
 
@@ -178,6 +181,22 @@ export class PedidosVendaService {
     });
   }
 
+  private async gerarFluxoCaixaAVista(pedido: any, empresaId: string) {
+    await prisma.fluxoCaixa.create({
+      data: {
+        empresaId,
+        tipo: 'ENTRADA',
+        categoria: 'VENDAS_PEDIDO',
+        descricao: `Pedido venda à vista - ${pedido.numeroPedido}`,
+        valor: pedido.valorTotal,
+        formaPagamento: 'DINHEIRO',
+        dataMovimentacao: new Date(),
+        referenciaId: pedido.id,
+        referenciaTipo: 'PEDIDO_VENDA',
+      },
+    });
+  }
+
   async cancelar(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
@@ -190,12 +209,38 @@ export class PedidosVendaService {
 
   async aprovar(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    await this.verificarProprietario(id, empresaId);
 
-    return prisma.pedidoVenda.update({
+    const pedido = await prisma.pedidoVenda.findFirst({
+      where: { id, empresaId },
+    });
+
+    if (!pedido) {
+      throw new Error('Pedido não encontrado');
+    }
+
+    if (pedido.situacao === 'CONFIRMADO') {
+      throw new Error('Pedido já está confirmado');
+    }
+
+    const updatedPedido = await prisma.pedidoVenda.update({
       where: { id },
       data: { situacao: 'CONFIRMADO' },
+      include: {
+        itens: true,
+        cliente: true,
+        filial: true,
+      },
     });
+
+    const condicaoPagamento = pedido.condicaoPagamento || 'A_VISTA';
+
+    if (condicaoPagamento !== 'A_VISTA') {
+      await this.gerarContasReceber(updatedPedido, empresaId);
+    } else {
+      await this.gerarFluxoCaixaAVista(updatedPedido, empresaId);
+    }
+
+    return updatedPedido;
   }
 
   async enviar(id: string, empresaId: string) {

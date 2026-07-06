@@ -141,7 +141,7 @@ describe('PDV', () => {
       expect(response.body.data.situacao).toBe('ABERTO');
     });
 
-    it('deve retornar 404 quando não há caixa aberto', async () => {
+    it('deve retornar null quando não há caixa aberto', async () => {
       (mockPrisma.caixa.findFirst as any).mockResolvedValue(null);
 
       const app = criarApp((app) => {
@@ -153,7 +153,8 @@ describe('PDV', () => {
         .query({ filialId: 'fil-1' })
         .set(gerarHeaders());
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeNull();
     });
   });
 });

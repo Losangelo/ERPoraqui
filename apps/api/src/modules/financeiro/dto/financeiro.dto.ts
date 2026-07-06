@@ -79,8 +79,8 @@ export const conciliarMovimentacaoSchema = z.object({
 
 export const criarConciliacaoSchema = z.object({
   contaBancariaId: z.string().min(1, 'Conta bancária é obrigatória'),
-  periodoIni: z.date(),
-  periodoFin: z.date(),
+  periodoIni: z.coerce.date(),
+  periodoFin: z.coerce.date(),
   observacoes: z.string().optional(),
 });
 

@@ -154,6 +154,8 @@
 - [x] **Filial CRUD Frontend:** FiliaisPage com tabela, busca, diálogo criação/edição
 - [x] **FilialSelect Component:** Componente reutilizável com loading de empresas+filiais
 - [x] **Filial Selector NFCe/NFSe/NF-e:** FilialSelect integrado nas 3 páginas que estavam sem
+- [x] Controller orçamentos: status codes 404/409/500 no catch
+- [x] Frontend orçamentos: toast error em vez de console.error
 
 ---
 
@@ -217,6 +219,13 @@
 - [x] **API + Frontend Contratos/Garantias/Devoluções completos**
 - [x] **Sidebar + Rotas registradas**
 - [x] **Cobertura Fase 5: 100%**
+
+---
+
+### ✅ Specs Completas (56 specs — cobertura total)
+
+- [x] **18 specs originais:** NFE, NFCE, NFSE, PDV, SPED, MDFE, BOLETOS_CNAB, CHEQUES, CENTRO_CUSTO, ESTOQUE_AVANCADO, CRM, AUTOMACAO, MULTI_EMPRESA, LOOKUP, REPORT_ENGINE, CONTRATOS_GARANTIAS_DEVOLUCOES, FILIAIS, EXPORTACAO
+- [x] **38 novos specs:** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS
 
 ---
 

@@ -247,6 +247,7 @@ export function ProdutosVariacoesPage() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          title="Editar variação"
                           onClick={() => handleEdit(variacao)}
                           className="text-gray-600 hover:text-primary"
                         >
@@ -255,6 +256,7 @@ export function ProdutosVariacoesPage() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          title="Excluir variação"
                           onClick={() => handleDelete(variacao)}
                           className="text-gray-600 hover:text-red-600"
                         >
@@ -271,7 +273,7 @@ export function ProdutosVariacoesPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingVariacao ? 'Editar Variação' : 'Nova Variação'}

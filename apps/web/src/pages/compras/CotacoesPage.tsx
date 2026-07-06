@@ -228,7 +228,7 @@ export function CotacoesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Nova Cotação de Compra</DialogTitle>
           </DialogHeader>

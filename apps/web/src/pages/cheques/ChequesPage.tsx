@@ -312,20 +312,20 @@ export default function ChequesPage() {
                         <div className="flex gap-1 justify-end">
                           {cheque.situacao === 'EM_CARTEIRA' && (
                             <>
-                              <Button variant="ghost" size="sm" onClick={() => handleAction(cheque.id, 'depositar')}>
+                              <Button variant="ghost" size="sm" title="Depositar cheque" onClick={() => handleAction(cheque.id, 'depositar')}>
                                 <ArrowUpRight className="h-4 w-4 text-yellow-600" />
                               </Button>
-                              <Button variant="ghost" size="sm" onClick={() => handleAction(cheque.id, 'cancelar')}>
+                              <Button variant="ghost" size="sm" title="Cancelar cheque" onClick={() => handleAction(cheque.id, 'cancelar')}>
                                 <XCircle className="h-4 w-4 text-red-600" />
                               </Button>
                             </>
                           )}
                           {cheque.situacao === 'DEPOSITADO' && (
                             <>
-                              <Button variant="ghost" size="sm" onClick={() => handleAction(cheque.id, 'compensar')}>
+                              <Button variant="ghost" size="sm" title="Compensar cheque" onClick={() => handleAction(cheque.id, 'compensar')}>
                                 <ArrowDownLeft className="h-4 w-4 text-green-600" />
                               </Button>
-                              <Button variant="ghost" size="sm" onClick={() => handleDevolver(cheque.id)}>
+                              <Button variant="ghost" size="sm" title="Devolver cheque" onClick={() => handleDevolver(cheque.id)}>
                                 <Ban className="h-4 w-4 text-red-600" />
                               </Button>
                             </>
@@ -342,7 +342,7 @@ export default function ChequesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg" aria-describedby={undefined}>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Novo Cheque</DialogTitle>
           </DialogHeader>

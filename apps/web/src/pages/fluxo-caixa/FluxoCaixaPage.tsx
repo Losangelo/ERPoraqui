@@ -226,7 +226,7 @@ export function FluxoCaixaPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Nova Movimentação</DialogTitle>
           </DialogHeader>

@@ -261,6 +261,7 @@ export function CampanhasPage() {
                   <Button 
                     size="sm" 
                     variant="destructive"
+                    title="Excluir campanha"
                     onClick={() => {
                       if (confirm('Tem certeza que deseja excluir?')) {
                         excluirCampanhaMutation.mutate(campanha.id);
@@ -296,7 +297,7 @@ export function CampanhasPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md" aria-describedby={undefined}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Nova Campanha</DialogTitle>
           </DialogHeader>

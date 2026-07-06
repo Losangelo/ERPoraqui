@@ -150,6 +150,44 @@
 | Auth Store Cleanup | apps/web/src/stores/authStore.ts | Removido Zustand authStore morto (nunca importado) | ✅ |
 | Pipeline CI | .github/workflows/ci.yml | GitHub Actions type-check + tests | ✅ |
 | Relatórios 10 novas fontes | apps/api/src/modules/relatorios | vendas-por-periodo, comissoes, lucratividade, fluxo-caixa, dre, estoque-geral, sped-contribuicoes, contas-vencidas, centro-custo, cheques | ✅ |
+| Spec AUTH | docs/specs/AUTH.md | Especificação autenticação JWT | ✅ |
+| Spec CLIENTES | docs/specs/CLIENTES.md | Especificação cadastro clientes | ✅ |
+| Spec FORNECEDORES | docs/specs/FORNECEDORES.md | Especificação cadastro fornecedores | ✅ |
+| Spec PRODUTOS | docs/specs/PRODUTOS.md | Especificação cadastro produtos | ✅ |
+| Spec CATEGORIAS | docs/specs/CATEGORIAS.md | Especificação categorias produtos | ✅ |
+| Spec UNIDADES_MEDIDA | docs/specs/UNIDADES_MEDIDA.md | Especificação unidades medida | ✅ |
+| Spec VENDEDORES | docs/specs/VENDEDORES.md | Especificação vendedores | ✅ |
+| Spec TRANSPORTADORAS | docs/specs/TRANSPORTADORAS.md | Especificação transportadoras | ✅ |
+| Spec USUARIOS | docs/specs/USUARIOS.md | Especificação usuários | ✅ |
+| Spec PARAMETROS | docs/specs/PARAMETROS.md | Especificação parâmetros sistema | ✅ |
+| Spec LICENCAS | docs/specs/LICENCAS.md | Especificação licenciamento | ✅ |
+| Spec LOGS | docs/specs/LOGS.md | Especificação sistema de logs | ✅ |
+| Spec DASHBOARD | docs/specs/DASHBOARD.md | Especificação dashboard gerencial | ✅ |
+| Spec API_PUBLICA | docs/specs/API_PUBLICA.md | Especificação API pública | ✅ |
+| Spec PEDIDOS_VENDA | docs/specs/PEDIDOS_VENDA.md | Especificação pedidos venda | ✅ |
+| Spec ORCAMENTOS | docs/specs/ORCAMENTOS.md | Especificação orçamentos | ✅ |
+| Spec PEDIDOS_COMPRA | docs/specs/PEDIDOS_COMPRA.md | Especificação pedidos compra | ✅ |
+| Spec COTACOES_COMPRA | docs/specs/COTACOES_COMPRA.md | Especificação cotações compra | ✅ |
+| Spec ENTRADAS_MERCADORIA | docs/specs/ENTRADAS_MERCADORIA.md | Especificação entradas mercadoria | ✅ |
+| Spec FINANCEIRO | docs/specs/FINANCEIRO.md | Especificação contas receber/pagar | ✅ |
+| Spec FLUXO_CAIXA | docs/specs/FLUXO_CAIXA.md | Especificação fluxo caixa | ✅ |
+| Spec PLANO_CONTAS | docs/specs/PLANO_CONTAS.md | Especificação plano contas | ✅ |
+| Spec DRE | docs/specs/DRE.md | Especificação DRE | ✅ |
+| Spec CONCILIACAO | docs/specs/CONCILIACAO.md | Especificação conciliação bancária | ✅ |
+| Spec RENEGOCIACAO | docs/specs/RENEGOCIACAO.md | Especificação renegociação | ✅ |
+| Spec ADIANTAMENTOS | docs/specs/ADIANTAMENTOS.md | Especificação adiantamentos | ✅ |
+| Spec QUITACOES | docs/specs/QUITACOES.md | Especificação quitações | ✅ |
+| Spec ESTOQUE | docs/specs/ESTOQUE.md | Especificação controle estoque | ✅ |
+| Spec MOVIMENTACOES_INTERNAS | docs/specs/MOVIMENTACOES_INTERNAS.md | Especificação movimentações internas | ✅ |
+| Spec INVENTARIO | docs/specs/INVENTARIO.md | Especificação inventário | ✅ |
+| Spec KARDEX | docs/specs/KARDEX.md | Especificação kardex | ✅ |
+| Spec ECF | docs/specs/ECF.md | Especificação ECF | ✅ |
+| Spec RELATORIOS_FISCAIS | docs/specs/RELATORIOS_FISCAIS.md | Especificação relatórios fiscais | ✅ |
+| Spec PROMOCOES | docs/specs/PROMOCOES.md | Especificação promoções | ✅ |
+| Spec CONVENIOS | docs/specs/CONVENIOS.md | Especificação convênios | ✅ |
+| Spec LICITACOES | docs/specs/LICITACOES.md | Especificação licitações | ✅ |
+| Spec CTE | docs/specs/CTE.md | Especificação CT-e | ✅ |
+| Spec RELATORIOS | docs/specs/RELATORIOS.md | Especificação relatórios | ✅ |
 
 ---
 
@@ -171,6 +209,7 @@
 
 ## Histórico de Atualizações
 
+- **06/07/2026**: Gerados 38 specs faltantes (cobertura total: 56 specs) + Correção controller orçamentos (status codes 404/409/500) + Toast errors no frontend + Atualização completa de docs/controle
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.
 - **01/07/2026 (noite 2)**: Motor de Relatórios Genérico — Spec REPORT_ENGINE.md, ReportTemplate Prisma, 8 data sources (clientes, produtos, pedidos, contas, NF-e, NFSe), API executar + CRUD templates, Frontend RelatoriosPage (seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates).

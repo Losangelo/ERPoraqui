@@ -260,6 +260,7 @@ export function AutomacaoPage() {
                       <Button
                         variant="outline"
                         size="sm"
+                        title="Pausar automação"
                         onClick={() => pausarMutation.mutate(automacao.id)}
                       >
                         <Pause className="h-4 w-4" />
@@ -268,6 +269,7 @@ export function AutomacaoPage() {
                       <Button
                         variant="outline"
                         size="sm"
+                        title="Ativar automação"
                         onClick={() => ativarMutation.mutate(automacao.id)}
                       >
                         <Play className="h-4 w-4" />
@@ -276,6 +278,7 @@ export function AutomacaoPage() {
                     <Button
                       variant="outline"
                       size="sm"
+                      title="Executar automação agora"
                       onClick={() => executarMutation.mutate(automacao.id)}
                       disabled={automacao.status !== 'ATIVA'}
                     >
@@ -284,6 +287,7 @@ export function AutomacaoPage() {
                     <Button
                       variant="outline"
                       size="sm"
+                      title="Excluir automação"
                       onClick={() => {
                         if (confirm('Tem certeza que deseja excluir esta automação?')) {
                           excluirMutation.mutate(automacao.id);
@@ -301,7 +305,7 @@ export function AutomacaoPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md" aria-describedby={undefined}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Nova Automação</DialogTitle>
           </DialogHeader>

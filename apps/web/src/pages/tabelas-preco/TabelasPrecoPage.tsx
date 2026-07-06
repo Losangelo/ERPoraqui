@@ -358,7 +358,7 @@ export default function TabelasPrecoPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{editando ? 'Editar Tabela de Preço' : 'Nova Tabela de Preço'}</DialogTitle>
           </DialogHeader>
@@ -438,7 +438,7 @@ export default function TabelasPrecoPage() {
       </Dialog>
 
       <Dialog open={itemDialogOpen} onOpenChange={setItemDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>{itemEditando ? 'Editar Item' : 'Adicionar Produto'}</DialogTitle>
           </DialogHeader>

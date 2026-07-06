@@ -128,7 +128,34 @@ ERPoraqui/
 │   │   │   │   ├── automacao/        # Automacao de regras
 │   │   │   │   ├── multi-empresa/    # Multi-empresa
 │   │   │   │   ├── licencas/         # Sistema de licenciamento
-│   │   │   │   └── ...               # Demais modulos
+│   │   │   │   ├── adiantamentos/    # Adiantamentos
+│   │   │   │   ├── quitacoes/        # Quitacoes em lote
+│   │   │   │   ├── conciliacao/      # Conciliacao bancaria
+│   │   │   │   ├── cte/              # CT-e
+│   │   │   │   ├── licitacoes/       # Licitacoes
+│   │   │   │   ├── convenios/        # Convenios
+│   │   │   │   ├── promocoes/        # Promocoes
+│   │   │   │   ├── kardex/           # Kardex
+│   │   │   │   ├── renegociacao/     # Renegociacao
+│   │   │   │   ├── orcamentos/       # Orcamentos
+│   │   │   │   ├── contratos/        # Contratos
+│   │   │   │   ├── garantias/        # Garantias
+│   │   │   │   ├── devolucoes/       # Devolucoes
+│   │   │   │   ├── sped-fiscal/      # SPED Fiscal
+│   │   │   │   ├── mdfe/             # MDF-e
+│   │   │   │   ├── relatorios/       # Motor de relatorios
+│   │   │   │   ├── dashboard/        # Dashboard
+│   │   │   │   ├── categorias/       # Categorias
+│   │   │   │   ├── unidades-medida/  # Unidades de medida
+│   │   │   │   ├── movimentacoes/    # Movimentacoes internas
+│   │   │   │   ├── inventario/       # Inventario
+│   │   │   │   ├── logs/             # Logs do sistema
+│   │   │   │   ├── usuarios/         # Usuarios
+│   │   │   │   ├── parametros/       # Parametros
+│   │   │   │   ├── fornecedores/     # Fornecedores
+│   │   │   │   ├── transportadoras/  # Transportadoras
+│   │   │   │   ├── vendedores/       # Vendedores
+│   │   │   │   └── cotacoes-compra/  # Cotacoes de compra
 │   │   │   ├── shared/
 │   │   │   │   ├── tributos/         # Calculos fiscais (CBS/IBS/ICMS/IPI/PIS/COFINS)
 │   │   │   │   ├── nfe-utils/        # Utilitarios NF-e (chave 44d, XML, assinatura)
@@ -166,13 +193,63 @@ ERPoraqui/
 │       └── vite.config.ts
 │
 ├── docs/
-│   ├── specs/                       # Especificacoes tecnicas
-│   │   ├── NFE.md
-│   │   ├── ESTOQUE_AVANCADO.md
+│   ├── specs/                       # Especificacoes tecnicas (56 specs)
+│   │   ├── ADIANTAMENTOS.md
+│   │   ├── API_PUBLICA.md
+│   │   ├── AUTH.md
+│   │   ├── AUTOMACAO.md
 │   │   ├── BOLETOS_CNAB.md
-│   │   ├── CHEQUES.md
+│   │   ├── CATEGORIAS.md
 │   │   ├── CENTRO_CUSTO.md
-│   │   └── EXPORTACAO.md
+│   │   ├── CHEQUES.md
+│   │   ├── CLIENTES.md
+│   │   ├── CONCILIACAO.md
+│   │   ├── CONTRATOS_GARANTIAS_DEVOLUCOES.md
+│   │   ├── CONVENIOS.md
+│   │   ├── COTACOES_COMPRA.md
+│   │   ├── CRM.md
+│   │   ├── CTE.md
+│   │   ├── DASHBOARD.md
+│   │   ├── DRE.md
+│   │   ├── ECF.md
+│   │   ├── ENTRADAS_MERCADORIA.md
+│   │   ├── ESTOQUE.md
+│   │   ├── ESTOQUE_AVANCADO.md
+│   │   ├── EXPORTACAO.md
+│   │   ├── FILIAIS.md
+│   │   ├── FINANCEIRO.md
+│   │   ├── FLUXO_CAIXA.md
+│   │   ├── FORNECEDORES.md
+│   │   ├── INVENTARIO.md
+│   │   ├── KARDEX.md
+│   │   ├── LICENCAS.md
+│   │   ├── LICITACOES.md
+│   │   ├── LOGS.md
+│   │   ├── LOOKUP.md
+│   │   ├── MDFE.md
+│   │   ├── MOVIMENTACOES_INTERNAS.md
+│   │   ├── MULTI_EMPRESA.md
+│   │   ├── NFCE.md
+│   │   ├── NFE.md
+│   │   ├── NFSE.md
+│   │   ├── ORCAMENTOS.md
+│   │   ├── PARAMETROS.md
+│   │   ├── PDV.md
+│   │   ├── PEDIDOS_COMPRA.md
+│   │   ├── PEDIDOS_VENDA.md
+│   │   ├── PLANO_CONTAS.md
+│   │   ├── PRODUTOS.md
+│   │   ├── PROMOCOES.md
+│   │   ├── QUITACOES.md
+│   │   ├── RELATORIOS.md
+│   │   ├── RELATORIOS_FISCAIS.md
+│   │   ├── RENEGOCIACAO.md
+│   │   ├── REPORT_ENGINE.md
+│   │   ├── SPED.md
+│   │   ├── TRANSPORTADORAS.md
+│   │   ├── UNIDADES_MEDIDA.md
+│   │   ├── USUARIOS.md
+│   │   └── VENDEDORES.md
 │   ├── TODO.md                      # Lista de tarefas
 │   ├── stepByStep.md                # Progresso cronologico
 │   └── kanban/
@@ -975,6 +1052,98 @@ git log --oneline -5  # ver ultimos commits
 - Nao commitar dist/ ou build/
 - Nao forcar push (\`--force\`)
 - Nao fazer commit sem autorizacao do usuario`,
+  },
+  {
+    id: 'spec-coverage',
+    titulo: 'Cobertura de Specs (56 Especificacoes)',
+    categoria: 'Arquitetura',
+    conteudo: `## Cobertura de Especificacoes Tecnicas
+
+O ERPoraqui possui atualmente **56 specs** em \`docs/specs/\` cobrindo **100% dos modulos** do sistema. Cada spec define requisitos, modelagem, API e frontend antes da implementacao.
+
+---
+
+### Por que Spec-Driven Development?
+
+- **Documentacao viva**: specs sao a fonte da verdade sobre cada modulo
+- **Implementacao mais rapida**: requisitos claros antes de codar
+- **Qualidade**: erros de especificacao sao pegos antes do codigo
+- **Onboarding**: novos devs leem as specs para entender o sistema
+
+---
+
+### Lista Completa de Specs (56)
+
+| # | Spec | Modulo |
+|---|------|--------|
+| 1 | ADIANTAMENTOS.md | Adiantamentos |
+| 2 | API_PUBLICA.md | API Publica |
+| 3 | AUTH.md | Autenticacao |
+| 4 | AUTOMACAO.md | Automacao |
+| 5 | BOLETOS_CNAB.md | Boletos CNAB |
+| 6 | CATEGORIAS.md | Categorias |
+| 7 | CENTRO_CUSTO.md | Centro de Custo |
+| 8 | CHEQUES.md | Cheques |
+| 9 | CLIENTES.md | Clientes |
+| 10 | CONCILIACAO.md | Conciliacao Bancaria |
+| 11 | CONTRATOS_GARANTIAS_DEVOLUCOES.md | Contratos, Garantias, Devolucoes |
+| 12 | CONVENIOS.md | Convenios |
+| 13 | COTACOES_COMPRA.md | Cotacoes de Compra |
+| 14 | CRM.md | CRM |
+| 15 | CTE.md | CT-e |
+| 16 | DASHBOARD.md | Dashboard |
+| 17 | DRE.md | DRE |
+| 18 | ECF.md | ECF |
+| 19 | ENTRADAS_MERCADORIA.md | Entradas de Mercadoria |
+| 20 | ESTOQUE.md | Estoque |
+| 21 | ESTOQUE_AVANCADO.md | Estoque Avancado |
+| 22 | EXPORTACAO.md | Exportacao |
+| 23 | FILIAIS.md | Filial |
+| 24 | FINANCEIRO.md | Financeiro |
+| 25 | FLUXO_CAIXA.md | Fluxo de Caixa |
+| 26 | FORNECEDORES.md | Fornecedores |
+| 27 | INVENTARIO.md | Inventario |
+| 28 | KARDEX.md | Kardex |
+| 29 | LICENCAS.md | Licencas |
+| 30 | LICITACOES.md | Licitacoes |
+| 31 | LOGS.md | Logs |
+| 32 | LOOKUP.md | Lookup Field |
+| 33 | MDFE.md | MDF-e |
+| 34 | MOVIMENTACOES_INTERNAS.md | Movimentacoes Internas |
+| 35 | MULTI_EMPRESA.md | Multi-empresa |
+| 36 | NFCE.md | NFC-e |
+| 37 | NFE.md | NF-e |
+| 38 | NFSE.md | NFSe |
+| 39 | ORCAMENTOS.md | Orcamentos |
+| 40 | PARAMETROS.md | Parametros |
+| 41 | PDV.md | PDV |
+| 42 | PEDIDOS_COMPRA.md | Pedidos de Compra |
+| 43 | PEDIDOS_VENDA.md | Pedidos de Venda |
+| 44 | PLANO_CONTAS.md | Plano de Contas |
+| 45 | PRODUTOS.md | Produtos |
+| 46 | PROMOCOES.md | Promocoes |
+| 47 | QUITACOES.md | Quitacoes |
+| 48 | RELATORIOS.md | Relatorios |
+| 49 | RELATORIOS_FISCAIS.md | Relatorios Fiscais |
+| 50 | RENEGOCIACAO.md | Renegociacao |
+| 51 | REPORT_ENGINE.md | Report Engine |
+| 52 | SPED.md | SPED Fiscal |
+| 53 | TRANSPORTADORAS.md | Transportadoras |
+| 54 | UNIDADES_MEDIDA.md | Unidades de Medida |
+| 55 | USUARIOS.md | Usuarios |
+| 56 | VENDEDORES.md | Vendedores |
+
+---
+
+### Status de Implementacao
+
+Cada spec representa um modulo 100% implementado:
+- **API**: rotas CRUD + regras de negocio
+- **Frontend**: pagina(s) React com shadcn/ui
+- **Database**: modelos Prisma + migrations
+- **Testes**: quando aplicavel
+
+A cobertura de specs permite que novos desenvolvedores entendam qualquer modulo do sistema em minutos, sem precisar ler codigo fonte.`,
   },
 ];
 

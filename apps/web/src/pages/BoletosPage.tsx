@@ -187,10 +187,10 @@ export function BoletosPage() {
                       <div className="flex gap-2 justify-end">
                         {boleto.situacao === "EMITIDO" || boleto.situacao === "ENVIADO" ? (
                           <>
-                            <Button variant="ghost" size="sm" onClick={() => baixar(boleto.id)}>
+                            <Button variant="ghost" size="sm" title="Baixar boleto" onClick={() => baixar(boleto.id)}>
                               <Check className="w-4 h-4 text-green-600" />
                             </Button>
-                            <Button variant="ghost" size="sm" onClick={() => cancelar(boleto.id)}>
+                            <Button variant="ghost" size="sm" title="Cancelar boleto" onClick={() => cancelar(boleto.id)}>
                               <X className="w-4 h-4 text-red-600" />
                             </Button>
                           </>

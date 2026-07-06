@@ -216,6 +216,7 @@ export function SuppliersPage() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        title="Editar fornecedor"
                         onClick={() => handleEdit(fornecedor)}
                         className="text-gray-600 hover:text-primary"
                       >
@@ -231,7 +232,7 @@ export function SuppliersPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingFornecedor ? 'Editar Fornecedor' : 'Novo Fornecedor'}

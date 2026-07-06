@@ -119,7 +119,7 @@ export function EstoquePage() {
                     <TableCell className="text-right">R$ {(produto.quantidadeEstoque * produto.precoVenda).toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-1 justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => setProdutoSelecionado(produto)}>
+                        <Button variant="ghost" size="sm" title="Visualizar detalhes do produto" onClick={() => setProdutoSelecionado(produto)}>
                           <Eye className="w-4 h-4 text-blue-600" />
                         </Button>
                       </div>
@@ -133,7 +133,7 @@ export function EstoquePage() {
       </Card>
 
       <Dialog open={!!produtoSelecionado} onOpenChange={() => setProdutoSelecionado(null)}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Detalhes do Produto</DialogTitle>
           </DialogHeader>

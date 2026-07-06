@@ -174,7 +174,7 @@ export function MovimentacoesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Nova Movimentação</DialogTitle>
           </DialogHeader>

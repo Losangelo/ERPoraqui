@@ -328,7 +328,7 @@ export default function ECFPage() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Novo ECF</DialogTitle>
           </DialogHeader>

@@ -223,7 +223,7 @@ export function UsuariosPage() {
       </Card>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>
               {editando ? 'Editar Usuário' : 'Novo Usuário'}

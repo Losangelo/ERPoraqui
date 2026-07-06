@@ -269,7 +269,7 @@ export function PedidosCompraPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl" aria-describedby={undefined}>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Novo Pedido de Compra</DialogTitle>
           </DialogHeader>
