@@ -8,8 +8,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Search, Truck, Plus, Clock, Package, MapPin, User, Calendar, AlertCircle, CheckCircle2, XCircle } from "lucide-react"
+import { Search, Truck, Plus, Clock, Package, MapPin, User, Calendar, AlertCircle, CheckCircle2, XCircle, ShoppingCart } from "lucide-react"
 import { entregasService } from "@/services/entregas"
+import { pedidosService } from "@/services/pedidos"
 import toast from "react-hot-toast"
 
 type Situacao = "PENDENTE" | "AGENDADO" | "SAIU_PARA_ENTREGA" | "ENTREGUE" | "TENTATIVA_FALHOU" | "CANCELADO"
@@ -104,12 +105,20 @@ export function EntregasPage() {
 
   const [motoristas, setMotoristas] = useState<any[]>([])
   const [veiculos, setVeiculos] = useState<any[]>([])
+  const [pedidoSearchOpen, setPedidoSearchOpen] = useState(false)
+  const [pedidosList, setPedidosList] = useState<any[]>([])
+  const [pedidosLoading, setPedidosLoading] = useState(false)
+  const [pedidoSearchTerm, setPedidoSearchTerm] = useState("")
 
   useEffect(() => {
     loadEntregas()
     loadMotoristas()
     loadVeiculos()
   }, [])
+
+  useEffect(() => {
+    if (pedidoSearchOpen) loadPedidos()
+  }, [pedidoSearchOpen])
 
   useEffect(() => {
     loadEntregas()
@@ -145,6 +154,30 @@ export function EntregasPage() {
       const result = await entregasService.listarVeiculos()
       setVeiculos(Array.isArray(result) ? result : [])
     } catch { /* ignore */ }
+  }
+
+  async function loadPedidos() {
+    setPedidosLoading(true)
+    try {
+      const result = await pedidosService.listar({ situacao: "APROVADO,EM_PROCESSAMENTO,ENVIADO,PENDENTE", limite: 50, busca: pedidoSearchTerm })
+      setPedidosList(Array.isArray(result) ? result : [])
+    } catch {
+      toast.error("Erro ao carregar pedidos")
+    } finally {
+      setPedidosLoading(false)
+    }
+  }
+
+  function selectPedido(pedido: any) {
+    setFormData({
+      ...formData,
+      pedidoVendaId: pedido.id,
+      clienteId: pedido.clienteId || pedido.cliente?.id || "",
+      enderecoEntrega: formData.enderecoEntrega || "",
+    })
+    setPedidoSearchOpen(false)
+    setPedidoSearchTerm("")
+    toast.success(`Pedido ${pedido.numeroPedido} selecionado`)
   }
 
   function verDetalhes(entrega: Entrega) {
@@ -620,14 +653,20 @@ export function EntregasPage() {
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="pedidoVendaId">Pedido de Venda <span className="text-red-500">*</span></Label>
-              <Input
-                id="pedidoVendaId"
-                value={formData.pedidoVendaId}
-                onChange={(e) => setFormData({ ...formData, pedidoVendaId: e.target.value })}
-                placeholder="ID do pedido de venda"
-                title="Informe o ID do pedido de venda associado"
-                required
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="pedidoVendaId"
+                  value={formData.pedidoVendaId}
+                  onChange={(e) => setFormData({ ...formData, pedidoVendaId: e.target.value })}
+                  placeholder="ID do pedido de venda"
+                  title="Informe o ID do pedido de venda associado"
+                  required
+                  onFocus={() => { if (!formData.pedidoVendaId) { setPedidoSearchTerm(""); setPedidoSearchOpen(true) } }}
+                />
+                <Button type="button" variant="outline" onClick={() => { setPedidoSearchTerm(""); setPedidoSearchOpen(true) }} title="Buscar pedidos de venda">
+                  <Search className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="clienteId">Cliente <span className="text-red-500">*</span></Label>
@@ -827,6 +866,59 @@ export function EntregasPage() {
               {actionLoading ? "Salvando..." : "Registrar Falha"}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={pedidoSearchOpen} onOpenChange={setPedidoSearchOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><ShoppingCart className="w-5 h-5" /> Selecionar Pedido de Venda</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar pedido por número ou nome do cliente..."
+                value={pedidoSearchTerm}
+                onChange={(e) => setPedidoSearchTerm(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') loadPedidos() }}
+                className="pl-10"
+                title="Digite o número do pedido ou nome do cliente"
+              />
+            </div>
+            <div className="max-h-80 overflow-y-auto border rounded-lg">
+              {pedidosLoading ? (
+                <div className="text-center py-8 text-muted-foreground">Carregando pedidos...</div>
+              ) : pedidosList.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  {pedidoSearchTerm ? "Nenhum pedido encontrado" : "Clique em buscar para listar pedidos"}
+                </div>
+              ) : (
+                <div className="divide-y">
+                  {pedidosList.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => selectPedido(p)}
+                      className="w-full text-left px-4 py-3 hover:bg-accent transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">#{p.numeroPedido}</span>
+                        <span className="text-sm text-muted-foreground">{new Date(p.dataEmissao).toLocaleDateString('pt-BR')}</span>
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-sm">{p.cliente?.nome || "Cliente não informado"}</span>
+                        <span className="text-sm font-semibold text-primary">R$ {(p.valorTotal || 0).toFixed(2)}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Button onClick={() => { setPedidoSearchTerm(""); loadPedidos() }} variant="outline" className="w-full">
+              <Search className="w-4 h-4 mr-2" /> Buscar Pedidos
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
