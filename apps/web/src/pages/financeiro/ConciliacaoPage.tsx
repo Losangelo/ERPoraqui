@@ -320,7 +320,7 @@ export default function ConciliacaoPage() {
                         <SelectValue placeholder="Conciliado" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Todos</SelectItem>
+                        <SelectItem value="todos">Todos</SelectItem>
                         <SelectItem value="sim">Conciliado</SelectItem>
                         <SelectItem value="nao">Não conciliado</SelectItem>
                       </SelectContent>

@@ -46,7 +46,7 @@ export function FilialSelect({ value, onValueChange, placeholder, disabled }: Fi
           </div>
         )}
         {filiais.length === 0 ? (
-          <SelectItem value="" disabled>Nenhuma filial disponível</SelectItem>
+          <SelectItem value="__none__" disabled>Nenhuma filial disponível</SelectItem>
         ) : (
           filiais.map(f => (
             <SelectItem key={f.id} value={f.id}>

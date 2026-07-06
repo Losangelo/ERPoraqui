@@ -655,7 +655,7 @@ export function OrdersPage() {
                     <SelectValue placeholder="Selecione a filial de atendimento" />
                   </SelectTrigger>
                   <SelectContent>
-                    {filiais.length === 0 && <SelectItem value="" disabled>Carregando...</SelectItem>}
+                    {filiais.length === 0 && <SelectItem value="__loading__" disabled>Carregando...</SelectItem>}
                     {filiais.map((f: any) => (
                       <SelectItem key={f.id} value={f.id}>{f.nomeFantasia || f.razaoSocial}</SelectItem>
                     ))}
