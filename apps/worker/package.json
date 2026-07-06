@@ -1,0 +1,21 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "nodemailer": "^6.9.8",
+    "pino": "^8.17.2"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.4",
+    "@types/nodemailer": "^6.4.14",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

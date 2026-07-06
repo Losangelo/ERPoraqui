@@ -297,3 +297,39 @@
 - **Hints**: placeholder + title descritivos em todos os inputs
 - **Validação**: Toast para filial, cliente, itens, e dados de item incompletos
 - **Build**: tsc --noEmit zero erros, deploy realizado
+
+## 06/07/2026 (fim do dia) — Módulo Entregas + Documentação + Testes
+
+### Spec
+- **docs/specs/ENTREGAS.md** — Especificação completa (models, status flow, API endpoints, endpoints públicos, notificações email, business rules, frontend pages, todo)
+
+### Treinamento (docs/treinamento/entregas.md)
+- Guia prático em português: configuração, criação, fluxo completo, tentativas falhas, rastreio público, avaliação, dicas e armadilhas
+- SUMMARY.md atualizado com entrada para Entregas
+
+### Testes
+- **API (vitest + supertest):** `apps/api/src/__tests__/entregas.test.ts` — 18 testes
+  - CRUD (listar, criar, buscar por ID, 401 sem token, 404 inexistente)
+  - Status transitions (agendar, saiuParaEntrega, entregue, tentativaFalhou, cancelar)
+  - Validação (missing fields, agendar sem motorista, cancelar ENTREGUE)
+  - Token rastreio (geração automática UUID)
+  - Público rastreio (dados sanitizados, 404 token inválido)
+  - Público avaliar (criar, rejeitar não ENTREGUE, rejeitar sem nota)
+- **Frontend (vitest):** `apps/web/src/__tests__/entregas.test.tsx` — 15 testes
+  - listar, criar, agendar, saiuParaEntrega, entregue, tentativaFalhou, cancelar
+  - Motoristas (listar, criar), Veículos (listar, criar), Taxas (listar, calcular)
+
+### Manuais
+- **ManualPage.tsx:** Nova seção "Entregas e Rastreamento" em Vendas (após CRM)
+- **AjudaPage.tsx:** Nova seção "Entregas" em Vendas (após PDV)
+- **ManualTecnicoPage.tsx:** Spec count 56→57, ENTREGAS.md na árvore + tabela, entregas/ no tree modules
+
+### Docs Controle
+- **FEATURES.md:** +9 entries (Spec ENTREGAS, Entregas API/Frontend, Motoristas, Veículos, Taxas, Rastreio público, Avaliação) + histórico
+- **TODO.md:** Seção concluídos novos + spec count 56→57
+- **stepByStep.md:** Este registro
+- **AGENTS.md:** Novidades adicionadas
+
+### Cobertura
+- 57 specs técnicas (100% dos módulos documentados)
+- 18 testes API + 15 testes Frontend

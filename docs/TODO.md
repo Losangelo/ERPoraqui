@@ -162,6 +162,13 @@
 
 ### ✅ Concluídos (Novos)
 
+- [x] **Spec ENTREGAS.md:** docs/specs/ENTREGAS.md — Especificação completa do módulo de entregas (rastreio, notificações, avaliação)
+- [x] **Entregas Treinamento:** docs/treinamento/entregas.md — Guia prático em português do módulo de entregas
+- [x] **Entregas API Tests:** apps/api/src/__tests__/entregas.test.ts — 18 testes (CRUD, status transitions, validação, token rastreio, público rastreio/avaliar)
+- [x] **Entregas Frontend Tests:** apps/web/src/__tests__/entregas.test.tsx — 15 testes (service methods: listar, criar, agendar, saiuParaEntrega, entregue, tentativaFalhou, cancelar, motoristas, veículos, taxas)
+- [x] **Manuais atualizados:** ManualPage (seção Entregas e Rastreamento), AjudaPage (seção Entregas), ManualTecnicoPage (spec count 57, árvore, tabela specs)
+- [x] **Docs controle atualizados:** FEATURES.md (+9 entries + history), TODO.md, stepByStep.md, AGENTS.md
+
 - [x] **Spec SPED.md:** docs/specs/SPED.md — Especificação técnica completa do SPED Fiscal (config-driven, blocos 0/C/D/E/G/H, motor TXT)
 - [x] **Spec MDFE.md:** docs/specs/MDFE.md — Especificação técnica do MDF-e (modelo 58, documento composto, ciclo SEFAZ)
 - [x] **Plano de Ação Futuro:** docs/plano_acao_futuro.md — Plano de 8 etapas para módulos pendentes
@@ -223,10 +230,11 @@
 
 ---
 
-### ✅ Specs Completas (56 specs — cobertura total)
+### ✅ Specs Completas (57 specs — cobertura total)
 
 - [x] **18 specs originais:** NFE, NFCE, NFSE, PDV, SPED, MDFE, BOLETOS_CNAB, CHEQUES, CENTRO_CUSTO, ESTOQUE_AVANCADO, CRM, AUTOMACAO, MULTI_EMPRESA, LOOKUP, REPORT_ENGINE, CONTRATOS_GARANTIAS_DEVOLUCOES, FILIAIS, EXPORTACAO
 - [x] **38 novos specs:** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS
+- [x] **1 nova spec ENTREGAS:** ENTREGAS.md — total 57 specs
 
 ---
 

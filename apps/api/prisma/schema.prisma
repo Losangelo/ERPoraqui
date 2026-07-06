@@ -119,6 +119,11 @@ model Empresa {
   renegociacoes        Renegociacao[]
   adiantamentos        Adiantamento[]
   quitacoes            Quitacao[]
+  motoristas           Motorista[]
+  veiculosEntrega      VeiculoEntrega[]
+  taxasEntrega         TaxaEntrega[]
+  entregas             Entrega[]
+  avaliacoes           Avaliacao[]
 
   // Multi-empresa (grupo econômico - empresas vinculadas à mesma licença)
   matrizId           String?
@@ -156,6 +161,7 @@ model Filial {
   notasServico NotaServico[]
   mdfes        Mdfe[]
   ctes         Cte[]
+  entregas     Entrega[]
 
   @@map("filiais")
 }
@@ -211,6 +217,7 @@ model Cliente {
   convenios      Convenio[]
   adiantamentos  Adiantamento[]
   quitacoes      Quitacao[]
+  entregas       Entrega[]
 
   @@map("clientes")
 }
@@ -274,6 +281,7 @@ model Transportadora {
   dataAtualizacao    DateTime   @updatedAt
 
   empresa Empresa @relation(fields: [empresaId], references: [id])
+  entregas Entrega[]
 
   @@map("transportadoras")
 }
@@ -549,6 +557,7 @@ model PedidoVenda {
   orcamento     Orcamento?
   notaFiscal    NotaFiscal?
   devolucoes    Devolucao[]
+  entregas      Entrega[]
 
   @@unique([empresaId, numeroPedido, serie])
   @@map("pedidos_venda")
@@ -3064,4 +3073,170 @@ model RenegociacaoParcela {
   renegociacao Renegociacao @relation(fields: [renegociacaoId], references: [id], onDelete: Cascade)
 
   @@map("renegociacoes_parcelas")
+}
+
+// =====================================================
+// ENTREGAS / DELIVERY
+// =====================================================
+
+enum SituacaoEntrega {
+  PENDENTE
+  AGENDADO
+  SAIU_PARA_ENTREGA
+  ENTREGUE
+  TENTATIVA_FALHOU
+  CANCELADO
+}
+
+enum TipoVeiculo {
+  CARRO
+  MOTO
+  VAN
+  CAMINHAO
+  BICICLETA
+  OUTRO
+}
+
+enum TipoTaxaEntrega {
+  FIXA
+  POR_KM
+  POR_CEP
+  POR_VALOR
+}
+
+enum TipoMotorista {
+  PROPRIO
+  PJ
+}
+
+model Motorista {
+  id                String   @id @default(cuid()) @map("_id")
+  empresaId         String
+  nome              String
+  cpf               String?
+  tipo              TipoMotorista @default(PROPRIO)
+  cnh               String?
+  cnhCategoria      String?
+  telefone          String?
+  email             String?
+  ativo             Boolean  @default(true)
+  observacoes       String?
+  dataCriacao       DateTime @default(now())
+  dataAtualizacao   DateTime @updatedAt
+
+  empresa           Empresa   @relation(fields: [empresaId], references: [id])
+  entregas          Entrega[]
+
+  @@map("motoristas")
+}
+
+model VeiculoEntrega {
+  id                String   @id @default(cuid()) @map("_id")
+  empresaId         String
+  placa             String
+  marca             String?
+  modelo            String?
+  ano               Int?
+  cor               String?
+  capacidadeKg      Float?
+  tipo              TipoVeiculo @default(CARRO)
+  proprietarioId    String?
+  ativo             Boolean  @default(true)
+  observacoes       String?
+  dataCriacao       DateTime @default(now())
+  dataAtualizacao   DateTime @updatedAt
+
+  empresa           Empresa   @relation(fields: [empresaId], references: [id])
+  entregas          Entrega[]
+
+  @@unique([empresaId, placa])
+  @@map("veiculos_entrega")
+}
+
+model TaxaEntrega {
+  id                String         @id @default(cuid()) @map("_id")
+  empresaId         String
+  descricao         String
+  tipo              TipoTaxaEntrega @default(FIXA)
+  valor             Float
+  raioKm            Float?
+  cepInicio         String?
+  cepFim            String?
+  valorMinimoPedido Float?
+  ativo             Boolean        @default(true)
+  dataCriacao       DateTime       @default(now())
+  dataAtualizacao   DateTime       @updatedAt
+
+  empresa           Empresa   @relation(fields: [empresaId], references: [id])
+  entregas          Entrega[]
+
+  @@map("taxas_entrega")
+}
+
+model Entrega {
+  id                String          @id @default(cuid()) @map("_id")
+  empresaId         String
+  filialId          String
+  pedidoVendaId     String?
+  clienteId         String?
+  motoristaId       String?
+  veiculoId         String?
+  transportadoraId  String?
+  tokenRastreio     String          @unique @default(cuid())
+  situacao          SituacaoEntrega @default(PENDENTE)
+  enderecoEntrega   Json?
+  dataAgendamento   DateTime?
+  dataSaida         DateTime?
+  dataEntrega       DateTime?
+  dataPrevisao      DateTime?
+  valorFrete        Float           @default(0)
+  taxaEntregaId     String?
+  observacoes       String?
+  comprovanteUrl    String?
+  assinaturaDigital String?
+  dataCriacao       DateTime        @default(now())
+  dataAtualizacao   DateTime        @updatedAt
+
+  empresa           Empresa           @relation(fields: [empresaId], references: [id])
+  filial            Filial            @relation(fields: [filialId], references: [id])
+  pedidoVenda       PedidoVenda?      @relation(fields: [pedidoVendaId], references: [id])
+  cliente           Cliente?          @relation(fields: [clienteId], references: [id])
+  motorista         Motorista?        @relation(fields: [motoristaId], references: [id])
+  veiculoEntrega    VeiculoEntrega?   @relation(fields: [veiculoId], references: [id])
+  transportadora    Transportadora?   @relation(fields: [transportadoraId], references: [id])
+  taxaEntrega       TaxaEntrega?      @relation(fields: [taxaEntregaId], references: [id])
+  tentativas        EntregaTentativa[]
+  avaliacao         Avaliacao?
+
+  @@map("entregas")
+}
+
+model EntregaTentativa {
+  id              String   @id @default(cuid()) @map("_id")
+  entregaId       String
+  dataTentativa   DateTime @default(now())
+  motivoFalha     String?
+  observacoes     String?
+  dataCriacao     DateTime @default(now())
+
+  entrega         Entrega  @relation(fields: [entregaId], references: [id], onDelete: Cascade)
+
+  @@map("entregas_tentativas")
+}
+
+model Avaliacao {
+  id              String   @id @default(cuid()) @map("_id")
+  empresaId       String
+  entregaId       String   @unique
+  tokenAvaliacao  String   @unique @default(cuid())
+  ratingLoja      Int?
+  ratingPedido    Int?
+  ratingEntrega   Int?
+  comentario      String?
+  dataCriacao     DateTime @default(now())
+
+  empresa         Empresa  @relation(fields: [empresaId], references: [id])
+  entrega         Entrega  @relation(fields: [entregaId], references: [id], onDelete: Cascade)
+
+  @@map("avaliacoes")
 }

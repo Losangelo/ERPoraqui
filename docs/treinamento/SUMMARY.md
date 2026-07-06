@@ -10,6 +10,7 @@
 | [Orçamentos](orcamentos.md) | Guia rápido de orçamentos |
 | [PDV (Ponto de Venda)](pdv.md) | Vendas rápidas no balcão |
 | [CRM](crm.md) | Gestão de relacionamento com cliente, pipeline e oportunidades |
+| [Entregas](entregas.md) | Gestão de entregas, rastreamento, motoristas e avaliação |
 | [Licitações](licitacoes.md) | Gestão de processos licitatórios |
 | [Convênios](convenios.md) | Parcerias e convênios com clientes |
 

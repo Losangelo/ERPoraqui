@@ -39,6 +39,7 @@ import {
   FileSignature,
   CheckCircle,
   Handshake,
+  DollarSign,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -79,6 +80,7 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'orders', label: 'Pedidos', icon: ShoppingCart, path: '/orders', categoria: 'vendas' },
       { id: 'pdv', label: 'PDV', icon: ShoppingBasket, path: '/pdv', categoria: 'vendas' },
       { id: 'crm', label: 'CRM', icon: TrendingUp, path: '/crm', categoria: 'vendas' },
+      { id: 'entregas', label: 'Entregas', icon: Truck, path: '/entregas', categoria: 'vendas' },
     ],
   },
   {
@@ -120,6 +122,9 @@ const menuCategorias: CategoriaMenu[] = [
       { id: 'vendedores', label: 'Vendedores', icon: Users, path: '/vendedores', categoria: 'cadastros' },
       { id: 'transportadoras', label: 'Transportadoras', icon: Truck, path: '/transportadoras', categoria: 'cadastros' },
       { id: 'filiais', label: 'Filiais', icon: Building2, path: '/filiais', categoria: 'cadastros' },
+      { id: 'motoristas', label: 'Motoristas', icon: UserCircle, path: '/motoristas', categoria: 'cadastros' },
+      { id: 'veiculos-entrega', label: 'Veículos (Entrega)', icon: Truck, path: '/veiculos-entrega', categoria: 'cadastros' },
+      { id: 'taxas-entrega', label: 'Taxas de Entrega', icon: DollarSign, path: '/taxas-entrega', categoria: 'cadastros' },
     ],
   },
   {

@@ -155,7 +155,8 @@ ERPoraqui/
 │   │   │   │   ├── fornecedores/     # Fornecedores
 │   │   │   │   ├── transportadoras/  # Transportadoras
 │   │   │   │   ├── vendedores/       # Vendedores
-│   │   │   │   └── cotacoes-compra/  # Cotacoes de compra
+│   │   │   │   ├── cotacoes-compra/  # Cotacoes de compra
+│   │   │   │   └── entregas/        # Entregas, motoristas, veiculos, taxas
 │   │   │   ├── shared/
 │   │   │   │   ├── tributos/         # Calculos fiscais (CBS/IBS/ICMS/IPI/PIS/COFINS)
 │   │   │   │   ├── nfe-utils/        # Utilitarios NF-e (chave 44d, XML, assinatura)
@@ -193,7 +194,7 @@ ERPoraqui/
 │       └── vite.config.ts
 │
 ├── docs/
-│   ├── specs/                       # Especificacoes tecnicas (56 specs)
+│   ├── specs/                       # Especificacoes tecnicas (57 specs)
 │   │   ├── ADIANTAMENTOS.md
 │   │   ├── API_PUBLICA.md
 │   │   ├── AUTH.md
@@ -212,6 +213,7 @@ ERPoraqui/
 │   │   ├── DASHBOARD.md
 │   │   ├── DRE.md
 │   │   ├── ECF.md
+│   │   ├── ENTREGAS.md
 │   │   ├── ENTRADAS_MERCADORIA.md
 │   │   ├── ESTOQUE.md
 │   │   ├── ESTOQUE_AVANCADO.md
@@ -500,6 +502,31 @@ model VendaItem {
   quantidade Int
   valorUnitario Decimal
   venda      Venda  @relation(fields: [vendaId], references: [id])
+}
+
+model Entrega {
+  id              String   @id @default(cuid())
+  empresaId       String
+  filialId        String?
+  clienteId       String
+  motoristaId     String?
+  veiculoId       String?
+  numero          Int
+  status          EntregaStatus @default(PENDENTE)
+  tokenRastreio   String  @unique
+  enderecoEntrega Json
+  dataPedido      DateTime
+  dataAgendamento DateTime?
+  tentativas      EntregaTentativa[]
+}
+
+model Motorista {
+  id        String @id @default(cuid())
+  empresaId String
+  nome      String
+  cpf       String
+  ativo     Boolean @default(true)
+  entregas  Entrega[]
 }
 \`\`\`
 
@@ -1055,11 +1082,11 @@ git log --oneline -5  # ver ultimos commits
   },
   {
     id: 'spec-coverage',
-    titulo: 'Cobertura de Specs (56 Especificacoes)',
+    titulo: 'Cobertura de Specs (57 Especificacoes)',
     categoria: 'Arquitetura',
     conteudo: `## Cobertura de Especificacoes Tecnicas
 
-O ERPoraqui possui atualmente **56 specs** em \`docs/specs/\` cobrindo **100% dos modulos** do sistema. Cada spec define requisitos, modelagem, API e frontend antes da implementacao.
+O ERPoraqui possui atualmente **57 specs** em \`docs/specs/\` cobrindo **100% dos modulos** do sistema. Cada spec define requisitos, modelagem, API e frontend antes da implementacao.
 
 ---
 
@@ -1072,7 +1099,7 @@ O ERPoraqui possui atualmente **56 specs** em \`docs/specs/\` cobrindo **100% do
 
 ---
 
-### Lista Completa de Specs (56)
+### Lista Completa de Specs (57)
 
 | # | Spec | Modulo |
 |---|------|--------|
@@ -1094,44 +1121,45 @@ O ERPoraqui possui atualmente **56 specs** em \`docs/specs/\` cobrindo **100% do
 | 16 | DASHBOARD.md | Dashboard |
 | 17 | DRE.md | DRE |
 | 18 | ECF.md | ECF |
-| 19 | ENTRADAS_MERCADORIA.md | Entradas de Mercadoria |
-| 20 | ESTOQUE.md | Estoque |
-| 21 | ESTOQUE_AVANCADO.md | Estoque Avancado |
-| 22 | EXPORTACAO.md | Exportacao |
-| 23 | FILIAIS.md | Filial |
-| 24 | FINANCEIRO.md | Financeiro |
-| 25 | FLUXO_CAIXA.md | Fluxo de Caixa |
-| 26 | FORNECEDORES.md | Fornecedores |
-| 27 | INVENTARIO.md | Inventario |
-| 28 | KARDEX.md | Kardex |
-| 29 | LICENCAS.md | Licencas |
-| 30 | LICITACOES.md | Licitacoes |
-| 31 | LOGS.md | Logs |
-| 32 | LOOKUP.md | Lookup Field |
-| 33 | MDFE.md | MDF-e |
-| 34 | MOVIMENTACOES_INTERNAS.md | Movimentacoes Internas |
-| 35 | MULTI_EMPRESA.md | Multi-empresa |
-| 36 | NFCE.md | NFC-e |
-| 37 | NFE.md | NF-e |
-| 38 | NFSE.md | NFSe |
-| 39 | ORCAMENTOS.md | Orcamentos |
-| 40 | PARAMETROS.md | Parametros |
-| 41 | PDV.md | PDV |
-| 42 | PEDIDOS_COMPRA.md | Pedidos de Compra |
-| 43 | PEDIDOS_VENDA.md | Pedidos de Venda |
-| 44 | PLANO_CONTAS.md | Plano de Contas |
-| 45 | PRODUTOS.md | Produtos |
-| 46 | PROMOCOES.md | Promocoes |
-| 47 | QUITACOES.md | Quitacoes |
-| 48 | RELATORIOS.md | Relatorios |
-| 49 | RELATORIOS_FISCAIS.md | Relatorios Fiscais |
-| 50 | RENEGOCIACAO.md | Renegociacao |
-| 51 | REPORT_ENGINE.md | Report Engine |
-| 52 | SPED.md | SPED Fiscal |
-| 53 | TRANSPORTADORAS.md | Transportadoras |
-| 54 | UNIDADES_MEDIDA.md | Unidades de Medida |
-| 55 | USUARIOS.md | Usuarios |
-| 56 | VENDEDORES.md | Vendedores |
+| 19 | ENTREGAS.md | Entregas |
+| 20 | ENTRADAS_MERCADORIA.md | Entradas de Mercadoria |
+| 21 | ESTOQUE.md | Estoque |
+| 22 | ESTOQUE_AVANCADO.md | Estoque Avancado |
+| 23 | EXPORTACAO.md | Exportacao |
+| 24 | FILIAIS.md | Filial |
+| 25 | FINANCEIRO.md | Financeiro |
+| 26 | FLUXO_CAIXA.md | Fluxo de Caixa |
+| 27 | FORNECEDORES.md | Fornecedores |
+| 28 | INVENTARIO.md | Inventario |
+| 29 | KARDEX.md | Kardex |
+| 30 | LICENCAS.md | Licencas |
+| 31 | LICITACOES.md | Licitacoes |
+| 32 | LOGS.md | Logs |
+| 33 | LOOKUP.md | Lookup Field |
+| 34 | MDFE.md | MDF-e |
+| 35 | MOVIMENTACOES_INTERNAS.md | Movimentacoes Internas |
+| 36 | MULTI_EMPRESA.md | Multi-empresa |
+| 37 | NFCE.md | NFC-e |
+| 38 | NFE.md | NF-e |
+| 39 | NFSE.md | NFSe |
+| 40 | ORCAMENTOS.md | Orcamentos |
+| 41 | PARAMETROS.md | Parametros |
+| 42 | PDV.md | PDV |
+| 43 | PEDIDOS_COMPRA.md | Pedidos de Compra |
+| 44 | PEDIDOS_VENDA.md | Pedidos de Venda |
+| 45 | PLANO_CONTAS.md | Plano de Contas |
+| 46 | PRODUTOS.md | Produtos |
+| 47 | PROMOCOES.md | Promocoes |
+| 48 | QUITACOES.md | Quitacoes |
+| 49 | RELATORIOS.md | Relatorios |
+| 50 | RELATORIOS_FISCAIS.md | Relatorios Fiscais |
+| 51 | RENEGOCIACAO.md | Renegociacao |
+| 52 | REPORT_ENGINE.md | Report Engine |
+| 53 | SPED.md | SPED Fiscal |
+| 54 | TRANSPORTADORAS.md | Transportadoras |
+| 55 | UNIDADES_MEDIDA.md | Unidades de Medida |
+| 56 | USUARIOS.md | Usuarios |
+| 57 | VENDEDORES.md | Vendedores |
 
 ---
 

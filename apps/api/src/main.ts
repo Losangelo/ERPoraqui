@@ -63,6 +63,11 @@ import authRoutes from './modules/auth/auth.routes';
 import renegociacaoRoutes from './modules/renegociacao/renegociacao.routes';
 import { adiantamentosRoutes } from './modules/adiantamentos';
 import { quitacoesRoutes } from './modules/quitacoes';
+import { motoristasRoutes } from './modules/motoristas';
+import { veiculosEntregasRoutes } from './modules/veiculos-entregas';
+import { taxasEntregaRoutes } from './modules/taxas-entrega';
+import { entregasRoutes } from './modules/entregas';
+import { publicEntregasRoutes } from './modules/public-entregas';
 import appLogger from './shared/logger/logger';
 
 dotenv.config();
@@ -158,6 +163,11 @@ app.use('/api/v1/quitacoes', quitacoesRoutes);
 app.use('/api/v1/convenios', conveniosRoutes);
 app.use('/api/v1/licitacoes', licitacoesRoutes);
 app.use('/api/v1/cte', cteRoutes);
+app.use('/api/v1/motoristas', motoristasRoutes);
+app.use('/api/v1/veiculos-entregas', veiculosEntregasRoutes);
+app.use('/api/v1/taxas-entrega', taxasEntregaRoutes);
+app.use('/api/v1/entregas', entregasRoutes);
+app.use('/api/v1/public/entregas', publicEntregasRoutes);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err.message);

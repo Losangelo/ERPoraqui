@@ -189,6 +189,14 @@
 | Spec LICITACOES | docs/specs/LICITACOES.md | Especificação licitações | ✅ |
 | Spec CTE | docs/specs/CTE.md | Especificação CT-e | ✅ |
 | Spec RELATORIOS | docs/specs/RELATORIOS.md | Especificação relatórios | ✅ |
+| Spec ENTREGAS | docs/specs/ENTREGAS.md | Especificação entregas com rastreio, notificações e avaliação | ✅ |
+| Entregas API | apps/api/src/modules/entregas | CRUD entregas + status transitions (agendar/sair/entregue/falhou/cancelar) | ✅ |
+| Entregas Frontend | apps/web/src/pages/entregas | Lista, detalhes, timeline, avaliação | ✅ |
+| Motoristas API | apps/api/src/modules/entregas | CRUD motoristas | ✅ |
+| Veículos entrega API | apps/api/src/modules/entregas | CRUD veículos frota | ✅ |
+| Taxas entrega API | apps/api/src/modules/entregas | CRUD taxas + cálculo automático | ✅ |
+| Rastreio público | apps/api/src/modules/entregas | Endpoint público GET /public/rastreio/:token | ✅ |
+| Avaliação pós-entrega | apps/api/src/modules/entregas | Endpoint público POST /public/avaliar | ✅ |
 
 ---
 
@@ -211,6 +219,7 @@
 ## Histórico de Atualizações
 
 - **06/07/2026**: Gerados 38 specs faltantes (cobertura total: 56 specs) + Correção controller orçamentos (status codes 404/409/500) + Toast errors no frontend + Atualização completa de docs/controle
+- **06/07/2026 (fim do dia)**: Módulo Entregas completo — Spec ENTREGAS.md (57 specs total), Treinamento entregas.md, API tests (18 testes), Frontend tests (15 testes), Manuais (ManualPage, AjudaPage, ManualTecnicoPage), Docs de controle (FEATURES/TODO/stepByStep/AGENTS)
 - **06/07/2026 (noite)**: OrdersPage reescrita — LookupField cliente/vendedor/transportadora, multi-itens com LookupField produto, Sheet grid produtos estilo PDV, parcelamento condicional, textarea, hints, cálculo automático total
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.

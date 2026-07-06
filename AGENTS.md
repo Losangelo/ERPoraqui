@@ -402,9 +402,9 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
 - ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
 
-### Status Atual Specs (56 specs — cobertura 100%)
+### Status Atual Specs (57 specs — cobertura 100%)
 - ✅ **18 originais:** NFE, NFCE, NFSE, PDV, SPED, MDFE, BOLETOS_CNAB, CHEQUES, CENTRO_CUSTO, ESTOQUE_AVANCADO, CRM, AUTOMACAO, MULTI_EMPRESA, LOOKUP, REPORT_ENGINE, CONTRATOS_GARANTIAS_DEVOLUCOES, FILIAIS, EXPORTACAO
-- ✅ **38 adicionados (06/07/2026):** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS
+- ✅ **38 adicionados (06/07/2026):** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS, ENTREGAS
 
 ### Novidades (02/07/2026 — Blitz 2)
 - Auth Store: authStore.ts deletado (nunca importado)
@@ -484,3 +484,16 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - VITE_API_URL fallback: `http://localhost:3002/api/v1` → `/api/v1`
 - 30+ erros TypeScript corrigidos no frontend (build limpo)
 - Prisma migrate: `prisma db push` — 7 novos modelos + enums + relacionamentos
+
+### Novidades (06/07/2026 — Módulo Entregas)
+- Spec ENTREGAS.md criada (57 specs totais)
+- Treinamento entregas.md em docs/treinamento/ (guia prático em português)
+- API tests: apps/api/src/__tests__/entregas.test.ts (18 testes: CRUD, status transitions, validação, público)
+- Frontend tests: apps/web/src/__tests__/entregas.test.tsx (15 testes: service methods)
+- ManualPage.tsx: seção "Entregas e Rastreamento" em Vendas
+- AjudaPage.tsx: seção "Entregas" em Vendas
+- ManualTecnicoPage.tsx: count 57, ENTREGAS.md na árvore + tabela, entregas/ no tree
+- FEATURES.md: +9 entries + histórico
+- TODO.md: concluídos novos + count 57
+- stepByStep.md: registro da etapa
+- AGENTS.md: novidades adicionadas

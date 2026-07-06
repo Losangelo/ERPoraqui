@@ -67,6 +67,12 @@ import RenegociacaoPage from '@/pages/financeiro/RenegociacaoPage';
 import ConciliacaoPage from '@/pages/financeiro/ConciliacaoPage';
 import AdiantamentosPage from '@/pages/financeiro/AdiantamentosPage';
 import QuitacoesPage from '@/pages/financeiro/QuitacoesPage';
+import { EntregasPage } from '@/pages/entregas/EntregasPage';
+import { MotoristasPage } from '@/pages/entregas/MotoristasPage';
+import { VeiculosEntregaPage } from '@/pages/entregas/VeiculosEntregaPage';
+import { TaxasEntregaPage } from '@/pages/entregas/TaxasEntregaPage';
+import { RastreioPage } from '@/pages/public/RastreioPage';
+import { AvaliarPage } from '@/pages/public/AvaliarPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -84,10 +90,14 @@ function AppRoutes() {
   
   return (
     <Routes>
-      <Route path="/login" element={
+       <Route path="/login" element={
         isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />
       } />
       
+      {/* Public routes - no auth required */}
+      <Route path="/rastreio/:token" element={<RastreioPage />} />
+      <Route path="/avaliar/:token" element={<AvaliarPage />} />
+
       <Route path="/*" element={
         <ProtectedRoute>
           <Routes>
@@ -153,6 +163,10 @@ function AppRoutes() {
             <Route path="/cte" element={<CtePage />} />
             <Route path="/convenios" element={<ConveniosPage />} />
             <Route path="/licitacoes" element={<LicitacoesPage />} />
+            <Route path="/entregas" element={<EntregasPage />} />
+            <Route path="/motoristas" element={<MotoristasPage />} />
+            <Route path="/veiculos-entrega" element={<VeiculosEntregaPage />} />
+            <Route path="/taxas-entrega" element={<TaxasEntregaPage />} />
           </Routes>
         </ProtectedRoute>
       } />

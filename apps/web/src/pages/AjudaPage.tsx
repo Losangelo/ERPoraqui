@@ -1235,6 +1235,37 @@ O sistema calcula juros e multas automaticamente.`,
     ],
   },
   {
+    id: 'entregas-ajuda',
+    titulo: 'Entregas',
+    categoria: 'Vendas',
+    conteudo: `# Entregas
+
+O módulo de Entregas gerencia o ciclo completo de entrega de pedidos.
+
+---
+
+## Funcionalidades
+
+- **Rastreamento**: cada entrega possui token único para acompanhamento público
+- **Motoristas e Veículos**: cadastro completo da frota
+- **Taxas de Entrega**: cálculo automático (fixa, por KM, por peso ou faixa CEP)
+- **Notificações**: e-mails automáticos ao cliente (agendamento, saiu p/ entrega, concluída, falha)
+- **Avaliação**: coleta de nota e comentário pós-entrega
+
+---
+
+## Fluxo de Status
+
+Pendente → Agendado → Saiu para Entrega → Entregue
+                                           ↘ Tentativa Falhou → Saiu para Entrega (re-tentativa)
+
+---
+
+## Como Usar
+
+Acesse **Vendas > Entregas** para gerenciar entregas, motoristas, veículos e taxas.`,
+  },
+  {
     id: 'pdv',
     titulo: 'PDV - Ponto de Venda',
     categoria: 'Vendas',

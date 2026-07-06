@@ -1223,6 +1223,85 @@ O modulo de automacao executa acoes automaticamente quando algo acontece.
 - Regras em excesso podem deixar o sistema lento`,
   },
   {
+    id: 'entregas-rastreamento',
+    titulo: 'Entregas e Rastreamento',
+    categoria: 'Vendas',
+    conteudo: `Aprenda a gerenciar entregas e rastreamento de pedidos.
+
+---
+
+## O que e o Modulo de Entregas?
+
+Gerencia todo o ciclo de entrega dos pedidos aos clientes:
+- Rastreamento com token unico
+- Motoristas e veiculos
+- Taxas de entrega automaticas
+- Notificacoes por e-mail
+- Avaliacao pos-entrega
+
+---
+
+## Criando uma Entrega
+
+### A partir de um Pedido
+
+1. Va em **Vendas** > **Pedidos**
+2. Localize o pedido confirmado
+3. Clique em **Criar Entrega**
+4. Selecione motorista, veiculo e taxa
+5. Defina a data de agendamento
+6. Salve
+
+### Manualmente
+
+1. Va em **Vendas** > **Entregas**
+2. Clique em **+ Nova Entrega**
+3. Selecione o cliente e endereco
+4. Informe contato e telefone
+5. Selecione motorista, veiculo e taxa
+6. Salve
+
+---
+
+## Fluxo de Status
+
+| Status | Descricao |
+|--------|-----------|
+| **Pendente** | Aguardando agendamento |
+| **Agendado** | Data e motorista definidos |
+| **Saiu para Entrega** | Motorista a caminho |
+| **Entregue** | Concluida com sucesso |
+| **Tentativa Falhou** | Nao foi possivel entregar |
+| **Cancelado** | Entrega cancelada |
+
+---
+
+## Rastreamento Publico
+
+O cliente recebe um link unico para acompanhar:
+- Status atual da entrega
+- Timeline completa
+- Nome do motorista
+- Nao exibe valores ou dados internos
+
+---
+
+## Avaliacao Pos-Entrega
+
+Apos a entrega, o cliente avalia:
+- **Nota**: 1 a 5 estrelas
+- **Comentario**: texto opcional
+
+As avaliacoes sao exibidas nos detalhes da entrega.
+
+---
+
+## Dica
+
+Crie taxas de entrega por KM para calcular automaticamente o valor.
+Acompanhe tentativas falhas para identificar problemas no cadastro de clientes.`,
+  },
+  {
     id: 'tabelas-preco-uso',
     titulo: 'Tabelas de Preco',
     categoria: 'Vendas',
