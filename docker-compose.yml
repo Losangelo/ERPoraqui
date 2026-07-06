@@ -84,10 +84,35 @@ services:
       JWT_REFRESH_EXPIRES_IN: 7d
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://erg_fg:fg2026@rabbitmq:5672/erg_fg
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@erporaqui.com.br}
     depends_on:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_healthy
+    networks:
+      - erg_network
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    container_name: erg_filho_do_guerreiro_worker
+    restart: unless-stopped
+    environment:
+      RABBITMQ_URL: amqp://erg_fg:fg2026@rabbitmq:5672/erg_fg
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@erporaqui.com.br}
+    depends_on:
+      rabbitmq:
         condition: service_healthy
     networks:
       - erg_network
