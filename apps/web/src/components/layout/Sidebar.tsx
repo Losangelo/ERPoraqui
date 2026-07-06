@@ -77,7 +77,7 @@ const menuCategorias: CategoriaMenu[] = [
     icone: ShoppingCart,
     items: [
       { id: 'orcamentos', label: 'Orçamentos', icon: FileBarChart, path: '/orcamentos', categoria: 'vendas' },
-      { id: 'orders', label: 'Pedidos', icon: ShoppingCart, path: '/orders', categoria: 'vendas' },
+      { id: 'orders', label: 'Pedidos de Venda', icon: ShoppingCart, path: '/orders', categoria: 'vendas' },
       { id: 'pdv', label: 'PDV', icon: ShoppingBasket, path: '/pdv', categoria: 'vendas' },
       { id: 'crm', label: 'CRM', icon: TrendingUp, path: '/crm', categoria: 'vendas' },
       { id: 'entregas', label: 'Entregas', icon: Truck, path: '/entregas', categoria: 'vendas' },
@@ -88,7 +88,7 @@ const menuCategorias: CategoriaMenu[] = [
     nome: 'Compras',
     icone: ShoppingBag,
     items: [
-      { id: 'compras', label: 'Pedidos', icon: ShoppingCart, path: '/compras', categoria: 'compras' },
+      { id: 'compras', label: 'Pedidos de Compra', icon: ShoppingCart, path: '/compras', categoria: 'compras' },
       { id: 'cotacoes', label: 'Cotações', icon: FileText, path: '/compras/cotacoes', categoria: 'compras' },
       { id: 'entradas', label: 'Entradas', icon: ArrowDownCircle, path: '/compras/entradas', categoria: 'compras' },
       { id: 'licitacoes', label: 'Licitações', icon: ScrollText, path: '/licitacoes', categoria: 'compras' },
