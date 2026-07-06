@@ -55,7 +55,7 @@ const SITUACAO_LABEL: Record<Situacao, string> = {
 }
 
 const SITUACAO_OPTIONS = [
-  { value: "", label: "Todas" },
+  { value: "todas", label: "Todas" },
   { value: "PENDENTE", label: "Pendente" },
   { value: "AGENDADO", label: "Agendado" },
   { value: "SAIU_PARA_ENTREGA", label: "Saiu para Entrega" },
@@ -120,7 +120,7 @@ export function EntregasPage() {
     try {
       const params: any = {}
       if (busca) params.busca = busca
-      if (filtroSituacao) params.situacao = filtroSituacao
+      if (filtroSituacao && filtroSituacao !== 'todas') params.situacao = filtroSituacao
       if (activeTab === "pendentes") params.situacao = "PENDENTE"
       else if (activeTab === "em-andamento") params.situacao = "AGENDADO,SAIU_PARA_ENTREGA"
       const result = await entregasService.listar(params)
