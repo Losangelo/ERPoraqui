@@ -94,7 +94,7 @@ export class QuitacaoService {
 
       for (const conta of parsed.contas) {
         if (conta.tipoConta === 'RECEBER') {
-          await tx.contaReceber.update({
+          const contaRec = await tx.contaReceber.update({
             where: { id: conta.contaId },
             data: {
               situacao: 'PAGO',
@@ -103,14 +103,44 @@ export class QuitacaoService {
               formaPagamento: parsed.formaPagamento as any || null,
             },
           });
+
+          await tx.fluxoCaixa.create({
+            data: {
+              empresaId,
+              tipo: 'ENTRADA',
+              categoria: 'RECEBIMENTO_CONTA',
+              descricao: `Recebimento - ${contaRec.numeroDocumento}`,
+              valor: conta.valorPago,
+              formaPagamento: (parsed.formaPagamento as any) || 'PIX',
+              dataMovimentacao: new Date(parsed.dataQuitacao),
+              referenciaId: conta.contaId,
+              referenciaTipo: 'CONTA_RECEBER',
+              centroCustoId: contaRec.centroCustoId,
+            },
+          });
         } else {
-          await tx.contaPagar.update({
+          const contaPag = await tx.contaPagar.update({
             where: { id: conta.contaId },
             data: {
               situacao: 'PAGO',
               valorPago: conta.valorPago,
               dataPagamento: new Date(parsed.dataQuitacao),
               formaPagamento: parsed.formaPagamento as any || null,
+            },
+          });
+
+          await tx.fluxoCaixa.create({
+            data: {
+              empresaId,
+              tipo: 'SAIDA',
+              categoria: 'PAGAMENTO_CONTA',
+              descricao: `Pagamento - ${contaPag.numeroDocumento}`,
+              valor: conta.valorPago,
+              formaPagamento: (parsed.formaPagamento as any) || 'PIX',
+              dataMovimentacao: new Date(parsed.dataQuitacao),
+              referenciaId: conta.contaId,
+              referenciaTipo: 'CONTA_PAGAR',
+              centroCustoId: contaPag.centroCustoId,
             },
           });
         }
