@@ -210,7 +210,7 @@ export function EntregasPage() {
       loadEntregas()
       toast.success("Entrega criada com sucesso")
     } catch (error: any) {
-      toast.error(error?.response?.data?.error?.message || "Erro ao criar entrega")
+      toast.error(error?.response?.data?.error || "Erro ao criar entrega")
     } finally {
       setActionLoading(false)
     }
@@ -230,7 +230,7 @@ export function EntregasPage() {
       loadEntregas()
       toast.success("Entrega agendada com sucesso")
     } catch (error: any) {
-      toast.error(error?.response?.data?.error?.message || "Erro ao agendar")
+      toast.error(error?.response?.data?.error || "Erro ao agendar")
     } finally {
       setActionLoading(false)
     }
@@ -244,7 +244,7 @@ export function EntregasPage() {
       loadEntregas()
       toast.success("Saída para entrega registrada")
     } catch (error: any) {
-      toast.error(error?.response?.data?.error?.message || "Erro ao registrar saída")
+      toast.error(error?.response?.data?.error || "Erro ao registrar saída")
     } finally {
       setActionLoading(false)
     }
@@ -258,7 +258,7 @@ export function EntregasPage() {
       loadEntregas()
       toast.success("Entrega concluída com sucesso")
     } catch (error: any) {
-      toast.error(error?.response?.data?.error?.message || "Erro ao confirmar entrega")
+      toast.error(error?.response?.data?.error || "Erro ao confirmar entrega")
     } finally {
       setActionLoading(false)
     }
@@ -278,7 +278,7 @@ export function EntregasPage() {
       loadEntregas()
       toast.success("Tentativa registrada")
     } catch (error: any) {
-      toast.error(error?.response?.data?.error?.message || "Erro ao registrar tentativa")
+      toast.error(error?.response?.data?.error || "Erro ao registrar tentativa")
     } finally {
       setActionLoading(false)
     }
@@ -292,7 +292,7 @@ export function EntregasPage() {
       loadEntregas()
       toast.success("Entrega cancelada")
     } catch (error: any) {
-      toast.error(error?.response?.data?.error?.message || "Erro ao cancelar")
+      toast.error(error?.response?.data?.error || "Erro ao cancelar")
     } finally {
       setActionLoading(false)
     }
