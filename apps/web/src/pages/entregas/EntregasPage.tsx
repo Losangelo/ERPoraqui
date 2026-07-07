@@ -159,7 +159,7 @@ export function EntregasPage() {
   async function loadPedidos() {
     setPedidosLoading(true)
     try {
-      const result = await pedidosService.listar({ situacao: "APROVADO,EM_PROCESSAMENTO,ENVIADO,PENDENTE", limite: 50, busca: pedidoSearchTerm })
+      const result = await pedidosService.listar({ limite: 50, busca: pedidoSearchTerm })
       setPedidosList(Array.isArray(result) ? result : [])
     } catch {
       toast.error("Erro ao carregar pedidos")
