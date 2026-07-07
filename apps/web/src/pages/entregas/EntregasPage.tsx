@@ -8,7 +8,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Search, Truck, Plus, Clock, Package, MapPin, User, Calendar, AlertCircle, CheckCircle2, XCircle, ShoppingCart } from "lucide-react"
+import { Search, Truck, Plus, Clock, Package, MapPin, User, Calendar, AlertCircle, CheckCircle2, XCircle, ShoppingCart, Building2 } from "lucide-react"
+import { FilialSelect } from "@/components/FilialSelect"
 import { entregasService } from "@/services/entregas"
 import { pedidosService } from "@/services/pedidos"
 import toast from "react-hot-toast"
@@ -83,6 +84,7 @@ export function EntregasPage() {
   const [formData, setFormData] = useState({
     pedidoVendaId: "",
     clienteId: "",
+    filialId: "",
     enderecoEntrega: "",
     motoristaId: "",
     veiculoId: "",
@@ -188,11 +190,13 @@ export function EntregasPage() {
   async function criarEntrega() {
     if (!formData.pedidoVendaId) { toast.error("Informe o pedido de venda"); return }
     if (!formData.clienteId) { toast.error("Informe o cliente"); return }
+    if (!formData.filialId) { toast.error("Selecione a filial"); return }
     setActionLoading(true)
     try {
       await entregasService.criar({
         pedidoVendaId: formData.pedidoVendaId,
         clienteId: formData.clienteId,
+        filialId: formData.filialId,
         motoristaId: formData.motoristaId || undefined,
         veiculoId: formData.veiculoId || undefined,
         dataAgendamento: formData.dataAgendamento ? new Date(formData.dataAgendamento).toISOString() : undefined,
@@ -298,6 +302,7 @@ export function EntregasPage() {
     setFormData({
       pedidoVendaId: "",
       clienteId: "",
+      filialId: "",
       enderecoEntrega: "",
       motoristaId: "",
       veiculoId: "",
@@ -677,6 +682,14 @@ export function EntregasPage() {
                 placeholder="ID do cliente"
                 title="Informe o ID do cliente"
                 required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="filialId">Filial <span className="text-red-500">*</span></Label>
+              <FilialSelect
+                value={formData.filialId}
+                onValueChange={(v) => setFormData({ ...formData, filialId: v })}
+                placeholder="Selecione a filial"
               />
             </div>
             <div className="grid gap-2">
