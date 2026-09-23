@@ -36,12 +36,16 @@ export class ECFService {
   async buscarECF(id: string) {
     const ecf = await prisma.eCF.findUnique({
       where: { id },
-      include: {
-        reducoesZ: { orderBy: { dataMovimento: 'desc' }, take: 10 },
-      },
     });
     if (!ecf) throw new Error('ECF não encontrado');
-    return ecf;
+
+    const reducoesZ = await prisma.reducaoZ.findMany({
+      where: { ecfId: id },
+      orderBy: { dataMovimento: 'desc' },
+      take: 10,
+    });
+
+    return { ...ecf, reducoesZ };
   }
 
   async atualizarECF(id: string, data: Partial<{
@@ -193,7 +197,6 @@ export class ECFService {
   async finalizarCupom(cupomId: string, data: {
     formaPagamento: string;
     valorPagamento: number;
-    observacoes?: string;
   }) {
     const cupom = await prisma.cupom.findUnique({
       where: { id: cupomId },
@@ -215,7 +218,6 @@ export class ECFService {
         valorPagamento: data.valorPagamento,
         valorTroco: valorTroco > 0 ? valorTroco : 0,
         hashCupom,
-        observacoes: data.observacoes,
       },
       include: { itens: true },
     });
@@ -233,7 +235,6 @@ export class ECFService {
       where: { id: cupomId },
       data: {
         situacao: 'CANCELADO',
-        observacoes: `CANCELADO: ${data.justificativa}`,
       },
     });
   }

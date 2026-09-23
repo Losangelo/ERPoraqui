@@ -5,5 +5,5 @@
 export * from './dto/licencas.dto';
 export * from './licencas.service';
 export * from './licencas.controller';
-export * from './licencas.routes';
+export { default as licencasRoutes } from './licencas.routes';
 export { licencaGuard } from './licenca.guard';

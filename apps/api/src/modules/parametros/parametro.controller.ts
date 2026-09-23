@@ -5,7 +5,7 @@ import {
   criarParametroSchema, 
   atualizarParametroSchema 
 } from './dto/parametro.dto';
-import appLogger from '@/shared/logger/logger';
+import appLogger, { LogCategory } from '@/shared/logger/logger';
 
 export class ParametroController {
   private readonly service = new ParametroService();
@@ -29,7 +29,7 @@ export class ParametroController {
       });
     } catch (error: any) {
       appLogger.error('Erro ao criar parâmetro', error, {
-        category: 'api',
+        category: LogCategory.API,
         action: 'parametros:create',
       });
       return res.status(400).json({

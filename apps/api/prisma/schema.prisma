@@ -119,8 +119,6 @@ model Empresa {
   renegociacoes        Renegociacao[]
   adiantamentos        Adiantamento[]
   quitacoes            Quitacao[]
-  motoristas           Motorista[]
-  veiculosEntrega      VeiculoEntrega[]
   taxasEntrega         TaxaEntrega[]
   entregas             Entrega[]
   avaliacoes           Avaliacao[]
@@ -336,7 +334,7 @@ model Produto {
   volume             Float?
   ncm                String?
   cest               String?
-  origenMercadoria   OrigemMercadoria @default(NACIONAL)
+  origemMercadoria   OrigemMercadoria @default(NACIONAL)
   ativo              Boolean          @default(true)
   dataCriacao        DateTime         @default(now())
   dataAtualizacao    DateTime         @updatedAt
@@ -1841,11 +1839,6 @@ enum NaturezaConta {
   DEVEDORA
 }
 
-enum NaturezaCredito {
-  CREDORA
-  DEVEDORA
-}
-
 // =====================================================
 // LANCAMENTOS CONTÁBEIS
 // =====================================================
@@ -2163,32 +2156,36 @@ enum TipoRps {
 // =====================================================
 
 model Veiculo {
-  id              String   @id @default(cuid()) @map("_id")
+  id              String      @id @default(cuid()) @map("_id")
   empresaId       String
   placa           String
   renavam         String?
   rntrc           String?
-  tipoPropriedade String   @default("1") // 1=Próprio, 2=Terceiro
-  tara            Decimal  @default(0) @db.Decimal(10, 2)
-  capacidade      Decimal  @default(0) @db.Decimal(10, 2)
+  tipoPropriedade String      @default("1") // 1=Próprio, 2=Terceiro
+  tara            Decimal     @default(0) @db.Decimal(10, 2)
+  capacidade      Decimal     @default(0) @db.Decimal(10, 2)
   tipoCarroceria  String?
   marca           String?
   modelo          String?
   anoFabricacao   Int?
   cor             String?
-  ativo           Boolean  @default(true)
-  dataCriacao     DateTime @default(now())
-  dataAtualizacao DateTime @updatedAt
+  tipoVeiculo     TipoVeiculo @default(CARRO)
+  capacidadeKg    Float?
+  observacoes     String?
+  ativo           Boolean     @default(true)
+  dataCriacao     DateTime    @default(now())
+  dataAtualizacao DateTime    @updatedAt
 
-  empresa Empresa @relation(fields: [empresaId], references: [id])
+  empresa Empresa  @relation(fields: [empresaId], references: [id])
   mdfes   Mdfe[]
+  entregas Entrega[]
 
   @@unique([empresaId, placa])
   @@map("veiculos")
 }
 
 model Condutor {
-  id              String    @id @default(cuid()) @map("_id")
+  id              String       @id @default(cuid()) @map("_id")
   empresaId       String
   cpf             String
   nome            String
@@ -2199,12 +2196,15 @@ model Condutor {
   telefone        String?
   email           String?
   endereco        Json?
-  ativo           Boolean   @default(true)
-  dataCriacao     DateTime  @default(now())
-  dataAtualizacao DateTime  @updatedAt
+  tipoCondutor    TipoCondutor @default(PROPRIO)
+  observacoes     String?
+  ativo           Boolean      @default(true)
+  dataCriacao     DateTime     @default(now())
+  dataAtualizacao DateTime     @updatedAt
 
-  empresa Empresa @relation(fields: [empresaId], references: [id])
-  mdfes   Mdfe[]
+  empresa  Empresa   @relation(fields: [empresaId], references: [id])
+  mdfes    Mdfe[]
+  entregas Entrega[]
 
   @@unique([empresaId, cpf])
   @@map("condutores")
@@ -3104,53 +3104,9 @@ enum TipoTaxaEntrega {
   POR_VALOR
 }
 
-enum TipoMotorista {
+enum TipoCondutor {
   PROPRIO
   PJ
-}
-
-model Motorista {
-  id                String   @id @default(cuid()) @map("_id")
-  empresaId         String
-  nome              String
-  cpf               String?
-  tipo              TipoMotorista @default(PROPRIO)
-  cnh               String?
-  cnhCategoria      String?
-  telefone          String?
-  email             String?
-  ativo             Boolean  @default(true)
-  observacoes       String?
-  dataCriacao       DateTime @default(now())
-  dataAtualizacao   DateTime @updatedAt
-
-  empresa           Empresa   @relation(fields: [empresaId], references: [id])
-  entregas          Entrega[]
-
-  @@map("motoristas")
-}
-
-model VeiculoEntrega {
-  id                String   @id @default(cuid()) @map("_id")
-  empresaId         String
-  placa             String
-  marca             String?
-  modelo            String?
-  ano               Int?
-  cor               String?
-  capacidadeKg      Float?
-  tipo              TipoVeiculo @default(CARRO)
-  proprietarioId    String?
-  ativo             Boolean  @default(true)
-  observacoes       String?
-  dataCriacao       DateTime @default(now())
-  dataAtualizacao   DateTime @updatedAt
-
-  empresa           Empresa   @relation(fields: [empresaId], references: [id])
-  entregas          Entrega[]
-
-  @@unique([empresaId, placa])
-  @@map("veiculos_entrega")
 }
 
 model TaxaEntrega {
@@ -3179,7 +3135,7 @@ model Entrega {
   filialId          String
   pedidoVendaId     String?
   clienteId         String?
-  motoristaId       String?
+  condutorId        String?
   veiculoId         String?
   transportadoraId  String?
   tokenRastreio     String          @unique @default(cuid())
@@ -3201,8 +3157,8 @@ model Entrega {
   filial            Filial            @relation(fields: [filialId], references: [id])
   pedidoVenda       PedidoVenda?      @relation(fields: [pedidoVendaId], references: [id])
   cliente           Cliente?          @relation(fields: [clienteId], references: [id])
-  motorista         Motorista?        @relation(fields: [motoristaId], references: [id])
-  veiculoEntrega    VeiculoEntrega?   @relation(fields: [veiculoId], references: [id])
+  condutor          Condutor?         @relation(fields: [condutorId], references: [id])
+  veiculo           Veiculo?          @relation(fields: [veiculoId], references: [id])
   transportadora    Transportadora?   @relation(fields: [transportadoraId], references: [id])
   taxaEntrega       TaxaEntrega?      @relation(fields: [taxaEntregaId], references: [id])
   tentativas        EntregaTentativa[]

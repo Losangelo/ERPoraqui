@@ -73,8 +73,8 @@ export class EntregasController {
     const empresaId = req.usuario?.empresaId || '';
 
     try {
-      const { dataAgendamento } = req.body;
-      const resultado = await this.service.agendar(id, empresaId, dataAgendamento);
+      const { dataAgendamento, condutorId, veiculoId } = req.body;
+      const resultado = await this.service.agendar(id, empresaId, { dataAgendamento, condutorId, veiculoId });
       return res.json(resultado);
     } catch (error: any) {
       return res.status(400).json({ error: error.message || error.issues?.[0]?.message || 'Validation error' });

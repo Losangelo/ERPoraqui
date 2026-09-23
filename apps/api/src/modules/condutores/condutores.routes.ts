@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { VeiculosEntregasController } from './veiculos-entregas.controller';
-import { VeiculosEntregasService } from './veiculos-entregas.service';
+import { CondutoresController } from './condutores.controller';
+import { CondutoresService } from './condutores.service';
 import { authMiddleware } from '@/shared/middleware/auth.middleware';
 
 const router = Router();
-const service = new VeiculosEntregasService();
-const controller = new VeiculosEntregasController(service);
+const service = new CondutoresService();
+const controller = new CondutoresController(service);
 
 router.use(authMiddleware);
 

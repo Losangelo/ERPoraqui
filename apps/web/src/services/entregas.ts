@@ -11,17 +11,17 @@ export const entregasService = {
   tentativaFalhou: (id: string, data: any) => api.patch(`/entregas/${id}/tentativa-falhou`, data).then(r => r.data),
   cancelar: (id: string) => api.patch(`/entregas/${id}/cancelar`).then(r => r.data),
 
-  listarMotoristas: (params?: any) => api.get("/motoristas", { params }).then(r => r.data?.dados || r.data?.data || []),
-  criarMotorista: (data: any) => api.post("/motoristas", data).then(r => r.data),
-  atualizarMotorista: (id: string, data: any) => api.put(`/motoristas/${id}`, data).then(r => r.data),
-  inativarMotorista: (id: string) => api.patch(`/motoristas/${id}/inativar`).then(r => r.data),
-  ativarMotorista: (id: string) => api.patch(`/motoristas/${id}/ativar`).then(r => r.data),
+  listarMotoristas: (params?: any) => api.get("/condutores", { params }).then(r => r.data?.dados || r.data?.data || []),
+  criarMotorista: (data: any) => api.post("/condutores", data).then(r => r.data),
+  atualizarMotorista: (id: string, data: any) => api.put(`/condutores/${id}`, data).then(r => r.data),
+  inativarMotorista: (id: string) => api.patch(`/condutores/${id}/inativar`).then(r => r.data),
+  ativarMotorista: (id: string) => api.patch(`/condutores/${id}/ativar`).then(r => r.data),
 
-  listarVeiculos: (params?: any) => api.get("/veiculos-entregas", { params }).then(r => r.data?.dados || r.data?.data || []),
-  criarVeiculo: (data: any) => api.post("/veiculos-entregas", data).then(r => r.data),
-  atualizarVeiculo: (id: string, data: any) => api.put(`/veiculos-entregas/${id}`, data).then(r => r.data),
-  inativarVeiculo: (id: string) => api.patch(`/veiculos-entregas/${id}/inativar`).then(r => r.data),
-  ativarVeiculo: (id: string) => api.patch(`/veiculos-entregas/${id}/ativar`).then(r => r.data),
+  listarVeiculos: (params?: any) => api.get("/veiculos", { params }).then(r => r.data?.dados || r.data?.data || []),
+  criarVeiculo: (data: any) => api.post("/veiculos", data).then(r => r.data),
+  atualizarVeiculo: (id: string, data: any) => api.put(`/veiculos/${id}`, data).then(r => r.data),
+  inativarVeiculo: (id: string) => api.patch(`/veiculos/${id}/inativar`).then(r => r.data),
+  ativarVeiculo: (id: string) => api.patch(`/veiculos/${id}/ativar`).then(r => r.data),
 
   listarTaxas: (params?: any) => api.get("/taxas-entrega", { params }).then(r => r.data?.dados || r.data?.data || []),
   calcularTaxa: (data: { cep: string; clienteId?: string; pedidoValor?: number }) =>

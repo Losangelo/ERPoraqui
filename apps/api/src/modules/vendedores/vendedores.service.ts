@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarVendedorInput, 
   AtualizarVendedorInput,
@@ -13,7 +14,7 @@ export class VendedoresService {
       data: {
         ...dados,
         empresaId,
-      },
+      } as Prisma.VendedorUncheckedCreateInput,
     });
   }
 

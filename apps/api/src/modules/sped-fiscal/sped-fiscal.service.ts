@@ -95,7 +95,7 @@ export class SpedFiscalService {
 
     const clientes = await prisma.cliente.findMany({ where: { empresaId: params.empresaId, ativo: true }, take: 500 });
     for (const c of clientes) {
-      const doc = c.cpfCnpj?.replace(/\D/g, '') || '';
+      const doc = c.documento?.replace(/\D/g, '') || '';
       const nome = (c.nome || '').padEnd(100).substring(0, 100);
       const endC = c.endereco ? (typeof c.endereco === 'string' ? JSON.parse(c.endereco) : c.endereco) : {};
       linhas.push(`|0150|${doc}|${doc.length > 11 ? 2 : 1}|${nome}|${endC.logradouro || ''}|${endC.numero || ''}||${endC.bairro || ''}||${endC.cep || ''}|${endC.cidade || ''}|${endC.estado || ''}|||`);
@@ -103,7 +103,7 @@ export class SpedFiscalService {
 
     const fornecedores = await prisma.fornecedor.findMany({ where: { empresaId: params.empresaId, ativo: true }, take: 500 });
     for (const f of fornecedores) {
-      const doc = f.cpfCnpj?.replace(/\D/g, '') || '';
+      const doc = f.documento?.replace(/\D/g, '') || '';
       const nome = (f.nome || '').padEnd(100).substring(0, 100);
       linhas.push(`|0150|${doc}|${doc.length > 11 ? 2 : 1}|${nome}|||||||||||`);
     }
@@ -113,12 +113,16 @@ export class SpedFiscalService {
       linhas.push(`|0190|${u.simbolo || 'UN'}|${(u.descricao || '').padEnd(20).substring(0, 20)}|`);
     }
 
-    const produtos = await prisma.produto.findMany({ where: { empresaId: params.empresaId, ativo: true }, take: 1000 });
+    const produtos = await prisma.produto.findMany({
+      where: { empresaId: params.empresaId, ativo: true },
+      include: { unidadeMedida: { select: { simbolo: true } } },
+      take: 1000,
+    });
     for (const p of produtos) {
       const cod = (p.codigoInterno || p.id.substring(0, 20)).padEnd(20).substring(0, 20);
       const nome = (p.nome || '').padEnd(100).substring(0, 100);
-      const ncm = p.NCM || '00000000';
-      linhas.push(`|0200|${cod}|${nome}|||${ncm}|${p.codigoBarras || ''}||${p.unidadeVenda || 'UN'}|`);
+      const ncm = p.ncm || '00000000';
+      linhas.push(`|0200|${cod}|${nome}|||${ncm}|${p.codigoBarras || ''}||${p.unidadeMedida?.simbolo || 'UN'}|`);
     }
 
     if (config?.cnpjContador) {
@@ -141,43 +145,42 @@ export class SpedFiscalService {
         dataEmissao: { gte: params.periodoIni, lte: params.periodoFin },
         situacao: 'AUTORIZADA',
       },
-      include: { itens: true },
+      include: { itens: true, cliente: { select: { documento: true } }, fornecedor: { select: { documento: true } } },
       orderBy: { dataEmissao: 'asc' },
       take: 2000,
     });
 
     for (const nf of notas) {
-      const cnpjDest = nf.cliente?.cpfCnpj?.replace(/\D/g, '') || nf.fornecedor?.cpfCnpj?.replace(/\D/g, '') || '';
+      const cnpjDest = nf.cliente?.documento?.replace(/\D/g, '') || nf.fornecedor?.documento?.replace(/\D/g, '') || '';
       const modelo = String(nf.modelo || '55');
       const serie = String(nf.serie || '1');
       const numero = String(nf.numero || '0');
       const dataEmi = nf.dataEmissao ? `${String(nf.dataEmissao.getDate()).padStart(2, '0')}${String(nf.dataEmissao.getMonth() + 1).padStart(2, '0')}${nf.dataEmissao.getFullYear()}` : '';
       const valorTotal = Number(nf.valorTotal || 0).toFixed(2);
-      const cfop = nf.cfop || '5102';
+      const cfop = nf.itens?.[0]?.cfop || '5102';
       const natOp = nf.naturezaOperacao || 'VENDA';
 
       linhas.push(`|C100|0|${modelo}|${serie}|${numero}|${dataEmi}|${dataEmi}||${cnpjDest}|${1}|${cnpjDest}|${cfop}|${natOp}|${''}|${''}|${''}|${''}|${''}|${''}|${''}|${''}|${valorTotal}|`);
 
       if (nf.itens && nf.itens.length > 0) {
         for (const item of nf.itens) {
-          const codProd = (item.codigoProduto || item.produtoId || '').padEnd(20).substring(0, 20);
-          const qtd = Number(item.quantidade || 1).toFixed(2);
-          const vUnit = Number(item.valorUnitario || 0).toFixed(2);
-          const vTotal = Number(item.valorTotal || 0).toFixed(2);
+          const codProd = (item.codigo || item.produtoId || '').padEnd(20).substring(0, 20);
+          const qtd = Number(item.quantidadeComercial || 1).toFixed(2);
+          const vUnit = Number(item.valorUnitarioComercial || 0).toFixed(2);
+          const vTotal = Number(item.valorTotalLiquido || 0).toFixed(2);
           const vDesc = Number(item.valorDesconto || 0).toFixed(2);
-          const vBCIcms = Number(item.baseICMS || 0).toFixed(2);
-          const vIcms = Number(item.valorICMS || 0).toFixed(2);
-          const aliqIcms = Number(item.aliquotaICMS || 0).toFixed(2);
-          const cst = item.CST || '00';
+          const vBCIcms = Number(item.icmsBaseCalculo || 0).toFixed(2);
+          const vIcms = Number(item.icmsValor || 0).toFixed(2);
+          const aliqIcms = Number(item.icmsAliquota || 0).toFixed(2);
+          const cst = item.codigoTributario || '00';
 
           linhas.push(`|C170|1|${codProd}|${qtd}|${vUnit}|${vTotal}|${vDesc}|${vBCIcms}|${vIcms}|${aliqIcms}|${cst}|`);
         }
       }
 
-      const resumoKey = `${cfop}_${nf.itens?.[0]?.CST || '00'}`;
-      const vBC = nf.itens?.reduce((a, i) => a + Number(i.baseICMS || 0), 0) || 0;
-      const vICMS = nf.itens?.reduce((a, i) => a + Number(i.valorICMS || 0), 0) || 0;
-      linhas.push(`|C190|0|${nf.itens?.[0]?.CST || '00'}|${cfop}|${vBC.toFixed(2)}|${vICMS.toFixed(2)}|`);
+      const vBC = nf.itens?.reduce((a, i) => a + Number(i.icmsBaseCalculo || 0), 0) || 0;
+      const vICMS = nf.itens?.reduce((a, i) => a + Number(i.icmsValor || 0), 0) || 0;
+      linhas.push(`|C190|0|${nf.itens?.[0]?.codigoTributario || '00'}|${cfop}|${vBC.toFixed(2)}|${vICMS.toFixed(2)}|`);
     }
 
     linhas.push(`|C990|${linhas.length + 1}|`);
@@ -200,7 +203,7 @@ export class SpedFiscalService {
     for (const ns of notasServico) {
       const dataEmi = ns.dataEmissao ? `${String(ns.dataEmissao.getDate()).padStart(2, '0')}${String(ns.dataEmissao.getMonth() + 1).padStart(2, '0')}${ns.dataEmissao.getFullYear()}` : '';
       const valor = Number(ns.valorTotal || 0).toFixed(2);
-      const iss = Number(ns.valorISS || 0).toFixed(2);
+      const iss = Number(ns.valorIss || 0).toFixed(2);
 
       linhas.push(`|D100|0|${ns.numero || ''}|${dataEmi}|${valor}|${iss}|${ns.codigoServico || ''}|`);
     }
@@ -249,7 +252,7 @@ export class SpedFiscalService {
 
     const produtos = await prisma.produto.findMany({
       where: { empresaId: params.empresaId, ativo: true },
-      select: { codigoInterno: true, nome: true, NCM: true, unidadeVenda: true, quantidadeEstoque: true, precoCusto: true },
+      select: { codigoInterno: true, nome: true, ncm: true, quantidadeEstoque: true, precoCusto: true, unidadeMedida: { select: { simbolo: true } } },
       take: 2000,
     });
 
@@ -257,7 +260,7 @@ export class SpedFiscalService {
       const cod = (p.codigoInterno || '').padEnd(20).substring(0, 20);
       const qtd = Number(p.quantidadeEstoque || 0).toFixed(2);
       const vCusto = Number(p.precoCusto || 0).toFixed(2);
-      linhas.push(`|H010|${cod}|${qtd}|${p.unidadeVenda || 'UN'}||${vCusto}|${p.NCM || '00000000'}|`);
+      linhas.push(`|H010|${cod}|${qtd}|${p.unidadeMedida?.simbolo || 'UN'}||${vCusto}|${p.ncm || '00000000'}|`);
     }
 
     linhas.push(`|H990|${linhas.length + 1}|`);

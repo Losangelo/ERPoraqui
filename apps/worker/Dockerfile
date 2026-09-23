@@ -16,4 +16,7 @@ ENV NODE_ENV=production
 
 WORKDIR /app/apps/worker
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD node -e "process.exit(0)"
+
 CMD ["npx", "tsx", "src/index.ts"]

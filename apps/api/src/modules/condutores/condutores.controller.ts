@@ -1,20 +1,19 @@
 import { Response } from 'express';
-import { VeiculosEntregasService } from './veiculos-entregas.service';
+import { CondutoresService } from './condutores.service';
 import {
-  criarVeiculoEntregaSchema,
-  atualizarVeiculoEntregaSchema,
-  veiculoEntregaFiltroSchema,
-} from './dto/veiculo-entrega.dto';
+  criarCondutorSchema,
+  atualizarCondutorSchema,
+  condutorFiltroSchema,
+} from './dto/condutor.dto';
 import { AuthRequest } from '@/shared/middleware/auth.middleware';
 
-export class VeiculosEntregasController {
-  constructor(private service: VeiculosEntregasService) {}
+export class CondutoresController {
+  constructor(private service: CondutoresService) {}
 
   criar = async (req: AuthRequest, res: Response) => {
     const empresaId = req.usuario?.empresaId || '';
-
     try {
-      const dados = criarVeiculoEntregaSchema.parse(req.body);
+      const dados = criarCondutorSchema.parse(req.body);
       const resultado = await this.service.criar(empresaId, dados);
       return res.status(201).json(resultado);
     } catch (error: any) {
@@ -25,14 +24,9 @@ export class VeiculosEntregasController {
   buscarPorId = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
       const resultado = await this.service.buscarPorId(id, empresaId);
-
-      if (!resultado) {
-        return res.status(404).json({ error: 'Veículo não encontrado' });
-      }
-
+      if (!resultado) return res.status(404).json({ error: 'Condutor não encontrado' });
       return res.json(resultado);
     } catch (error) {
       return res.status(400).json({ error: (error as Error).message });
@@ -41,9 +35,8 @@ export class VeiculosEntregasController {
 
   listar = async (req: AuthRequest, res: Response) => {
     const empresaId = req.usuario?.empresaId || '';
-
     try {
-      const filtros = veiculoEntregaFiltroSchema.parse({
+      const filtros = condutorFiltroSchema.parse({
         ...req.query,
         pagina: Number(req.query.pagina) || 1,
         limite: Number(req.query.limite) || 20,
@@ -58,9 +51,8 @@ export class VeiculosEntregasController {
   atualizar = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
-      const dados = atualizarVeiculoEntregaSchema.parse(req.body);
+      const dados = atualizarCondutorSchema.parse(req.body);
       const resultado = await this.service.atualizar(id, empresaId, dados);
       return res.json(resultado);
     } catch (error: any) {
@@ -71,7 +63,6 @@ export class VeiculosEntregasController {
   inativar = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
       const resultado = await this.service.inativar(id, empresaId);
       return res.json(resultado);
@@ -83,7 +74,6 @@ export class VeiculosEntregasController {
   ativar = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
       const resultado = await this.service.ativar(id, empresaId);
       return res.json(resultado);

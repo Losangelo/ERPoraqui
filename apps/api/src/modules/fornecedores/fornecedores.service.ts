@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarFornecedorInput, 
   AtualizarFornecedorInput, 
@@ -6,11 +7,16 @@ import {
 } from './dto/fornecedor.dto';
 
 export class FornecedoresService {
+  private flatten<T extends { endereco?: any }>(item: T) {
+    const { endereco, ...rest } = item as any;
+    return { ...rest, ...(endereco || {}) };
+  }
+
   async criar(empresaId: string, dados: CriarFornecedorInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
     const { logradouro, numero, complemento, bairro, cidade, uf, cep, ...resto } = dados;
     
-    return prisma.fornecedor.create({
+    const result = await prisma.fornecedor.create({
       data: {
         ...resto,
         empresaId,
@@ -23,15 +29,17 @@ export class FornecedoresService {
           uf,
           cep,
         } : undefined,
-      },
+      } as Prisma.FornecedorUncheckedCreateInput,
     });
+    return this.flatten(result);
   }
 
   async buscarPorId(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    return prisma.fornecedor.findFirst({
+    const result = await prisma.fornecedor.findFirst({
       where: { id, empresaId },
     });
+    return result ? this.flatten(result) : null;
   }
 
   async listar(empresaId: string, filtros: FornecedorFiltro) {
@@ -57,7 +65,7 @@ export class FornecedoresService {
     ]);
 
     return {
-      dados,
+      dados: dados.map(this.flatten),
       meta: {
         pagina,
         limite,
@@ -73,23 +81,25 @@ export class FornecedoresService {
     
     const { logradouro, numero, complemento, bairro, cidade, uf, cep, ...resto } = dados;
     
-    return prisma.fornecedor.update({
+    const endereco: any = {};
+    if (logradouro !== undefined) endereco.logradouro = logradouro;
+    if (numero !== undefined) endereco.numero = numero;
+    if (complemento !== undefined) endereco.complemento = complemento;
+    if (bairro !== undefined) endereco.bairro = bairro;
+    if (cidade !== undefined) endereco.cidade = cidade;
+    if (uf !== undefined) endereco.uf = uf;
+    if (cep !== undefined) endereco.cep = cep;
+
+    const hasEndereco = Object.keys(endereco).length > 0;
+
+    const result = await prisma.fornecedor.update({
       where: { id },
       data: {
         ...resto,
-        ...(logradouro && {
-          endereco: {
-            logradouro,
-            numero,
-            complemento,
-            bairro,
-            cidade,
-            uf,
-            cep,
-          },
-        }),
+        ...(hasEndereco ? { endereco } : {}),
       },
     });
+    return this.flatten(result);
   }
 
   async inativar(id: string, empresaId: string) {

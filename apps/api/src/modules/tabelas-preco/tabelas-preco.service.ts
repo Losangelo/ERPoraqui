@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import {
   CriarTabelaPrecoInput,
   AtualizarTabelaPrecoInput,
@@ -12,7 +13,7 @@ export class TabelasPrecoService {
   async criar(empresaId: string, dados: CriarTabelaPrecoInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
     return prisma.tabelaPreco.create({
-      data: { ...dados, empresaId },
+      data: { ...dados, empresaId } as Prisma.TabelaPrecoUncheckedCreateInput,
     });
   }
 
@@ -71,7 +72,7 @@ export class TabelasPrecoService {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(tabelaPrecoId, empresaId);
     return prisma.tabelaPrecoItem.create({
-      data: { ...dados, tabelaPrecoId },
+      data: { ...dados, tabelaPrecoId } as Prisma.TabelaPrecoItemUncheckedCreateInput,
     });
   }
 

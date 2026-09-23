@@ -11,11 +11,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import toast from "react-hot-toast"
 
-interface Motorista {
+interface Condutor {
   id: string
   nome: string
   cpf?: string
-  tipo: "PROPRIO" | "PJ"
+  tipoCondutor: "PROPRIO" | "PJ"
   cnh?: string
   cnhCategoria?: string
   telefone?: string
@@ -25,14 +25,14 @@ interface Motorista {
 }
 
 export function MotoristasPage() {
-  const [motoristas, setMotoristas] = useState<Motorista[]>([])
+  const [condutores, setCondutores] = useState<Condutor[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [editando, setEditando] = useState<Motorista | null>(null)
+  const [editando, setEditando] = useState<Condutor | null>(null)
   const [formData, setFormData] = useState({
     nome: "",
     cpf: "",
-    tipo: "PROPRIO" as "PROPRIO" | "PJ",
+    tipoCondutor: "PROPRIO" as "PROPRIO" | "PJ",
     cnh: "",
     cnhCategoria: "",
     telefone: "",
@@ -47,10 +47,10 @@ export function MotoristasPage() {
     try {
       setLoading(true)
       const result = await entregasService.listarMotoristas()
-      setMotoristas(Array.isArray(result) ? result : [])
+      setCondutores(Array.isArray(result) ? result : [])
     } catch (error) {
-      console.error("Erro ao carregar motoristas:", error)
-      toast.error("Erro ao carregar motoristas")
+      console.error("Erro ao carregar condutores:", error)
+      toast.error("Erro ao carregar condutores")
     } finally {
       setLoading(false)
     }
@@ -61,27 +61,27 @@ export function MotoristasPage() {
     try {
       if (editando) {
         await entregasService.atualizarMotorista(editando.id, formData)
-        toast.success("Motorista atualizado com sucesso")
+        toast.success("Condutor atualizado com sucesso")
       } else {
         await entregasService.criarMotorista(formData)
-        toast.success("Motorista criado com sucesso")
+        toast.success("Condutor criado com sucesso")
       }
       setShowModal(false)
       resetForm()
       loadData()
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || "Erro ao salvar motorista")
+      toast.error(error.response?.data?.error?.message || "Erro ao salvar condutor")
     }
   }
 
-  const handleToggleAtivo = async (item: Motorista) => {
+  const handleToggleAtivo = async (item: Condutor) => {
     try {
       if (item.ativo) {
         await entregasService.inativarMotorista(item.id)
-        toast.success("Motorista inativado")
+        toast.success("Condutor inativado")
       } else {
         await entregasService.ativarMotorista(item.id)
-        toast.success("Motorista ativado")
+        toast.success("Condutor ativado")
       }
       loadData()
     } catch (error: any) {
@@ -89,12 +89,12 @@ export function MotoristasPage() {
     }
   }
 
-  const openEdit = (item: Motorista) => {
+  const openEdit = (item: Condutor) => {
     setEditando(item)
     setFormData({
       nome: item.nome,
       cpf: item.cpf || "",
-      tipo: item.tipo,
+      tipoCondutor: item.tipoCondutor,
       cnh: item.cnh || "",
       cnhCategoria: item.cnhCategoria || "",
       telefone: item.telefone || "",
@@ -110,7 +110,7 @@ export function MotoristasPage() {
     setFormData({
       nome: "",
       cpf: "",
-      tipo: "PROPRIO",
+      tipoCondutor: "PROPRIO",
       cnh: "",
       cnhCategoria: "",
       telefone: "",
@@ -131,13 +131,13 @@ export function MotoristasPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <User className="w-6 h-6" />
-            Motoristas
+            Condutores
           </h1>
-          <p className="text-gray-500">Gerenciamento de motoristas de entregas</p>
+          <p className="text-gray-500">Gerenciamento de condutores de entregas</p>
         </div>
-        <Button onClick={() => { resetForm(); setShowModal(true) }} title="Cadastrar novo motorista">
+        <Button onClick={() => { resetForm(); setShowModal(true) }} title="Cadastrar novo condutor">
           <Plus className="mr-2 h-4 w-4" />
-          Novo Motorista
+          Novo Condutor
         </Button>
       </div>
 
@@ -160,14 +160,14 @@ export function MotoristasPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {motoristas.length === 0 ? (
+                {condutores.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} className="h-32 text-center text-gray-500">
-                      Nenhum motorista encontrado
+                      Nenhum condutor encontrado
                     </TableCell>
                   </TableRow>
                 ) : (
-                  motoristas.map((item) => (
+                  condutores.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
@@ -179,8 +179,8 @@ export function MotoristasPage() {
                       </TableCell>
                       <TableCell>{item.cpf || "-"}</TableCell>
                       <TableCell>
-                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${item.tipo === "PROPRIO" ? "bg-green-100 text-green-800" : "bg-orange-100 text-orange-800"}`}>
-                          {tipoLabel[item.tipo]}
+                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${item.tipoCondutor === "PROPRIO" ? "bg-green-100 text-green-800" : "bg-orange-100 text-orange-800"}`}>
+                          {tipoLabel[item.tipoCondutor]}
                         </span>
                       </TableCell>
                       <TableCell>{item.telefone || "-"}</TableCell>
@@ -191,10 +191,10 @@ export function MotoristasPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon" title="Editar motorista" onClick={() => openEdit(item)}>
+                          <Button variant="ghost" size="icon" title="Editar condutor" onClick={() => openEdit(item)}>
                             <Edit className="h-4 w-4 text-gray-600" />
                           </Button>
-                          <Button variant="ghost" size="icon" title={item.ativo ? "Inativar motorista" : "Ativar motorista"} onClick={() => handleToggleAtivo(item)}>
+                          <Button variant="ghost" size="icon" title={item.ativo ? "Inativar condutor" : "Ativar condutor"} onClick={() => handleToggleAtivo(item)}>
                             {item.ativo ? <ToggleLeft className="h-4 w-4 text-red-600" /> : <ToggleRight className="h-4 w-4 text-green-600" />}
                           </Button>
                         </div>
@@ -211,7 +211,7 @@ export function MotoristasPage() {
       <Dialog open={showModal} onOpenChange={(open) => { if (!open) { setShowModal(false); resetForm() } }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><User className="w-5 h-5" /> {editando ? "Editar" : "Novo"} Motorista</DialogTitle>
+            <DialogTitle className="flex items-center gap-2"><User className="w-5 h-5" /> {editando ? "Editar" : "Novo"} Condutor</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-2">
@@ -221,8 +221,8 @@ export function MotoristasPage() {
                 type="text"
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                placeholder="Nome completo do motorista"
-                title="Nome completo do motorista"
+                placeholder="Nome completo do condutor"
+                title="Nome completo do condutor"
                 required
               />
             </div>
@@ -235,13 +235,13 @@ export function MotoristasPage() {
                   value={formData.cpf}
                   onChange={(e) => setFormData({ ...formData, cpf: e.target.value })}
                   placeholder="000.000.000-00"
-                  title="CPF do motorista (apenas números)"
+                  title="CPF do condutor (apenas números)"
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tipo">Tipo</Label>
-                <Select value={formData.tipo} onValueChange={(v: "PROPRIO" | "PJ") => setFormData({ ...formData, tipo: v })}>
-                  <SelectTrigger id="tipo" title="Tipo de vínculo do motorista">
+                <Label htmlFor="tipoCondutor">Tipo</Label>
+                <Select value={formData.tipoCondutor} onValueChange={(v: "PROPRIO" | "PJ") => setFormData({ ...formData, tipoCondutor: v })}>
+                  <SelectTrigger id="tipoCondutor" title="Tipo de vínculo do condutor">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -284,7 +284,7 @@ export function MotoristasPage() {
                   value={formData.telefone}
                   onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
                   placeholder="(99) 99999-9999"
-                  title="Telefone do motorista com DDD"
+                  title="Telefone do condutor com DDD"
                 />
               </div>
               <div className="grid gap-2">
@@ -294,8 +294,8 @@ export function MotoristasPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="motorista@exemplo.com"
-                  title="E-mail do motorista"
+                  placeholder="condutor@exemplo.com"
+                  title="E-mail do condutor"
                 />
               </div>
             </div>
@@ -305,8 +305,8 @@ export function MotoristasPage() {
                 id="observacoes"
                 value={formData.observacoes}
                 onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
-                placeholder="Informações adicionais sobre o motorista (restrições, observações de cadastro, etc.)"
-                title="Observações relevantes sobre o motorista"
+                placeholder="Informações adicionais sobre o condutor (restrições, observações de cadastro, etc.)"
+                title="Observações relevantes sobre o condutor"
               />
             </div>
             <div className="flex items-center gap-2">

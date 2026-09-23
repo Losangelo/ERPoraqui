@@ -11,7 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 interface Transportadora {
   id: string;
   nome: string;
-  cnpj: string;
+  documento: string;
+  tipoPessoa: string;
   telefone: string;
   email: string;
   ativo: boolean;
@@ -24,7 +25,8 @@ export function TransportadorasPage() {
   const [editando, setEditando] = useState<Transportadora | null>(null);
   const [formData, setFormData] = useState({
     nome: '',
-    cnpj: '',
+    tipoPessoa: 'JURIDICA',
+    documento: '',
     telefone: '',
     email: '',
     ativo: true,
@@ -38,7 +40,7 @@ export function TransportadorasPage() {
     try {
       setLoading(true);
       const res = await transportadorasService.listar();
-      if (res.data.success) setTransportadoras(res.data.data);
+      if (res.data.dados) setTransportadoras(res.data.dados);
     } catch (error) {
       console.error('Erro ao carregar:', error);
     } finally {
@@ -76,7 +78,8 @@ export function TransportadorasPage() {
     setEditando(item);
     setFormData({
       nome: item.nome,
-      cnpj: item.cnpj,
+      tipoPessoa: item.tipoPessoa,
+      documento: item.documento,
       telefone: item.telefone,
       email: item.email,
       ativo: item.ativo,
@@ -86,7 +89,7 @@ export function TransportadorasPage() {
 
   const resetForm = () => {
     setEditando(null);
-    setFormData({ nome: '', cnpj: '', telefone: '', email: '', ativo: true });
+    setFormData({ nome: '', tipoPessoa: 'JURIDICA', documento: '', telefone: '', email: '', ativo: true });
   };
 
   return (
@@ -113,7 +116,7 @@ export function TransportadorasPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Nome</TableHead>
-                  <TableHead>CNPJ</TableHead>
+                  <TableHead>Documento</TableHead>
                   <TableHead>Telefone</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Status</TableHead>
@@ -131,7 +134,7 @@ export function TransportadorasPage() {
                         <span className="font-medium text-gray-900">{item.nome}</span>
                       </div>
                     </TableCell>
-                    <TableCell>{item.cnpj}</TableCell>
+                    <TableCell>{item.documento}</TableCell>
                     <TableCell>{item.telefone}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>
@@ -183,14 +186,26 @@ export function TransportadorasPage() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="cnpj">CNPJ</Label>
+              <Label htmlFor="tipoPessoa">Tipo</Label>
+              <select
+                id="tipoPessoa"
+                value={formData.tipoPessoa}
+                onChange={(e) => setFormData({ ...formData, tipoPessoa: e.target.value })}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="FISICA">Pessoa Física</option>
+                <option value="JURIDICA">Pessoa Jurídica</option>
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="documento">{formData.tipoPessoa === 'FISICA' ? 'CPF' : 'CNPJ'}</Label>
               <Input
-                id="cnpj"
+                id="documento"
                 type="text"
-                value={formData.cnpj}
-                onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
-                placeholder="00.000.000/0000-00"
-                title="CNPJ da transportadora"
+                value={formData.documento}
+                onChange={(e) => setFormData({ ...formData, documento: e.target.value })}
+                placeholder={formData.tipoPessoa === 'FISICA' ? '000.000.000-00' : '00.000.000/0000-00'}
+                title={formData.tipoPessoa === 'FISICA' ? 'CPF da transportadora' : 'CNPJ da transportadora'}
                 required
               />
             </div>

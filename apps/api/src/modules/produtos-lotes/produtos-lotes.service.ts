@@ -1,11 +1,12 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { CriarProdutoLoteInput, AtualizarProdutoLoteInput, ProdutoLoteFiltro, AjustarEstoqueInput } from './dto/produto-lote.dto';
 
 export class ProdutosLotesService {
   async criar(empresaId: string, dados: CriarProdutoLoteInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
     return prisma.produtoLote.create({
-      data: { ...dados, empresaId },
+      data: { ...dados, empresaId } as Prisma.ProdutoLoteUncheckedCreateInput,
     });
   }
 

@@ -1,25 +1,30 @@
 import { prisma } from '@/database/prisma.service';
 import {
-  CriarVeiculoEntregaInput,
-  AtualizarVeiculoEntregaInput,
-  VeiculoEntregaFiltro,
-} from './dto/veiculo-entrega.dto';
+  CriarVeiculoInput,
+  AtualizarVeiculoInput,
+  VeiculoFiltro,
+} from './dto/veiculo.dto';
 
-export class VeiculosEntregasService {
-  async criar(empresaId: string, dados: CriarVeiculoEntregaInput) {
+export class VeiculosService {
+  async criar(empresaId: string, dados: CriarVeiculoInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
 
-    return prisma.veiculoEntrega.create({
+    const existente = await prisma.veiculo.findUnique({
+      where: { empresaId_placa: { empresaId, placa: dados.placa } },
+    });
+    if (existente) throw new Error(`Placa ${dados.placa} já cadastrada`);
+
+    return prisma.veiculo.create({
       data: {
         placa: dados.placa,
         marca: dados.marca,
         modelo: dados.modelo,
-        ano: dados.ano,
+        anoFabricacao: dados.ano,
         cor: dados.cor,
         capacidadeKg: dados.capacidadeKg,
-        tipo: dados.tipo,
-        proprietarioId: dados.proprietarioId,
+        tipoVeiculo: dados.tipoVeiculo,
         observacoes: dados.observacoes,
+        ativo: dados.ativo,
         empresaId,
       },
     });
@@ -27,30 +32,30 @@ export class VeiculosEntregasService {
 
   async buscarPorId(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    return prisma.veiculoEntrega.findFirst({
+    return prisma.veiculo.findFirst({
       where: { id, empresaId },
     });
   }
 
-  async listar(empresaId: string, filtros: VeiculoEntregaFiltro) {
+  async listar(empresaId: string, filtros: VeiculoFiltro) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    const { placa, tipo, ativo, pagina, limite } = filtros;
+    const { placa, tipoVeiculo, ativo, pagina, limite } = filtros;
 
     const where = {
       empresaId,
       ...(placa && { placa: { contains: placa, mode: 'insensitive' as const } }),
-      ...(tipo && { tipo }),
+      ...(tipoVeiculo && { tipoVeiculo }),
       ...(ativo !== undefined && { ativo }),
     };
 
     const [dados, total] = await Promise.all([
-      prisma.veiculoEntrega.findMany({
+      prisma.veiculo.findMany({
         where,
         skip: (pagina - 1) * limite,
         take: limite,
         orderBy: { placa: 'asc' },
       }),
-      prisma.veiculoEntrega.count({ where }),
+      prisma.veiculo.count({ where }),
     ]);
 
     return {
@@ -64,22 +69,22 @@ export class VeiculosEntregasService {
     };
   }
 
-  async atualizar(id: string, empresaId: string, dados: AtualizarVeiculoEntregaInput) {
+  async atualizar(id: string, empresaId: string, dados: AtualizarVeiculoInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
 
-    return prisma.veiculoEntrega.update({
+    return prisma.veiculo.update({
       where: { id },
       data: {
         ...(dados.placa !== undefined && { placa: dados.placa }),
         ...(dados.marca !== undefined && { marca: dados.marca }),
         ...(dados.modelo !== undefined && { modelo: dados.modelo }),
-        ...(dados.ano !== undefined && { ano: dados.ano }),
+        ...(dados.ano !== undefined && { anoFabricacao: dados.ano }),
         ...(dados.cor !== undefined && { cor: dados.cor }),
         ...(dados.capacidadeKg !== undefined && { capacidadeKg: dados.capacidadeKg }),
-        ...(dados.tipo !== undefined && { tipo: dados.tipo }),
-        ...(dados.proprietarioId !== undefined && { proprietarioId: dados.proprietarioId }),
+        ...(dados.tipoVeiculo !== undefined && { tipoVeiculo: dados.tipoVeiculo }),
         ...(dados.observacoes !== undefined && { observacoes: dados.observacoes }),
+        ...(dados.ativo !== undefined && { ativo: dados.ativo }),
       },
     });
   }
@@ -87,8 +92,7 @@ export class VeiculosEntregasService {
   async inativar(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
-
-    return prisma.veiculoEntrega.update({
+    return prisma.veiculo.update({
       where: { id },
       data: { ativo: false },
     });
@@ -97,20 +101,16 @@ export class VeiculosEntregasService {
   async ativar(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
-
-    return prisma.veiculoEntrega.update({
+    return prisma.veiculo.update({
       where: { id },
       data: { ativo: true },
     });
   }
 
   private async verificarProprietario(id: string, empresaId: string) {
-    const veiculo = await prisma.veiculoEntrega.findFirst({
+    const veiculo = await prisma.veiculo.findFirst({
       where: { id, empresaId },
     });
-
-    if (!veiculo) {
-      throw new Error('Veículo não encontrado');
-    }
+    if (!veiculo) throw new Error('Veículo não encontrado');
   }
 }

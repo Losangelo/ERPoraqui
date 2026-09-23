@@ -114,19 +114,20 @@ export class AutomacaoService {
           amanha.setDate(amanha.getDate() + (trigger.diasAntecedencia || 3));
           amanha.setHours(0, 0, 0, 0);
 
-          const amanhaStr = amanha.toISOString().split('T')[0];
+          const fimDia = new Date(amanha);
+          fimDia.setHours(23, 59, 59, 999);
           
           const contasVencendo = await this.prisma.contaReceber.findMany({
             where: {
               empresaId: automacao.empresaId,
-              dataVencimento: { startsWith: amanhaStr },
-              situacao: 'PENDENTE',
+              dataVencimento: { gte: amanha, lte: fimDia },
+              situacao: 'ABERTA',
             },
             include: { cliente: true },
           });
 
           for (const conta of contasVencendo) {
-            detalhes.push({ tipo: 'CONTA_VENCENDO', cliente: conta.cliente?.nome, valor: conta.valor });
+            detalhes.push({ tipo: 'CONTA_VENCENDO', cliente: conta.cliente?.nome, valor: conta.valorOriginal });
           }
           executado = contasVencendo.length > 0;
           break;
@@ -134,12 +135,11 @@ export class AutomacaoService {
         case 'CLIENTE_CADASTRADO':
           const hoje = new Date();
           hoje.setHours(0, 0, 0, 0);
-          const hojeStr = hoje.toISOString();
           
           const novosClientes = await this.prisma.cliente.findMany({
             where: {
               empresaId: automacao.empresaId,
-              createdAt: { gte: hojeStr },
+              dataCriacao: { gte: hoje },
             },
             take: trigger.limit || 50,
           });

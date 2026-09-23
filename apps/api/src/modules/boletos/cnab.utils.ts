@@ -62,7 +62,7 @@ interface BoletoCnabData {
   mensagem?: string;
 }
 
-interface RetornoItem {
+export interface RetornoItem {
   nossoNumero: string;
   numeroDocumento: string;
   situacao: string;

@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarEntradaMercadoriaInput,
   EntradaFiltro 
@@ -25,13 +26,14 @@ export class EntradasMercadoriaService {
         valorTotal,
         dataEmissao: entradaData.dataEmissao || new Date(),
         itens: {
-          create: itens.map((item) => ({
+          create: itens.map(({ produtoId, ...item }) => ({
             ...item,
+            produto: { connect: { id: produtoId } },
             quantidadeRecebida: item.quantidadeRecebida || item.quantidade,
             valorTotal: item.quantidade * item.valorUnitario,
           })),
         },
-      },
+      } as Prisma.EntradaMercadoriaUncheckedCreateInput,
       include: {
         itens: {
           include: {

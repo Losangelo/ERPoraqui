@@ -135,7 +135,7 @@ export class MultiEmpresaService {
         telefone: data.telefone,
         email: data.email,
         site: data.site,
-        regimeTributario: data.regimeTributario,
+        regimeTributario: data.regimeTributario as any,
         endereco: data.endereco,
         matrizId: data.empresaMatrizId,
       },

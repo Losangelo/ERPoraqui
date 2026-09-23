@@ -130,7 +130,7 @@ export class PdvService {
         codigoBarras: produto.codigoBarras || produto.gtin,
         descricao: produto.nome,
         quantidade: data.quantidade,
-        unidadeMedida: produto.unidadeMedidaId?.simbolo || 'UN',
+        unidadeMedida: 'UN',
         valorUnitario: data.valorUnitario || produto.precoVenda,
         valorDesconto: data.valorDesconto,
       };

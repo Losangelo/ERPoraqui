@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import appLogger from '@/shared/logger/logger';
 import { LogCategory } from '@/shared/logger/logger';
@@ -121,7 +122,7 @@ export class NFSeService {
             issValor: (item.valorUnitario * (item.quantidade || 1)) * ((item.issAliquota || 0) / 100),
           })),
         } : undefined,
-      },
+      } as Prisma.NotaServicoUncheckedCreateInput,
       include: {
         filial: true,
         cliente: true,

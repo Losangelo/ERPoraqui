@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { prisma } from '@/database/prisma.service';
 import { LicencasService } from './licencas.service';
 import { 
   criarPlanoSchema, 
@@ -11,7 +12,7 @@ export class LicencasController {
   private service: LicencasService;
 
   constructor() {
-    this.service = new LicencasService();
+    this.service = new LicencasService(prisma);
   }
 
   // ==================== PLANOS ====================

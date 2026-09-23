@@ -9,6 +9,10 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/pdv':                             { file: 'pdv', title: 'PDV (Ponto de Venda)' },
   '/orcamentos':                      { file: 'orcamentos-vendas', title: 'Orçamentos de Vendas' },
   '/orders':                          { file: 'orcamentos-vendas', title: 'Orçamentos de Vendas' },
+  '/entregas':                        { file: 'estoque-avancado', title: 'Entregas' },
+  '/motoristas':                      { file: 'summary', title: 'Motoristas' },
+  '/veiculos-entrega':                { file: 'summary', title: 'Veículos de Entrega' },
+  '/taxas-entrega':                   { file: 'summary', title: 'Taxas de Entrega' },
 
   // CRM
   '/crm':                             { file: 'crm', title: 'CRM (Gestão de Relacionamento)' },
@@ -24,29 +28,31 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/mdfe':                            { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
   '/veiculos':                        { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
   '/condutores':                      { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
+  '/cte':                             { file: 'cte', title: 'CT-e (Conhecimento de Transporte Eletrônico)' },
 
   // Promoções
   '/promocoes':                       { file: 'promocoes', title: 'Promoções' },
 
-  // CT-e
-  '/cte':                             { file: 'cte', title: 'CT-e (Conhecimento de Transporte Eletrônico)' },
-
-  // Contratos / Garantias / Devoluções
+  // Contratos / Garantias / Devoluções / Convênios
   '/contratos':                       { file: 'contratos-garantias-devolucoes', title: 'Contratos, Garantias e Devoluções' },
   '/garantias':                       { file: 'contratos-garantias-devolucoes', title: 'Contratos, Garantias e Devoluções' },
   '/devolucoes':                      { file: 'contratos-garantias-devolucoes', title: 'Contratos, Garantias e Devoluções' },
+  '/convenios':                       { file: 'convenios-licitacoes', title: 'Convênios' },
+
+  // Licitações
+  '/licitacoes':                      { file: 'convenios-licitacoes', title: 'Licitações' },
 
   // Financeiro
   '/contas-receber':                  { file: 'financeiro', title: 'Financeiro' },
   '/contas-pagar':                    { file: 'financeiro', title: 'Financeiro' },
-  '/fluxo-caixa':                     { file: 'financeiro', title: 'Financeiro' },
-  '/dre':                             { file: 'financeiro', title: 'Financeiro' },
-  '/plano-contas':                    { file: 'financeiro', title: 'Financeiro' },
+  '/fluxo-caixa':                     { file: 'fluxo-caixa', title: 'Fluxo de Caixa' },
+  '/dre':                             { file: 'dre', title: 'DRE' },
+  '/plano-contas':                    { file: 'plano-contas', title: 'Plano de Contas' },
   '/boletos':                         { file: 'boletos-cnab', title: 'Boletos / CNAB' },
   '/cheques':                         { file: 'cheques', title: 'Cheques' },
   '/centros-custo':                   { file: 'centro-custo', title: 'Centro de Custo' },
-  '/renegociacao':                    { file: 'financeiro', title: 'Financeiro (Renegociação)' },
-  '/conciliacao':                     { file: 'financeiro', title: 'Financeiro (Conciliação Bancária)' },
+  '/renegociacao':                    { file: 'renegociacao', title: 'Renegociação' },
+  '/conciliacao':                     { file: 'conciliacao', title: 'Conciliação Bancária' },
   '/adiantamentos':                   { file: 'adiantamentos-quitacoes', title: 'Adiantamentos' },
   '/quitacoes':                       { file: 'adiantamentos-quitacoes', title: 'Quitações' },
 
@@ -59,12 +65,8 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/estoque/movimentacoes':           { file: 'estoque-avancado', title: 'Estoque Avançado' },
   '/estoque/categorias':              { file: 'estoque-avancado', title: 'Estoque Avançado' },
   '/estoque/unidades':                { file: 'estoque-avancado', title: 'Estoque Avançado' },
-  '/estoque/kardex':                  { file: 'estoque-avancado', title: 'Estoque Avançado (Kardex)' },
-  '/inventario':                      { file: 'estoque-avancado', title: 'Estoque Avançado' },
-
-  // Convênios / Licitações
-  '/convenios':                       { file: 'convenios-licitacoes', title: 'Convênios' },
-  '/licitacoes':                      { file: 'convenios-licitacoes', title: 'Licitações' },
+  '/estoque/kardex':                  { file: 'kardex', title: 'Kardex' },
+  '/inventario':                      { file: 'inventario', title: 'Inventário' },
 
   // Compras
   '/compras':                         { file: 'financeiro', title: 'Financeiro' },
@@ -72,23 +74,23 @@ export const routeHelpMap: Record<string, HelpMapEntry> = {
   '/compras/entradas':                { file: 'financeiro', title: 'Financeiro' },
   '/suppliers':                       { file: 'financeiro', title: 'Financeiro' },
 
+  // Cadastros
+  '/vendedores':                      { file: 'crm', title: 'CRM (Gestão de Relacionamento)' },
+  '/transportadoras':                 { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
+  '/filiais':                         { file: 'filial', title: 'Filial' },
+  '/usuarios':                        { file: 'usuarios', title: 'Usuários' },
+
   // Relatórios / Automação / Gestão
   '/relatorios':                      { file: 'relatorios', title: 'Relatórios (Report Engine)' },
   '/automacao':                       { file: 'automacao', title: 'Automação' },
   '/multi-empresa':                   { file: 'multi-empresa', title: 'Multi-empresa (Grupo Econômico)' },
-  '/filiais':                         { file: 'filial', title: 'Filial' },
-
-  // Cadastros
-  '/vendedores':                      { file: 'crm', title: 'CRM (Gestão de Relacionamento)' },
-  '/transportadoras':                 { file: 'mdfe', title: 'MDF-e (Manifesto Eletrônico)' },
-  '/usuarios':                        { file: 'summary', title: 'Manual de Treinamento' },
 
   // Sistema
-  '/logs':                            { file: 'summary', title: 'Manual de Treinamento' },
-  '/parametros':                      { file: 'summary', title: 'Manual de Treinamento' },
+  '/logs':                            { file: 'logs', title: 'Logs do Sistema' },
+  '/parametros':                      { file: 'parametros', title: 'Parâmetros' },
   '/planos':                          { file: 'summary', title: 'Manual de Treinamento' },
   '/settings':                        { file: 'summary', title: 'Manual de Treinamento' },
   '/ajuda':                           { file: 'summary', title: 'Manual de Treinamento' },
   '/manual':                          { file: 'summary', title: 'Manual de Treinamento' },
-  '/manual-tecnico':                  { file: 'summary', title: 'Manual de Treinamento' },
+  '/manual-tecnico':                  { file: 'summary', title: 'Manual Técnico' },
 };

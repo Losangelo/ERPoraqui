@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import toast from "react-hot-toast"
 
-type TipoVeiculo = "CARRO" | "MOTO" | "VAN" | "CAMINHAO" | "BICICLETA" | "OUTRO"
+type VeiculoTipo = "CARRO" | "MOTO" | "VAN" | "CAMINHAO" | "BICICLETA" | "OUTRO"
 
 interface Veiculo {
   id: string
@@ -21,12 +21,12 @@ interface Veiculo {
   ano?: number
   cor?: string
   capacidadeKg?: number
-  tipo: TipoVeiculo
+  tipoVeiculo: VeiculoTipo
   ativo: boolean
   observacoes?: string
 }
 
-const TIPO_VEICULO_LABEL: Record<TipoVeiculo, string> = {
+const TIPO_VEICULO_LABEL: Record<VeiculoTipo, string> = {
   CARRO: "Carro",
   MOTO: "Moto",
   VAN: "Van",
@@ -35,7 +35,7 @@ const TIPO_VEICULO_LABEL: Record<TipoVeiculo, string> = {
   OUTRO: "Outro",
 }
 
-const TIPO_VEICULO_BADGE: Record<TipoVeiculo, string> = {
+const TIPO_VEICULO_BADGE: Record<VeiculoTipo, string> = {
   CARRO: "bg-blue-100 text-blue-800",
   MOTO: "bg-orange-100 text-orange-800",
   VAN: "bg-purple-100 text-purple-800",
@@ -56,7 +56,7 @@ export function VeiculosEntregaPage() {
     ano: "",
     cor: "",
     capacidadeKg: "",
-    tipo: "CARRO" as TipoVeiculo,
+    tipoVeiculo: "CARRO" as VeiculoTipo,
     observacoes: "",
     ativo: true,
   })
@@ -123,7 +123,7 @@ export function VeiculosEntregaPage() {
       ano: item.ano ? String(item.ano) : "",
       cor: item.cor || "",
       capacidadeKg: item.capacidadeKg ? String(item.capacidadeKg) : "",
-      tipo: item.tipo,
+      tipoVeiculo: item.tipoVeiculo,
       observacoes: item.observacoes || "",
       ativo: item.ativo,
     })
@@ -139,7 +139,7 @@ export function VeiculosEntregaPage() {
       ano: "",
       cor: "",
       capacidadeKg: "",
-      tipo: "CARRO",
+      tipoVeiculo: "CARRO",
       observacoes: "",
       ativo: true,
     })
@@ -151,7 +151,7 @@ export function VeiculosEntregaPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <Truck className="w-6 h-6" />
-            Veículos de Entrega
+            Veículos
           </h1>
           <p className="text-gray-500">Gerenciamento de veículos para entregas</p>
         </div>
@@ -199,8 +199,8 @@ export function VeiculosEntregaPage() {
                       </TableCell>
                       <TableCell>{[item.marca, item.modelo].filter(Boolean).join(" / ") || "-"}</TableCell>
                       <TableCell>
-                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${TIPO_VEICULO_BADGE[item.tipo]}`}>
-                          {TIPO_VEICULO_LABEL[item.tipo]}
+                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${TIPO_VEICULO_BADGE[item.tipoVeiculo]}`}>
+                          {TIPO_VEICULO_LABEL[item.tipoVeiculo]}
                         </span>
                       </TableCell>
                       <TableCell>{item.capacidadeKg ? `${item.capacidadeKg} kg` : "-"}</TableCell>
@@ -248,9 +248,9 @@ export function VeiculosEntregaPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tipo">Tipo</Label>
-                <Select value={formData.tipo} onValueChange={(v: TipoVeiculo) => setFormData({ ...formData, tipo: v })}>
-                  <SelectTrigger id="tipo" title="Tipo de veículo">
+                <Label htmlFor="tipoVeiculo">Tipo</Label>
+                <Select value={formData.tipoVeiculo} onValueChange={(v: VeiculoTipo) => setFormData({ ...formData, tipoVeiculo: v })}>
+                  <SelectTrigger id="tipoVeiculo" title="Tipo de veículo">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

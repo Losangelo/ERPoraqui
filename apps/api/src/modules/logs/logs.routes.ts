@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import appLogger from '../../shared/logger/logger';
+import appLogger, { LogCategory } from '../../shared/logger/logger';
 
 const router = Router();
 
@@ -19,7 +19,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     res.json(result);
   } catch (error) {
-    appLogger.error('Erro ao buscar logs', error as Error, { category: 'api', action: 'logs:list' });
+    appLogger.error('Erro ao buscar logs', error as Error, { category: LogCategory.API, action: 'logs:list' });
     res.status(500).json({ error: 'Erro ao buscar logs' });
   }
 });
@@ -30,7 +30,7 @@ router.get('/estatisticas', async (req: Request, res: Response) => {
     const stats = await appLogger.getStats(empresaId as string);
     res.json(stats);
   } catch (error) {
-    appLogger.error('Erro ao buscar estatísticas', error as Error, { category: 'api', action: 'logs:stats' });
+    appLogger.error('Erro ao buscar estatísticas', error as Error, { category: LogCategory.API, action: 'logs:stats' });
     res.status(500).json({ error: 'Erro ao buscar estatísticas' });
   }
 });

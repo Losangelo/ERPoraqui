@@ -190,11 +190,17 @@
 | Spec CTE | docs/specs/CTE.md | Especificação CT-e | ✅ |
 | Spec RELATORIOS | docs/specs/RELATORIOS.md | Especificação relatórios | ✅ |
 | Spec ENTREGAS | docs/specs/ENTREGAS.md | Especificação entregas com rastreio, notificações e avaliação | ✅ |
+| Spec MOTORISTAS | docs/specs/MOTORISTAS.md | Especificação cadastro motoristas (próprio/PJ) | ✅ |
+| Spec VEICULOS_ENTREGA | docs/specs/VEICULOS_ENTREGA.md | Especificação veículos de entrega (frota) | ✅ |
+| Spec TAXAS_ENTREGA | docs/specs/TAXAS_ENTREGA.md | Especificação taxas de entrega com cálculo por CEP | ✅ |
 | Entregas API | apps/api/src/modules/entregas | CRUD entregas + status transitions (agendar/sair/entregue/falhou/cancelar) | ✅ |
 | Entregas Frontend | apps/web/src/pages/entregas | Lista, detalhes, timeline, avaliação | ✅ |
-| Motoristas API | apps/api/src/modules/entregas | CRUD motoristas | ✅ |
-| Veículos entrega API | apps/api/src/modules/entregas | CRUD veículos frota | ✅ |
-| Taxas entrega API | apps/api/src/modules/entregas | CRUD taxas + cálculo automático | ✅ |
+| Motoristas API | apps/api/src/modules/motoristas | CRUD motoristas (autônomo próprio/PJ) + inativar/ativar | ✅ |
+| Motoristas Frontend | apps/web/src/pages/entregas/MotoristasPage.tsx | Página CRUD motoristas | ✅ |
+| Veículos entrega API | apps/api/src/modules/veiculos-entregas | CRUD veículos frota (carro, moto, van, caminhão) + inativar/ativar | ✅ |
+| Veículos entrega Frontend | apps/web/src/pages/entregas/VeiculosEntregaPage.tsx | Página CRUD veículos entrega | ✅ |
+| Taxas entrega API | apps/api/src/modules/taxas-entrega | CRUD taxas + cálculo automático por CEP + validação valor mínimo | ✅ |
+| Taxas entrega Frontend | apps/web/src/pages/entregas/TaxasEntregaPage.tsx | Página CRUD taxas entrega | ✅ |
 | Rastreio público | apps/api/src/modules/entregas | Endpoint público GET /public/rastreio/:token | ✅ |
 | Avaliação pós-entrega | apps/api/src/modules/entregas | Endpoint público POST /public/avaliar | ✅ |
 
@@ -221,6 +227,7 @@
 - **06/07/2026**: Gerados 38 specs faltantes (cobertura total: 56 specs) + Correção controller orçamentos (status codes 404/409/500) + Toast errors no frontend + Atualização completa de docs/controle
 - **06/07/2026 (fim do dia)**: Módulo Entregas completo — Spec ENTREGAS.md (57 specs total), Treinamento entregas.md, API tests (18 testes), Frontend tests (15 testes), Manuais (ManualPage, AjudaPage, ManualTecnicoPage), Docs de controle (FEATURES/TODO/stepByStep/AGENTS)
 - **06/07/2026 (noite)**: OrdersPage reescrita — LookupField cliente/vendedor/transportadora, multi-itens com LookupField produto, Sheet grid produtos estilo PDV, parcelamento condicional, textarea, hints, cálculo automático total
+- **07/07/2026**: Geradas 3 specs faltantes (MOTORISTAS, VEICULOS_ENTREGA, TAXAS_ENTREGA) — cobertura total: 60 specs + Seed centros de custo (48 registros hierárquicos) + Correção fluxo-caixa na quitação em lote + Correção toast de erros EntregasPage
 - **01/07/2026**: PDV completo (carrinho, barcode, pagamento, troco) + Manual Técnico c/ senha 2145 + Manual Usuário atualizado (+13 seções) + Filial CRUD completo (backend rotas + frontend CRUD + componente FilialSelect + integração NFCe/NFSe/NF-e) + Deploy ZimaLOS.
 - **01/07/2026 (noite)**: MDF-e completo — Prisma models (Veiculo, Condutor, Mdfe, MdfeDocumento, MdfeEvento), API CRUD Veículos/Condutores/MDF-e com eventos (cancelar, encerrar, incluir/remover doc), Frontend VeiculosPage/CondutoresPage/MdfePage (listagem, filtro, criação, detalhes), Sidebar + Rotas.
 - **01/07/2026 (noite 2)**: Motor de Relatórios Genérico — Spec REPORT_ENGINE.md, ReportTemplate Prisma, 8 data sources (clientes, produtos, pedidos, contas, NF-e, NFSe), API executar + CRUD templates, Frontend RelatoriosPage (seletor fonte, colunas, filtros, preview, download CSV/XLSX, templates).

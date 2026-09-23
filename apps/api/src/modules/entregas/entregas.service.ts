@@ -16,7 +16,7 @@ export class EntregasService {
         clienteId: dados.clienteId,
         filialId: dados.filialId,
         empresaId,
-        motoristaId: dados.motoristaId,
+        condutorId: dados.condutorId,
         veiculoId: dados.veiculoId,
         transportadoraId: dados.transportadoraId,
         enderecoEntrega: dados.enderecoEntrega,
@@ -42,8 +42,8 @@ export class EntregasService {
     return prisma.entrega.findFirst({
       where: { id, empresaId },
       include: {
-        motorista: true,
-        veiculoEntrega: true,
+        condutor: true,
+        veiculo: true,
         cliente: true,
         pedidoVenda: true,
         tentativas: { orderBy: { dataTentativa: 'desc' } },
@@ -56,13 +56,13 @@ export class EntregasService {
 
   async listar(empresaId: string, filtros: EntregaFiltro) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    const { situacao, clienteId, motoristaId, pedidoVendaId, dataInicial, dataFinal, pagina, limite } = filtros;
+    const { situacao, clienteId, condutorId, pedidoVendaId, dataInicial, dataFinal, pagina, limite } = filtros;
 
     const where: any = { empresaId };
 
     if (situacao) where.situacao = situacao;
     if (clienteId) where.clienteId = clienteId;
-    if (motoristaId) where.motoristaId = motoristaId;
+    if (condutorId) where.condutorId = condutorId;
     if (pedidoVendaId) where.pedidoVendaId = pedidoVendaId;
     if (dataInicial || dataFinal) {
       where.dataCriacao = {};
@@ -77,8 +77,8 @@ export class EntregasService {
         take: limite,
         orderBy: { dataCriacao: 'desc' },
         include: {
-          motorista: true,
-          veiculoEntrega: true,
+          condutor: true,
+          veiculo: true,
           cliente: true,
           taxaEntrega: true,
         },
@@ -112,21 +112,23 @@ export class EntregasService {
     });
   }
 
-  async agendar(id: string, empresaId: string, dataAgendamento: string) {
+  async agendar(id: string, empresaId: string, dados: { dataAgendamento?: string; condutorId?: string; veiculoId?: string }) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
 
     const entrega = await prisma.entrega.update({
       where: { id },
       data: {
-        dataAgendamento: dataAgendamento ? new Date(dataAgendamento) : undefined,
+        dataAgendamento: dados.dataAgendamento ? new Date(dados.dataAgendamento) : undefined,
+        condutorId: dados.condutorId,
+        veiculoId: dados.veiculoId,
         situacao: 'AGENDADO',
       },
     });
 
     await this.criarNotificacaoEmail(empresaId, entrega.clienteId || '',
       `Entrega #${entrega.id.substring(0, 8)} agendada`,
-      `Sua entrega foi agendada para ${dataAgendamento ? new Date(dataAgendamento).toLocaleString('pt-BR') : 'em breve'}.`
+      `Sua entrega foi agendada para ${dados.dataAgendamento ? new Date(dados.dataAgendamento).toLocaleString('pt-BR') : 'em breve'}.`
     );
 
     return entrega;

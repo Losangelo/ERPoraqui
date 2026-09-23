@@ -1,4 +1,11 @@
 import { PrismaService } from '@/database/prisma.service';
+import { criarPlanoSchema, atualizarPlanoSchema, ativarLicencaSchema, renewalLicencaSchema } from './dto/licencas.dto';
+import { z } from 'zod';
+
+type CriarPlanoInput = z.infer<typeof criarPlanoSchema>;
+type AtualizarPlanoInput = z.infer<typeof atualizarPlanoSchema>;
+type AtivarLicencaInput = z.infer<typeof ativarLicencaSchema>;
+type RenewalLicencaInput = z.infer<typeof renewalLicencaSchema>;
 
 export class LicencasService {
   constructor(private prisma: PrismaService) {}
@@ -22,10 +29,10 @@ export class LicencasService {
     return plano;
   }
 
-  async criarPlano(data: criarPlanoSchema) {
+  async criarPlano(data: CriarPlanoInput) {
     return this.prisma.plano.create({
       data: {
-        ...data,
+        ...data as any,
         precoMensal: data.precoMensal ? String(data.precoMensal) : undefined,
         precoAnual: data.precoAnual ? String(data.precoAnual) : undefined,
         precoDefinitivo: data.precoDefinitivo ? String(data.precoDefinitivo) : undefined,
@@ -33,13 +40,13 @@ export class LicencasService {
     });
   }
 
-  async atualizarPlano(id: string, data: atualizarPlanoSchema) {
+  async atualizarPlano(id: string, data: AtualizarPlanoInput) {
     await this.buscarPlanoPorId(id);
     
     return this.prisma.plano.update({
       where: { id },
       data: {
-        ...data,
+        ...data as any,
         precoMensal: data.precoMensal ? String(data.precoMensal) : undefined,
         precoAnual: data.precoAnual ? String(data.precoAnual) : undefined,
         precoDefinitivo: data.precoDefinitivo ? String(data.precoDefinitivo) : undefined,
@@ -115,7 +122,7 @@ export class LicencasService {
     return licenca;
   }
 
-  async ativarLicenca(data: ativarLicencaSchema & { chave?: string }) {
+  async ativarLicenca(data: AtivarLicencaInput) {
     // Verificar se empresa existe
     const empresa = await this.prisma.empresa.findUnique({
       where: { id: data.empresaId },
@@ -176,7 +183,7 @@ export class LicencasService {
     return licenca;
   }
 
-  async renewLicenca(data: renewalLicencaSchema) {
+  async renewLicenca(data: RenewalLicencaInput) {
     const licenca = await this.buscarLicencaPorId(data.licencaId);
 
     // Calcular nova data de expiracao

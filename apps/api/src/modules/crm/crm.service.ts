@@ -446,7 +446,6 @@ export class CRMService {
 
     const tarefasPendentes = await this.prisma.cRMTarefa.findMany({
       where: {
-        clienteId: undefined,
         oportunidade: { clienteId },
         concluida: false,
       },
@@ -456,7 +455,7 @@ export class CRMService {
     const faturasPendentes = await this.prisma.contaReceber.findMany({
       where: {
         clienteId,
-        situacao: { in: ['PENDENTE', 'VENCIDA'] },
+        situacao: { in: ['ABERTA', 'VENCIDO'] },
       },
       orderBy: { dataVencimento: 'asc' },
     });
@@ -479,7 +478,7 @@ export class CRMService {
       tarefasPendentes,
       financeiro: {
         faturasPendentes,
-        totalPendente: faturasPendentes.reduce((sum, f) => sum + Number(f.valor), 0),
+        totalPendente: faturasPendentes.reduce((sum, f) => sum + Number(f.valorOriginal), 0),
       },
       notasFiscais,
       totalComprado: totalComprado._sum.valorTotal || 0,

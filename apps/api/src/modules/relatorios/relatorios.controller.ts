@@ -79,7 +79,7 @@ export class RelatoriosController {
       const empresaId = req.usuario?.empresaId;
       if (!empresaId) return res.status(401).json({ success: false, error: { code: 'UNAUTHORIZED', message: 'Empresa não identificada' } });
       const dados = templateSchema.parse(req.body);
-      const template = await this.service.criarTemplate(empresaId, dados);
+      const template = await this.service.criarTemplate(empresaId, { ...dados as any, filtros: dados.filtros ?? [] });
       return res.status(201).json({ success: true, data: template });
     } catch (error: any) {
       return res.status(400).json({ success: false, error: { code: 'ERROR', message: error.message } });

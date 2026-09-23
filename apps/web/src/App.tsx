@@ -164,8 +164,8 @@ function AppRoutes() {
             <Route path="/convenios" element={<ConveniosPage />} />
             <Route path="/licitacoes" element={<LicitacoesPage />} />
             <Route path="/entregas" element={<EntregasPage />} />
-            <Route path="/motoristas" element={<MotoristasPage />} />
-            <Route path="/veiculos-entrega" element={<VeiculosEntregaPage />} />
+            <Route path="/condutores" element={<MotoristasPage />} />
+            <Route path="/veiculos" element={<VeiculosEntregaPage />} />
             <Route path="/taxas-entrega" element={<TaxasEntregaPage />} />
           </Routes>
         </ProtectedRoute>

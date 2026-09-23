@@ -333,3 +333,48 @@
 ### Cobertura
 - 57 specs técnicas (100% dos módulos documentados)
 - 18 testes API + 15 testes Frontend
+
+---
+
+## 07/07/2026 — Correções Quitação + Seed Centros Custo + 3 Specs Faltantes
+
+### Correções
+- **Quitação em lote (quitacoes.service.ts):** Agora cria registros `fluxoCaixa` para cada conta quitada (tipo ENTRADA/SAIDA, categoria RECEBIMENTO_CONTA/PAGAMENTO_CONTA, vinculando centroCustoId)
+- **Toast de erro EntregasPage:** Corrigido path de `error.response.data.error.message` para `error.response.data.error` (mensagens reais do servidor agora aparecem)
+- **Filial obrigatória na criação de entrega:** Adicionado campo `filialId` com FilialSelect no formulário
+
+### Seed
+- **Seed Centros de Custo:** Script `scripts/seed-centros-custo.sh` povoa 48 centros de custo hierárquicos (10 diretorias + 38 departamentos) via API
+
+### Specs Faltantes (3 novas — total 60)
+- **MOTORISTAS.md:** Cadastro de motoristas (próprio CLT / PJ), tipo, CNH, controle ativo/inativo
+- **VEICULOS_ENTREGA.md:** Veículos de frota (carro, moto, van, caminhão, bicicleta), placa única por empresa, vinculação a motorista proprietário
+- **TAXAS_ENTREGA.md:** Taxas de entrega (fixa, por km, por CEP, por valor do pedido), algoritmo de cálculo automático
+
+### Docs Controle Atualizados
+- **FEATURES.md:** +6 entries (3 specs + 3 frontends), histórico 07/07
+- **TODO.md:** Spec count 57→60
+- **stepByStep.md:** Este registro
+- **AGENTS.md:** Atualizado com novos specs e status (60 specs, 39 adicionados)
+- **ManualTecnicoPage.tsx:** Spec count 57→60, MOTORISTAS/TAXAS_ENTREGA/VEICULOS_ENTREGA na árvore + tabela (itens 35/55/59)
+
+---
+
+## 07/07/2026 — Reorganização do Menu Lateral (9 → 14 categorias)
+
+### Mudanças
+
+| Antes | Depois |
+|-------|--------|
+| **Estoque** (11 itens) | **Estoque** (5) + **Movimentações** (4) + **Preços** (2) |
+| **Fiscal** (14 itens) | **Fiscal** (7 docs/SPED) + **Frota** (2) + **Contratos** (4) + **Relatórios** (1) |
+| **Gestão** (5 itens) | **Gestão** (5, sem DRE/PlanoContas) |
+| **Sistema** (7 itens) | **Sistema** (5, sem Multi-empresa/Automação) |
+| **Cadastros** (8 itens) | **Cadastros** (5, sem Motoristas/Veículos/Taxas) |
+| **Vendas** (5 itens) | **Vendas** (8, + Motoristas/Veículos/Taxas) |
+| **Financeiro** (10 itens) | **Financeiro** (12, + DRE + PlanoContas) |
+
+### Arquivos Alterados
+- `Sidebar.tsx` — Estrutura completa refeita (14 categorias, ~65 itens)
+- `CommandPalette.tsx` — +5 entradas (Motoristas, Veículos Entrega, Taxas Entrega, Unidades, Manual Técnico)
+- `AjudaPage.tsx` — Referências de menu corrigidas (Multi-empresa: Sistema→Gestão, CRM: Gestão→Vendas, DRE/PlanoContas: Gestão→Financeiro)

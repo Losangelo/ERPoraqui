@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarProdutoInput, 
   AtualizarProdutoInput, 
@@ -12,7 +13,7 @@ export class ProdutosService {
       data: {
         ...dados,
         empresaId,
-      },
+      } as Prisma.ProdutoUncheckedCreateInput,
     });
   }
 

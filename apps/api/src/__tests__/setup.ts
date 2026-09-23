@@ -87,6 +87,8 @@ export const mockPrisma = {
   quitacao: modelMock(),
   quitacaoConta: modelMock(),
   cte: modelMock(),
+  entrega: modelMock(),
+  avaliacao: modelMock(),
   $transaction: vi.fn((cb: any) => cb(mockPrisma)),
 };
 

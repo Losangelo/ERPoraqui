@@ -194,7 +194,7 @@ ERPoraqui/
 │       └── vite.config.ts
 │
 ├── docs/
-│   ├── specs/                       # Especificacoes tecnicas (57 specs)
+│   ├── specs/                       # Especificacoes tecnicas (60 specs)
 │   │   ├── ADIANTAMENTOS.md
 │   │   ├── API_PUBLICA.md
 │   │   ├── AUTH.md
@@ -229,6 +229,7 @@ ERPoraqui/
 │   │   ├── LOGS.md
 │   │   ├── LOOKUP.md
 │   │   ├── MDFE.md
+│   │   ├── MOTORISTAS.md
 │   │   ├── MOVIMENTACOES_INTERNAS.md
 │   │   ├── MULTI_EMPRESA.md
 │   │   ├── NFCE.md
@@ -248,9 +249,11 @@ ERPoraqui/
 │   │   ├── RENEGOCIACAO.md
 │   │   ├── REPORT_ENGINE.md
 │   │   ├── SPED.md
+│   │   ├── TAXAS_ENTREGA.md
 │   │   ├── TRANSPORTADORAS.md
 │   │   ├── UNIDADES_MEDIDA.md
 │   │   ├── USUARIOS.md
+│   │   ├── VEICULOS_ENTREGA.md
 │   │   └── VENDEDORES.md
 │   ├── TODO.md                      # Lista de tarefas
 │   ├── stepByStep.md                # Progresso cronologico
@@ -1082,11 +1085,11 @@ git log --oneline -5  # ver ultimos commits
   },
   {
     id: 'spec-coverage',
-    titulo: 'Cobertura de Specs (57 Especificacoes)',
+    titulo: 'Cobertura de Specs (60 Especificacoes)',
     categoria: 'Arquitetura',
     conteudo: `## Cobertura de Especificacoes Tecnicas
 
-O ERPoraqui possui atualmente **57 specs** em \`docs/specs/\` cobrindo **100% dos modulos** do sistema. Cada spec define requisitos, modelagem, API e frontend antes da implementacao.
+O ERPoraqui possui atualmente **60 specs** em \`docs/specs/\` cobrindo **100% dos modulos** do sistema. Cada spec define requisitos, modelagem, API e frontend antes da implementacao.
 
 ---
 
@@ -1099,7 +1102,7 @@ O ERPoraqui possui atualmente **57 specs** em \`docs/specs/\` cobrindo **100% do
 
 ---
 
-### Lista Completa de Specs (57)
+### Lista Completa de Specs (60)
 
 | # | Spec | Modulo |
 |---|------|--------|
@@ -1137,29 +1140,32 @@ O ERPoraqui possui atualmente **57 specs** em \`docs/specs/\` cobrindo **100% do
 | 32 | LOGS.md | Logs |
 | 33 | LOOKUP.md | Lookup Field |
 | 34 | MDFE.md | MDF-e |
-| 35 | MOVIMENTACOES_INTERNAS.md | Movimentacoes Internas |
-| 36 | MULTI_EMPRESA.md | Multi-empresa |
-| 37 | NFCE.md | NFC-e |
-| 38 | NFE.md | NF-e |
-| 39 | NFSE.md | NFSe |
-| 40 | ORCAMENTOS.md | Orcamentos |
-| 41 | PARAMETROS.md | Parametros |
-| 42 | PDV.md | PDV |
-| 43 | PEDIDOS_COMPRA.md | Pedidos de Compra |
-| 44 | PEDIDOS_VENDA.md | Pedidos de Venda |
-| 45 | PLANO_CONTAS.md | Plano de Contas |
-| 46 | PRODUTOS.md | Produtos |
-| 47 | PROMOCOES.md | Promocoes |
-| 48 | QUITACOES.md | Quitacoes |
-| 49 | RELATORIOS.md | Relatorios |
-| 50 | RELATORIOS_FISCAIS.md | Relatorios Fiscais |
-| 51 | RENEGOCIACAO.md | Renegociacao |
-| 52 | REPORT_ENGINE.md | Report Engine |
-| 53 | SPED.md | SPED Fiscal |
-| 54 | TRANSPORTADORAS.md | Transportadoras |
-| 55 | UNIDADES_MEDIDA.md | Unidades de Medida |
-| 56 | USUARIOS.md | Usuarios |
-| 57 | VENDEDORES.md | Vendedores |
+| 35 | MOTORISTAS.md | Motoristas |
+| 36 | MOVIMENTACOES_INTERNAS.md | Movimentacoes Internas |
+| 37 | MULTI_EMPRESA.md | Multi-empresa |
+| 38 | NFCE.md | NFC-e |
+| 39 | NFE.md | NF-e |
+| 40 | NFSE.md | NFSe |
+| 41 | ORCAMENTOS.md | Orcamentos |
+| 42 | PARAMETROS.md | Parametros |
+| 43 | PDV.md | PDV |
+| 44 | PEDIDOS_COMPRA.md | Pedidos de Compra |
+| 45 | PEDIDOS_VENDA.md | Pedidos de Venda |
+| 46 | PLANO_CONTAS.md | Plano de Contas |
+| 47 | PRODUTOS.md | Produtos |
+| 48 | PROMOCOES.md | Promocoes |
+| 49 | QUITACOES.md | Quitacoes |
+| 50 | RELATORIOS.md | Relatorios |
+| 51 | RELATORIOS_FISCAIS.md | Relatorios Fiscais |
+| 52 | RENEGOCIACAO.md | Renegociacao |
+| 53 | REPORT_ENGINE.md | Report Engine |
+| 54 | SPED.md | SPED Fiscal |
+| 55 | TAXAS_ENTREGA.md | Taxas de Entrega |
+| 56 | TRANSPORTADORAS.md | Transportadoras |
+| 57 | UNIDADES_MEDIDA.md | Unidades de Medida |
+| 58 | USUARIOS.md | Usuarios |
+| 59 | VEICULOS_ENTREGA.md | Veiculos de Entrega |
+| 60 | VENDEDORES.md | Vendedores |
 
 ---
 

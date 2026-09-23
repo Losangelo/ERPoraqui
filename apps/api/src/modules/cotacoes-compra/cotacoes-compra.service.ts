@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarCotacaoInput,
   ResponderCotacaoInput,
@@ -16,9 +17,12 @@ export class CotacoesCompraService {
         ...cotacaoData,
         empresaId,
         itens: {
-          create: itens,
+          create: itens.map(({ produtoId, ...rest }) => ({
+            ...rest,
+            produto: { connect: { id: produtoId } },
+          })),
         },
-      },
+      } as Prisma.CotacaoCompraUncheckedCreateInput,
       include: {
         itens: {
           include: {
@@ -110,7 +114,7 @@ export class CotacoesCompraService {
         valorFrete: dados.valorFrete,
         valorDesconto: dados.valorDesconto,
         prazoEntrega: dados.prazoEntrega,
-      },
+      } as Prisma.RespostaCotacaoUncheckedCreateInput,
     });
   }
 

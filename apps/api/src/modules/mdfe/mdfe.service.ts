@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import type {
   VeiculoInput,
   VeiculoUpdate,
@@ -33,7 +34,7 @@ export class MdfeService {
   async criarVeiculo(dados: VeiculoInput, empresaId: string) {
     const existente = await prisma.veiculo.findUnique({ where: { empresaId_placa: { empresaId, placa: dados.placa } } });
     if (existente) throw new Error(`Placa ${dados.placa} já cadastrada`);
-    return prisma.veiculo.create({ data: { ...dados, empresaId } });
+    return prisma.veiculo.create({ data: { ...dados, empresaId } as Prisma.VeiculoUncheckedCreateInput });
   }
 
   async atualizarVeiculo(id: string, dados: VeiculoUpdate, empresaId: string) {
@@ -63,7 +64,7 @@ export class MdfeService {
   async criarCondutor(dados: CondutorInput, empresaId: string) {
     const existente = await prisma.condutor.findUnique({ where: { empresaId_cpf: { empresaId, cpf: dados.cpf } } });
     if (existente) throw new Error(`CPF ${dados.cpf} já cadastrado`);
-    return prisma.condutor.create({ data: { ...dados, empresaId } });
+    return prisma.condutor.create({ data: { ...dados, empresaId } as Prisma.CondutorUncheckedCreateInput });
   }
 
   async atualizarCondutor(id: string, dados: CondutorUpdate, empresaId: string) {
@@ -122,8 +123,8 @@ export class MdfeService {
         empresaId,
         numero: proximoNumero,
         chaveAcesso,
-        documentos: documentos.length > 0 ? { create: documentos } : undefined,
-      },
+        documentos: documentos.length > 0 ? { create: documentos } as Prisma.MdfeDocumentoUncheckedCreateNestedManyWithoutMdfeInput : undefined,
+      } as Prisma.MdfeUncheckedCreateInput,
       include: MDFE_INCLUDE,
     });
   }
@@ -157,7 +158,7 @@ export class MdfeService {
     const mdfe = await prisma.mdfe.update({
       where: { id: mdfeId },
       data: {
-        documentos: { create: dados },
+        documentos: { create: dados } as Prisma.MdfeDocumentoUncheckedCreateNestedManyWithoutMdfeInput,
         qtdTotalDocumentos: { increment: 1 },
       },
       include: MDFE_INCLUDE,
@@ -179,7 +180,7 @@ export class MdfeService {
     const mdfe = await this.buscarMdfe(id, empresaId);
     if (mdfe.situacao !== 'AUTORIZADO') throw new Error('Só é possível cancelar MDF-e autorizado');
     await prisma.mdfeEvento.create({
-      data: { mdfeId: id, tipo: 'CANCELAMENTO', descricao: 'Cancelamento solicitado' },
+      data: { mdfeId: id, tipo: 'CANCELAMENTO', descricao: 'Cancelamento solicitado' } as Prisma.MdfeEventoUncheckedCreateInput,
     });
     return prisma.mdfe.update({
       where: { id },
@@ -192,7 +193,7 @@ export class MdfeService {
     const mdfe = await this.buscarMdfe(id, empresaId);
     if (mdfe.situacao !== 'AUTORIZADO') throw new Error('Só é possível encerrar MDF-e autorizado');
     await prisma.mdfeEvento.create({
-      data: { mdfeId: id, tipo: 'ENCERRAMENTO', descricao: 'Encerramento solicitado' },
+      data: { mdfeId: id, tipo: 'ENCERRAMENTO', descricao: 'Encerramento solicitado' } as Prisma.MdfeEventoUncheckedCreateInput,
     });
     return prisma.mdfe.update({
       where: { id },

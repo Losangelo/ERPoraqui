@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarPedidoVendaInput, 
   AtualizarPedidoVendaInput,
@@ -26,13 +27,14 @@ export class PedidosVendaService {
         valorTotal,
         dataEmissao: pedidoData.dataEmissao || new Date(),
         itens: {
-          create: itens.map((item, index) => ({
+          create: itens.map(({ produtoId, ...item }, index) => ({
             ...item,
+            produto: { connect: { id: produtoId } },
             numeroItem: index + 1,
             valorTotal: item.quantidade * item.valorUnitario,
           })),
         },
-      },
+      } as Prisma.PedidoVendaUncheckedCreateInput,
       include: {
         itens: true,
         cliente: true,
@@ -193,7 +195,7 @@ export class PedidosVendaService {
         dataMovimentacao: new Date(),
         referenciaId: pedido.id,
         referenciaTipo: 'PEDIDO_VENDA',
-      },
+      } as Prisma.FluxoCaixaUncheckedCreateInput,
     });
   }
 

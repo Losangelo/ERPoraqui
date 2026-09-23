@@ -1,11 +1,12 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { CriarProdutoVariacaoInput, AtualizarProdutoVariacaoInput, ProdutoVariacaoFiltro } from './dto/produto-variacao.dto';
 
 export class ProdutosVariacoesService {
   async criar(empresaId: string, dados: CriarProdutoVariacaoInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
     return prisma.produtoVariacao.create({
-      data: { ...dados, empresaId },
+      data: { ...dados, empresaId } as Prisma.ProdutoVariacaoUncheckedCreateInput,
     });
   }
 

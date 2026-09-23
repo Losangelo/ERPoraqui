@@ -310,7 +310,7 @@ A empresa vinculada terá acesso aos mesmos módulos da empresa matriz conforme 
 
 O módulo Multi-empresa está disponível nos planos **PROFISSIONAL** e **PREMIUM**.
 
-Acesse pelo menu: **Sistema > Multi-empresa**
+Acesse pelo menu: **Gestão > Multi-empresa**
 `,
   },
   {
@@ -424,7 +424,7 @@ Para usar o Módulo de Automação, você precisa de:
 
 ## Como Criar uma Automação
 
-1. Acesse **Gestão > CRM** (em breve página própria)
+1. Acesse **Vendas > CRM** (em breve página própria)
 2. Clique em **Nova Automação**
 3. Defina o **nome** e **descrição**
 4. Selecione o **trigger** (evento que inicia a automação)
@@ -767,14 +767,14 @@ A NFSe também está sujeita à reforma. O ISS será progressivamente substituí
   {
     id: 'dre',
     titulo: 'Demonstração do Resultado do Exercício',
-    categoria: 'Gestão',
+    categoria: 'Financeiro',
     conteudo: `O DRE é um relatório contábil que apresenta a composição do resultado da empresa.
 
 ---
 
 ## Como Acessar
 
-1. Vá ao menu Gestão > DRE
+1. Vá ao menu Financeiro > DRE
 2. Selecione o período desejado
 3. Analise os indicadores
 
@@ -791,7 +791,7 @@ A NFSe também está sujeita à reforma. O ISS será progressivamente substituí
   {
     id: 'plano-contas',
     titulo: 'Plano de Contas',
-    categoria: 'Gestão',
+    categoria: 'Financeiro',
     conteudo: `O Plano de Contas é a estrutura de codificação de todas as contas contábeis da empresa.
 
 ---
@@ -807,7 +807,7 @@ A NFSe também está sujeita à reforma. O ISS será progressivamente substituí
 
 ## Como Usar
 
-1. Menu Gestão > Plano de Contas
+1. Menu Financeiro > Plano de Contas
 2. Clique em Nova Conta
 3. Preencha código, nome, tipo e natureza
 4. Estruture hierarquicamente`,
@@ -1263,7 +1263,7 @@ Pendente → Agendado → Saiu para Entrega → Entregue
 
 ## Como Usar
 
-Acesse **Vendas > Entregas** para gerenciar entregas, motoristas, veículos e taxas.`,
+Acesse **Vendas > Entregas** para gerenciar entregas, condutores, veículos e taxas.`,
   },
   {
     id: 'pdv',

@@ -1,20 +1,19 @@
 import { Response } from 'express';
-import { MotoristasService } from './motoristas.service';
+import { VeiculosService } from './veiculos.service';
 import {
-  criarMotoristaSchema,
-  atualizarMotoristaSchema,
-  motoristaFiltroSchema,
-} from './dto/motorista.dto';
+  criarVeiculoSchema,
+  atualizarVeiculoSchema,
+  veiculoFiltroSchema,
+} from './dto/veiculo.dto';
 import { AuthRequest } from '@/shared/middleware/auth.middleware';
 
-export class MotoristasController {
-  constructor(private service: MotoristasService) {}
+export class VeiculosController {
+  constructor(private service: VeiculosService) {}
 
   criar = async (req: AuthRequest, res: Response) => {
     const empresaId = req.usuario?.empresaId || '';
-
     try {
-      const dados = criarMotoristaSchema.parse(req.body);
+      const dados = criarVeiculoSchema.parse(req.body);
       const resultado = await this.service.criar(empresaId, dados);
       return res.status(201).json(resultado);
     } catch (error: any) {
@@ -25,14 +24,9 @@ export class MotoristasController {
   buscarPorId = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
       const resultado = await this.service.buscarPorId(id, empresaId);
-
-      if (!resultado) {
-        return res.status(404).json({ error: 'Motorista não encontrado' });
-      }
-
+      if (!resultado) return res.status(404).json({ error: 'Veículo não encontrado' });
       return res.json(resultado);
     } catch (error) {
       return res.status(400).json({ error: (error as Error).message });
@@ -41,9 +35,8 @@ export class MotoristasController {
 
   listar = async (req: AuthRequest, res: Response) => {
     const empresaId = req.usuario?.empresaId || '';
-
     try {
-      const filtros = motoristaFiltroSchema.parse({
+      const filtros = veiculoFiltroSchema.parse({
         ...req.query,
         pagina: Number(req.query.pagina) || 1,
         limite: Number(req.query.limite) || 20,
@@ -58,9 +51,8 @@ export class MotoristasController {
   atualizar = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
-      const dados = atualizarMotoristaSchema.parse(req.body);
+      const dados = atualizarVeiculoSchema.parse(req.body);
       const resultado = await this.service.atualizar(id, empresaId, dados);
       return res.json(resultado);
     } catch (error: any) {
@@ -71,7 +63,6 @@ export class MotoristasController {
   inativar = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
       const resultado = await this.service.inativar(id, empresaId);
       return res.json(resultado);
@@ -83,7 +74,6 @@ export class MotoristasController {
   ativar = async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
     const empresaId = req.usuario?.empresaId || '';
-
     try {
       const resultado = await this.service.ativar(id, empresaId);
       return res.json(resultado);

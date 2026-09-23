@@ -11,7 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 interface Vendedor {
   id: string;
   nome: string;
-  cpf: string;
+  documento: string;
+  tipoPessoa: string;
   telefone: string;
   email: string;
   comissao: number;
@@ -25,7 +26,8 @@ export function VendedoresPage() {
   const [editando, setEditando] = useState<Vendedor | null>(null);
   const [formData, setFormData] = useState({
     nome: '',
-    cpf: '',
+    tipoPessoa: 'FISICA',
+    documento: '',
     telefone: '',
     email: '',
     comissao: '',
@@ -40,7 +42,7 @@ export function VendedoresPage() {
     try {
       setLoading(true);
       const res = await vendedoresService.listar();
-      if (res.data.success) setVendedores(res.data.data);
+      if (res.data.dados) setVendedores(res.data.dados);
     } catch (error) {
       console.error('Erro ao carregar:', error);
     } finally {
@@ -79,7 +81,8 @@ export function VendedoresPage() {
     setEditando(item);
     setFormData({
       nome: item.nome,
-      cpf: item.cpf,
+      tipoPessoa: item.tipoPessoa,
+      documento: item.documento,
       telefone: item.telefone,
       email: item.email,
       comissao: String(item.comissao),
@@ -90,7 +93,7 @@ export function VendedoresPage() {
 
   const resetForm = () => {
     setEditando(null);
-    setFormData({ nome: '', cpf: '', telefone: '', email: '', comissao: '', ativo: true });
+    setFormData({ nome: '', tipoPessoa: 'FISICA', documento: '', telefone: '', email: '', comissao: '', ativo: true });
   };
 
   const formatPercent = (value: number) => `${value}%`;
@@ -121,7 +124,7 @@ export function VendedoresPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Nome</TableHead>
-                  <TableHead>CPF</TableHead>
+                  <TableHead>Documento</TableHead>
                   <TableHead>Telefone</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Comissão</TableHead>
@@ -140,7 +143,7 @@ export function VendedoresPage() {
                         <span className="font-medium text-gray-900">{item.nome}</span>
                       </div>
                     </TableCell>
-                    <TableCell>{item.cpf}</TableCell>
+                    <TableCell>{item.documento}</TableCell>
                     <TableCell>{item.telefone}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{formatPercent(item.comissao)}</TableCell>
@@ -191,14 +194,26 @@ export function VendedoresPage() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="cpf">CPF</Label>
+              <Label htmlFor="tipoPessoa">Tipo</Label>
+              <select
+                id="tipoPessoa"
+                value={formData.tipoPessoa}
+                onChange={(e) => setFormData({ ...formData, tipoPessoa: e.target.value })}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="FISICA">Pessoa Física</option>
+                <option value="JURIDICA">Pessoa Jurídica</option>
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="documento">{formData.tipoPessoa === 'FISICA' ? 'CPF' : 'CNPJ'}</Label>
               <Input
-                id="cpf"
+                id="documento"
                 type="text"
-                value={formData.cpf}
-                onChange={(e) => setFormData({ ...formData, cpf: e.target.value })}
-                placeholder="000.000.000-00"
-                title="CPF do vendedor"
+                value={formData.documento}
+                onChange={(e) => setFormData({ ...formData, documento: e.target.value })}
+                placeholder={formData.tipoPessoa === 'FISICA' ? '000.000.000-00' : '00.000.000/0000-00'}
+                title="Documento do vendedor"
                 required
               />
             </div>

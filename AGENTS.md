@@ -240,43 +240,77 @@ Acessar `/logs` no frontend para visualizar os logs com filtros.
 
 ## Deploy e Infraestrutura
 
-### Servidor (ZimaLOS / CasaOS)
-- **Host:** 192.168.15.222
-- **User:** losangelo
-- **Senha:** olegnasol
-- **Path:** /DATA/shopping/erporaqui/
-- **Docker:** DOCKER_CONFIG=/tmp/docker-config docker compose
-- **Rede:** erg_network
+### Servidor de Produção (ZimaOSlos — ZimaCube / ZimaOS v1.6.1)
+- **Host:** 192.168.15.12 (LAN — o ZimaOS Web fica em http://192.168.15.12/#/)
+- **SSH User:** losangelo | **Senha:** olegnasol (grupos: `wheel`, `docker`)
+- **Path do projeto:** /DATA/shopping/erporaqui/
+- **Discos:** `/` (root) 1.2G 100% cheio — **não** instalar pacotes apt; `/DATA` 222G livre
+- **Docker:** 27.5.1 (socket `root:docker`; usuário já no grupo `docker`)
+- **Compose:** `/DATA/bin/docker-compose` v2.32.1 (binário standalone — o plugin `docker compose` **não** existe no servidor)
+- **DOCKER_CONFIG=/tmp/docker-config** é obrigatório (o default `/DATA/.docker/config.json` causa `permission denied`)
+
+### Acesso Remoto (Tailscale + Funnel)
+- **Nó Tailscale:** `erporaqui-srv` — Tailscale IP `100.109.207.11`
+- **Binários:** `/DATA/bin/ts/tailscale` e `tailscaled` (v1.102.4, estáticos)
+- **Daemon:** serviço systemd `tailscaled` (state em `/DATA/bin/ts/state`, socket `/DATA/bin/ts/sock/tailscaled.sock`, doService re-aplica o Funnel após reboot)
+- **Funnel público:** `https://erporaqui-srv.tailc76ba9.ts.net` → `http://127.0.0.1:3003`
+
+Comandos Tailscale (sempre com sudo + --socket):
+```bash
+TS="sudo /DATA/bin/ts/tailscale --socket=/DATA/bin/ts/sock/tailscaled.sock"
+$TS status                 # ver tailnet
+$TS funnel status          # ver config funnel ativa
+$TS funnel --bg 3003       # (re)criar funnel em background
+$TS funnel --https=443 off # desativar funnel
+```
 
 ### Containers
 | Nome | Porta |
 |------|-------|
 | erg_filho_do_guerreiro_api | 3002 |
 | erg_filho_do_guerreiro_web | 3003 |
+| erg_filho_do_guerreiro_worker | — (consumer RabbitMQ, fila `email`) |
 | postgres | 5432 |
 | redis | 6379 |
 | rabbitmq | 5672/15672 |
 
 ### Acesso Web
-- Frontend: http://192.168.15.222:3003
-- Login: admin@erporaqui.com.br / admin123
+- **Público (Funnel):** https://erporaqui-srv.tailc76ba9.ts.net
+- **Local (LAN):** http://192.168.15.12:3003
+- **API:** `/api/v1` (proxy nginx do web)
+- **Login:** admin@erporaqui.com.br / admin123
 
-### Deploy
+### Deploy (atualizar código)
 ```bash
-# Rsync + rebuild
-rsync -avz --delete --exclude='node_modules' --exclude='.git' \
-  --exclude='dist' --exclude='.env' --exclude='*.log' \
-  --exclude='apps/web/node_modules' --exclude='apps/api/node_modules' \
-  --exclude='apps/api/prisma/migrations' --exclude='apps/web/dist' \
-  -e "ssh -o StrictHostKeyChecking=no" \
-  /home/losangelo/.../ERPoraqui/ losangelo@192.168.15.222:/DATA/shopping/erporaqui/
+# 1. Sincronizar projeto local → servidor (a partir da raiz do repo)
+sshpass -p 'olegnasol' rsync -avz --delete \
+  --exclude='node_modules' --exclude='.git' --exclude='dist' --exclude='*.log' \
+  --exclude='.turbo' --exclude='.env' \
+  -e "ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -o PreferredAuthentications=password" \
+  ./ losangelo@192.168.15.12:/DATA/shopping/erporaqui/
 
-# Rebuild container
-ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
+# 2. Rebuild + restart (no servidor — rodar em background)
+sshpass -p 'olegnasol' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no losangelo@192.168.15.12 '
   cd /DATA/shopping/erporaqui
-  DOCKER_CONFIG=/tmp/docker-config docker compose build api web
-  DOCKER_CONFIG=/tmp/docker-config docker compose up -d api web
-"
+  DOCKER_CONFIG=/tmp/docker-config nohup /DATA/bin/docker-compose up -d --build > .build.log 2>&1 &
+'
+# Acompanhar: tail -f /DATA/shopping/erporaqui/.build.log
+```
+
+### Atualizar Banco / Seed
+O `.dockerignore` exclui `apps/api/prisma/migrations` da imagem, então o `docker-entrypoint.sh` aplica **`prisma db push`** automaticamente na subida quando não há migrations (corrigido em 23/09/2026). Para atualizar/seedar manualmente:
+```bash
+sshpass -p 'olegnasol' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no losangelo@192.168.15.12 '
+  DOCKER_CONFIG=/tmp/docker-config docker exec erg_filho_do_guerreiro_api npx prisma db push
+  DOCKER_CONFIG=/tmp/docker-config docker exec erg_filho_do_guerreiro_api npx tsx prisma/seed.ts
+'
+```
+
+### Logs / Diagnóstico (no servidor)
+```bash
+DOCKER_CONFIG=/tmp/docker-config docker logs -f erg_filho_do_guerreiro_api   # logs da API (Pino)
+DOCKER_CONFIG=/tmp/docker-config docker ps --format "{{.Names}} {{.Status}}" # healthy?
+tail -f /DATA/shopping/erporaqui/.build.log                                    # log do build
 ```
 
 ### Shared Modules (NF-e)
@@ -402,9 +436,9 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - ✅ Manual Técnico (ManualTecnicoPage): 11 seções técnicas, acesso senha 2145
 - ✅ Manual do Usuário (ManualPage): +13 seções (Multi-empresa, CRM, Automação, Tabelas Preço, Variações/Lotes, Cheques, Centros Custo, DRE, NFC-e, NFSe, ECF, Relatórios Fiscais, Logs, Exportação)
 
-### Status Atual Specs (57 specs — cobertura 100%)
+### Status Atual Specs (60 specs — cobertura 100%)
 - ✅ **18 originais:** NFE, NFCE, NFSE, PDV, SPED, MDFE, BOLETOS_CNAB, CHEQUES, CENTRO_CUSTO, ESTOQUE_AVANCADO, CRM, AUTOMACAO, MULTI_EMPRESA, LOOKUP, REPORT_ENGINE, CONTRATOS_GARANTIAS_DEVOLUCOES, FILIAIS, EXPORTACAO
-- ✅ **38 adicionados (06/07/2026):** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS, ENTREGAS
+- ✅ **39 adicionados (06-07/07/2026):** AUTH, CLIENTES, FORNECEDORES, PRODUTOS, CATEGORIAS, UNIDADES_MEDIDA, VENDEDORES, TRANSPORTADORAS, USUARIOS, PARAMETROS, LICENCAS, LOGS, DASHBOARD, API_PUBLICA, PEDIDOS_VENDA, ORCAMENTOS, PEDIDOS_COMPRA, COTACOES_COMPRA, ENTRADAS_MERCADORIA, FINANCEIRO, FLUXO_CAIXA, PLANO_CONTAS, DRE, CONCILIACAO, RENEGOCIACAO, ADIANTAMENTOS, QUITACOES, ESTOQUE, MOVIMENTACOES_INTERNAS, INVENTARIO, KARDEX, ECF, RELATORIOS_FISCAIS, PROMOCOES, CONVENIOS, LICITACOES, CTE, RELATORIOS, ENTREGAS, MOTORISTAS, VEICULOS_ENTREGA, TAXAS_ENTREGA
 
 ### Novidades (02/07/2026 — Blitz 2)
 - Auth Store: authStore.ts deletado (nunca importado)
@@ -483,7 +517,7 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - PDV: `buscarCaixaAberto` com filialId vazio
 - VITE_API_URL fallback: `http://localhost:3002/api/v1` → `/api/v1`
 - 30+ erros TypeScript corrigidos no frontend (build limpo)
-- Prisma migrate: `prisma db push` — 7 novos modelos + enums + relacionamentos
+- Prisma: `prisma migrate deploy` — 7 novos modelos + enums + relacionamentos
 
 ### Novidades (06/07/2026 — Módulo Entregas)
 - Spec ENTREGAS.md criada (57 specs totais)
@@ -497,3 +531,14 @@ ssh -o StrictHostKeyChecking=no losangelo@192.168.15.222 "
 - TODO.md: concluídos novos + count 57
 - stepByStep.md: registro da etapa
 - AGENTS.md: novidades adicionadas
+
+### Novidades (07/07/2026 — 3 Specs Faltantes + Correções)
+- **3 specs criadas:** MOTORISTAS.md, VEICULOS_ENTREGA.md, TAXAS_ENTREGA.md — total 60 specs
+- **Seed centros de custo:** 48 registros hierárquicos via script
+- **Correção quitação em lote:** fluxo-caixa agora é alimentado ao quitar contas
+- **Correção toast EntregasPage:** path de erro corrigido + campo filialId adicionado
+- **ManualTecnicoPage.tsx:** spec count 60, 3 novos entries na árvore + tabela
+- **FEATURES.md:** +6 entries (3 specs + 3 frontends), spec count 60
+- **TODO.md:** spec count 60
+- **stepByStep.md:** registro da etapa
+- **Reorganização menu lateral:** Sidebar 9→14 categorias: Estoque dividido (Estoque/Movimentações/Preços), Fiscal dividido (Fiscal/Frota/Contratos/Relatórios), entregas movido p/ Vendas, DRE+PlanoContas p/ Financeiro, Multi-empresa+Automação p/ Gestão; CommandPalette +5 entradas; AjudaPage corrigido caminhos

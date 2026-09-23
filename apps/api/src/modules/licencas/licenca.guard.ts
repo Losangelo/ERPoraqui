@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { prisma } from '@/database/prisma.service';
 import { LicencasService } from './licencas.service';
 
 export function licencaGuard(modulo: string) {
@@ -17,7 +18,7 @@ export function licencaGuard(modulo: string) {
       }
 
       if (modulo) {
-        const service = new LicencasService();
+        const service = new LicencasService(prisma);
         const temAcesso = await service.verificarAcesso(empresaId, modulo);
         
         if (!temAcesso) {

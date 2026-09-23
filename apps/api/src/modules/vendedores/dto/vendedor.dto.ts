@@ -7,7 +7,7 @@ export const criarVendedorSchema = z.object({
   inscricaoEstadual: z.string().optional(),
   telefone: z.string().optional(),
   telefoneCelular: z.string().optional(),
-  email: z.string().email('E-mail inválido').optional(),
+  email: z.string().email('E-mail inválido').optional().or(z.literal('')),
   comissao: z.number().min(0).max(100).default(0),
 });
 

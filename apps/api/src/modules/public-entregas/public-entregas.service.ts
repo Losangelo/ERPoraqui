@@ -9,10 +9,10 @@ export class PublicEntregasService {
         cliente: {
           select: { nome: true, telefone: true, email: true },
         },
-        motorista: {
+        condutor: {
           select: { nome: true, telefone: true },
         },
-        veiculoEntrega: {
+        veiculo: {
           select: { placa: true, modelo: true, marca: true, cor: true },
         },
         tentativas: {
@@ -34,8 +34,8 @@ export class PublicEntregasService {
       dataPrevisao: entrega.dataPrevisao,
       enderecoEntrega: entrega.enderecoEntrega,
       cliente: entrega.cliente,
-      motorista: entrega.motorista,
-      veiculo: entrega.veiculoEntrega,
+      condutor: entrega.condutor,
+      veiculo: entrega.veiculo,
       tentativas: entrega.tentativas,
     };
   }

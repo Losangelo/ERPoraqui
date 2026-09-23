@@ -75,12 +75,12 @@ const dataSources: DataSource[] = [
         take: 500,
       })
       return rows.map(r => ({
-        numero: r.numero,
+        numero: r.numeroPedido,
         cliente: r.cliente?.nome || '-',
         dataEmissao: r.dataEmissao,
-        total: r.total,
-        status: r.status,
-        formaPagamento: r.formaPagamento,
+        total: r.valorTotal,
+        status: r.situacao,
+        formaPagamento: r.condicaoPagamento,
       }))
     },
   },
@@ -103,11 +103,11 @@ const dataSources: DataSource[] = [
         take: 500,
       })
       return rows.map(r => ({
-        numero: r.numero,
+        numero: r.numeroPedido,
         fornecedor: r.fornecedor?.nome || '-',
         dataEmissao: r.dataEmissao,
-        total: r.total,
-        status: r.status,
+        total: r.valorTotal,
+        status: r.situacao,
       }))
     },
   },
@@ -132,11 +132,11 @@ const dataSources: DataSource[] = [
       })
       return rows.map(r => ({
         cliente: r.cliente?.nome || '-',
-        descricao: r.descricao,
-        valor: r.valor,
+        descricao: r.observacoes ?? '',
+        valor: r.valorOriginal,
         dataVencimento: r.dataVencimento,
         situacao: r.situacao,
-        dataPagamento: r.dataPagamento,
+        dataPagamento: r.dataRecebimento,
       }))
     },
   },
@@ -160,8 +160,8 @@ const dataSources: DataSource[] = [
       })
       return rows.map(r => ({
         fornecedor: r.fornecedor?.nome || '-',
-        descricao: r.descricao,
-        valor: r.valor,
+        descricao: r.observacoes ?? '',
+        valor: r.valorOriginal,
         dataVencimento: r.dataVencimento,
         situacao: r.situacao,
       }))

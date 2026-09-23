@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarEmpresaInput, 
   AtualizarEmpresaInput 
@@ -24,7 +25,7 @@ export class EmpresasService {
           uf,
           cep,
         } : undefined,
-      },
+      } as Prisma.EmpresaUncheckedCreateInput,
     });
   }
 
@@ -48,7 +49,7 @@ export class EmpresasService {
       data: {
         ...resto,
         endereco: logradouro ? { logradouro, numero, complemento, bairro, cidade, uf, cep } : undefined,
-      },
+      } as Prisma.FilialUncheckedCreateInput,
       include: { empresa: { select: { razaoSocial: true, nomeFantasia: true } } },
     });
   }

@@ -14,7 +14,7 @@ export const criarFornecedorSchema = z.object({
   complemento: z.string().optional(),
   bairro: z.string().optional(),
   cidade: z.string().optional(),
-  uf: z.string().length(2, 'UF deve ter 2 dígitos').optional(),
+  uf: z.string().length(2, 'UF deve ter 2 dígitos').optional().or(z.literal('')),
   cep: z.string().optional(),
   ativo: z.boolean().default(true),
 });

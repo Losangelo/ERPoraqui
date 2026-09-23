@@ -362,7 +362,7 @@ export class BoletosService {
       throw new Error('Banco com este código já existe');
     }
 
-    return prisma.banco.create({ data: parsed });
+    return prisma.banco.create({ data: parsed as any });
   }
 
   async listarBancos() {

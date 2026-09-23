@@ -1,24 +1,33 @@
 import { prisma } from '@/database/prisma.service';
 import {
-  CriarMotoristaInput,
-  AtualizarMotoristaInput,
-  MotoristaFiltro,
-} from './dto/motorista.dto';
+  CriarCondutorInput,
+  AtualizarCondutorInput,
+  CondutorFiltro,
+} from './dto/condutor.dto';
 
-export class MotoristasService {
-  async criar(empresaId: string, dados: CriarMotoristaInput) {
+export class CondutoresService {
+  async criar(empresaId: string, dados: CriarCondutorInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
 
-    return prisma.motorista.create({
+    if (dados.cpf) {
+      const existente = await prisma.condutor.findUnique({
+        where: { empresaId_cpf: { empresaId, cpf: dados.cpf } },
+      });
+      if (existente) throw new Error(`CPF ${dados.cpf} já cadastrado`);
+    }
+
+    return prisma.condutor.create({
       data: {
         nome: dados.nome,
-        cpf: dados.cpf,
-        tipo: dados.tipo,
+        cpf: dados.cpf ?? '',
+        tipoCondutor: dados.tipoCondutor,
         cnh: dados.cnh,
         cnhCategoria: dados.cnhCategoria,
+        cnhVencimento: dados.cnhVencimento,
         telefone: dados.telefone,
-        email: dados.email,
+        email: dados.email || null,
         observacoes: dados.observacoes,
+        ativo: dados.ativo,
         empresaId,
       },
     });
@@ -26,30 +35,30 @@ export class MotoristasService {
 
   async buscarPorId(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    return prisma.motorista.findFirst({
+    return prisma.condutor.findFirst({
       where: { id, empresaId },
     });
   }
 
-  async listar(empresaId: string, filtros: MotoristaFiltro) {
+  async listar(empresaId: string, filtros: CondutorFiltro) {
     if (!empresaId) throw new Error('Empresa não identificada');
-    const { nome, ativo, tipo, pagina, limite } = filtros;
+    const { nome, ativo, tipoCondutor, pagina, limite } = filtros;
 
     const where = {
       empresaId,
       ...(nome && { nome: { contains: nome, mode: 'insensitive' as const } }),
       ...(ativo !== undefined && { ativo }),
-      ...(tipo && { tipo }),
+      ...(tipoCondutor && { tipoCondutor }),
     };
 
     const [dados, total] = await Promise.all([
-      prisma.motorista.findMany({
+      prisma.condutor.findMany({
         where,
         skip: (pagina - 1) * limite,
         take: limite,
         orderBy: { nome: 'asc' },
       }),
-      prisma.motorista.count({ where }),
+      prisma.condutor.count({ where }),
     ]);
 
     return {
@@ -63,21 +72,23 @@ export class MotoristasService {
     };
   }
 
-  async atualizar(id: string, empresaId: string, dados: AtualizarMotoristaInput) {
+  async atualizar(id: string, empresaId: string, dados: AtualizarCondutorInput) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
 
-    return prisma.motorista.update({
+    return prisma.condutor.update({
       where: { id },
       data: {
         ...(dados.nome !== undefined && { nome: dados.nome }),
         ...(dados.cpf !== undefined && { cpf: dados.cpf }),
-        ...(dados.tipo !== undefined && { tipo: dados.tipo }),
+        ...(dados.tipoCondutor !== undefined && { tipoCondutor: dados.tipoCondutor }),
         ...(dados.cnh !== undefined && { cnh: dados.cnh }),
         ...(dados.cnhCategoria !== undefined && { cnhCategoria: dados.cnhCategoria }),
+        ...(dados.cnhVencimento !== undefined && { cnhVencimento: dados.cnhVencimento }),
         ...(dados.telefone !== undefined && { telefone: dados.telefone }),
         ...(dados.email !== undefined && { email: dados.email }),
         ...(dados.observacoes !== undefined && { observacoes: dados.observacoes }),
+        ...(dados.ativo !== undefined && { ativo: dados.ativo }),
       },
     });
   }
@@ -85,8 +96,7 @@ export class MotoristasService {
   async inativar(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
-
-    return prisma.motorista.update({
+    return prisma.condutor.update({
       where: { id },
       data: { ativo: false },
     });
@@ -95,20 +105,16 @@ export class MotoristasService {
   async ativar(id: string, empresaId: string) {
     if (!empresaId) throw new Error('Empresa não identificada');
     await this.verificarProprietario(id, empresaId);
-
-    return prisma.motorista.update({
+    return prisma.condutor.update({
       where: { id },
       data: { ativo: true },
     });
   }
 
   private async verificarProprietario(id: string, empresaId: string) {
-    const motorista = await prisma.motorista.findFirst({
+    const condutor = await prisma.condutor.findFirst({
       where: { id, empresaId },
     });
-
-    if (!motorista) {
-      throw new Error('Motorista não encontrado');
-    }
+    if (!condutor) throw new Error('Condutor não encontrado');
   }
 }

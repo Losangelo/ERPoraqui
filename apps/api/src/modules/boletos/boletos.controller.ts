@@ -19,7 +19,7 @@ import {
   GerarRemessaLoteInput,
   ProcessarRetornoInput,
 } from './dto/boleto.dto';
-import appLogger from '@/shared/logger/logger';
+import appLogger, { LogCategory } from '@/shared/logger/logger';
 
 export class BoletosController {
   private readonly service = new BoletosService();
@@ -43,7 +43,7 @@ export class BoletosController {
       });
     } catch (error: any) {
       appLogger.error('Erro ao criar boleto', error, {
-        category: 'api',
+        category: LogCategory.API,
         action: 'boletos:create',
       });
       return res.status(400).json({

@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarPedidoCompraInput, 
   AtualizarPedidoCompraInput,
@@ -26,13 +27,14 @@ export class PedidosCompraService {
         valorTotal,
         dataEmissao: pedidoData.dataEmissao || new Date(),
         itens: {
-          create: itens.map((item, index) => ({
+          create: itens.map(({ produtoId, ...item }, index) => ({
             ...item,
+            produto: { connect: { id: produtoId } },
             numeroItem: index + 1,
             valorTotal: item.quantidade * item.valorUnitario,
           })),
         },
-      },
+      } as Prisma.PedidoCompraUncheckedCreateInput,
       include: {
         itens: true,
         fornecedor: true,

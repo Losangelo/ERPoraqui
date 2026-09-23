@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Search, Truck, Plus, Clock, Package, MapPin, User, Calendar, AlertCircle, CheckCircle2, XCircle, ShoppingCart, Building2 } from "lucide-react"
+import { Search, Truck, Plus, Clock, Package, MapPin, User, Calendar, AlertCircle, CheckCircle2, XCircle, ShoppingCart } from "lucide-react"
 import { FilialSelect } from "@/components/FilialSelect"
 import { entregasService } from "@/services/entregas"
 import { pedidosService } from "@/services/pedidos"
@@ -21,7 +21,7 @@ interface Entrega {
   tokenRastreio: string
   pedidoVendaId?: string
   clienteId?: string
-  motoristaId?: string
+  condutorId?: string
   veiculoId?: string
   situacao: Situacao
   enderecoEntrega?: any
@@ -31,8 +31,8 @@ interface Entrega {
   dataPrevisao?: string
   dataCriacao: string
   observacoes?: string
-  motorista?: { id: string; nome: string }
-  veiculoEntrega?: { id: string; placa: string; modelo?: string; marca?: string }
+  condutor?: { id: string; nome: string }
+  veiculo?: { id: string; placa: string; modelo?: string; marca?: string }
   cliente?: { id: string; nome: string }
   pedidoVenda?: { id: string; numeroPedido?: string }
   tentativas?: Array<{ id: string; dataTentativa: string; motivoFalha?: string; observacoes?: string }>
@@ -86,7 +86,7 @@ export function EntregasPage() {
     clienteId: "",
     filialId: "",
     enderecoEntrega: "",
-    motoristaId: "",
+    condutorId: "",
     veiculoId: "",
     dataAgendamento: "",
     dataPrevisao: "",
@@ -96,7 +96,7 @@ export function EntregasPage() {
 
   const [agendarData, setAgendarData] = useState({
     dataAgendamento: "",
-    motoristaId: "",
+    condutorId: "",
     veiculoId: "",
   })
 
@@ -105,7 +105,7 @@ export function EntregasPage() {
     observacoes: "",
   })
 
-  const [motoristas, setMotoristas] = useState<any[]>([])
+  const [condutores, setCondutores] = useState<any[]>([])
   const [veiculos, setVeiculos] = useState<any[]>([])
   const [pedidoSearchOpen, setPedidoSearchOpen] = useState(false)
   const [pedidosList, setPedidosList] = useState<any[]>([])
@@ -114,7 +114,7 @@ export function EntregasPage() {
 
   useEffect(() => {
     loadEntregas()
-    loadMotoristas()
+    loadCondutores()
     loadVeiculos()
   }, [])
 
@@ -144,10 +144,10 @@ export function EntregasPage() {
     }
   }
 
-  async function loadMotoristas() {
+  async function loadCondutores() {
     try {
       const result = await entregasService.listarMotoristas()
-      setMotoristas(Array.isArray(result) ? result : [])
+      setCondutores(Array.isArray(result) ? result : [])
     } catch { /* ignore */ }
   }
 
@@ -197,7 +197,7 @@ export function EntregasPage() {
         pedidoVendaId: formData.pedidoVendaId,
         clienteId: formData.clienteId,
         filialId: formData.filialId,
-        motoristaId: formData.motoristaId || undefined,
+        condutorId: formData.condutorId || undefined,
         veiculoId: formData.veiculoId || undefined,
         dataAgendamento: formData.dataAgendamento ? new Date(formData.dataAgendamento).toISOString() : undefined,
         dataPrevisao: formData.dataPrevisao ? new Date(formData.dataPrevisao).toISOString() : undefined,
@@ -223,7 +223,7 @@ export function EntregasPage() {
     try {
       await entregasService.agendar(selectedEntrega.id, {
         dataAgendamento: new Date(agendarData.dataAgendamento).toISOString(),
-        motoristaId: agendarData.motoristaId || undefined,
+        condutorId: agendarData.condutorId || undefined,
         veiculoId: agendarData.veiculoId || undefined,
       })
       setAgendarDialogOpen(false)
@@ -304,7 +304,7 @@ export function EntregasPage() {
       clienteId: "",
       filialId: "",
       enderecoEntrega: "",
-      motoristaId: "",
+      condutorId: "",
       veiculoId: "",
       dataAgendamento: "",
       dataPrevisao: "",
@@ -350,7 +350,7 @@ export function EntregasPage() {
     setSelectedEntrega(entrega)
     setAgendarData({
       dataAgendamento: "",
-      motoristaId: entrega.motoristaId || "",
+      condutorId: entrega.condutorId || "",
       veiculoId: entrega.veiculoId || "",
     })
     setAgendarDialogOpen(true)
@@ -457,7 +457,7 @@ export function EntregasPage() {
                   <TableHead>Token</TableHead>
                   <TableHead>Pedido</TableHead>
                   <TableHead>Cliente</TableHead>
-                  <TableHead>Motorista</TableHead>
+                  <TableHead>Condutor</TableHead>
                   <TableHead>Situação</TableHead>
                   <TableHead>Data Prevista</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
@@ -478,7 +478,7 @@ export function EntregasPage() {
                       </TableCell>
                       <TableCell className="font-medium">{entrega.pedidoVenda?.numeroPedido || entrega.pedidoVendaId?.substring(0, 8) || "-"}</TableCell>
                       <TableCell>{entrega.cliente?.nome || entrega.clienteId?.substring(0, 8) || "-"}</TableCell>
-                      <TableCell>{entrega.motorista?.nome || "-"}</TableCell>
+                      <TableCell>{entrega.condutor?.nome || "-"}</TableCell>
                       <TableCell>
                         <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getSituacaoBadge(entrega.situacao)}`}>
                           {getSituacaoLabel(entrega.situacao)}
@@ -562,14 +562,14 @@ export function EntregasPage() {
                   <p className="font-medium">{selectedEntrega.cliente?.nome || selectedEntrega.clienteId || "-"}</p>
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground flex items-center gap-1"><User className="w-3 h-3" /> Motorista</Label>
-                  <p className="font-medium">{selectedEntrega.motorista?.nome || "-"}</p>
+                  <Label className="text-xs text-muted-foreground flex items-center gap-1"><User className="w-3 h-3" /> Condutor</Label>
+                  <p className="font-medium">{selectedEntrega.condutor?.nome || "-"}</p>
                 </div>
                 <div className="space-y-1">
                   <Label className="text-xs text-muted-foreground flex items-center gap-1"><Truck className="w-3 h-3" /> Veículo</Label>
                   <p className="font-medium">
-                    {selectedEntrega.veiculoEntrega
-                      ? `${selectedEntrega.veiculoEntrega.placa} - ${selectedEntrega.veiculoEntrega.modelo || ""}`
+                    {selectedEntrega.veiculo
+                      ? `${selectedEntrega.veiculo.placa} - ${selectedEntrega.veiculo.modelo || ""}`
                       : "-"}
                   </p>
                 </div>
@@ -704,13 +704,13 @@ export function EntregasPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="motoristaId">Motorista</Label>
-                <Select value={formData.motoristaId} onValueChange={(v) => setFormData({ ...formData, motoristaId: v })}>
-                  <SelectTrigger id="motoristaId" title="Selecione o motorista responsável">
-                    <SelectValue placeholder="Selecione um motorista" />
+                <Label htmlFor="condutorId">Condutor</Label>
+                <Select value={formData.condutorId} onValueChange={(v) => setFormData({ ...formData, condutorId: v })}>
+                  <SelectTrigger id="condutorId" title="Selecione o condutor responsável">
+                    <SelectValue placeholder="Selecione um condutor" />
                   </SelectTrigger>
                   <SelectContent>
-                    {motoristas.map((m: any) => (
+                    {condutores.map((m: any) => (
                       <SelectItem key={m.id} value={m.id}>{m.nome}</SelectItem>
                     ))}
                   </SelectContent>
@@ -804,13 +804,13 @@ export function EntregasPage() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="agendarMotorista">Motorista</Label>
-              <Select value={agendarData.motoristaId} onValueChange={(v) => setAgendarData({ ...agendarData, motoristaId: v })}>
-                <SelectTrigger id="agendarMotorista" title="Selecione o motorista para esta entrega">
-                  <SelectValue placeholder="Selecione um motorista" />
+              <Label htmlFor="agendarCondutor">Condutor</Label>
+              <Select value={agendarData.condutorId} onValueChange={(v) => setAgendarData({ ...agendarData, condutorId: v })}>
+                <SelectTrigger id="agendarCondutor" title="Selecione o condutor para esta entrega">
+                  <SelectValue placeholder="Selecione um condutor" />
                 </SelectTrigger>
                 <SelectContent>
-                  {motoristas.map((m: any) => (
+                  {condutores.map((m: any) => (
                     <SelectItem key={m.id} value={m.id}>{m.nome}</SelectItem>
                   ))}
                 </SelectContent>

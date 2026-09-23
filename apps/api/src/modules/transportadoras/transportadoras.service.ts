@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import { 
   CriarTransportadoraInput, 
   AtualizarTransportadoraInput,
@@ -23,7 +24,7 @@ export class TransportadorasService {
           uf,
           cep,
         } : undefined,
-      },
+      } as Prisma.TransportadoraUncheckedCreateInput,
     });
   }
 

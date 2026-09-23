@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import appLogger from '@/shared/logger/logger';
 import { 
   CriarParametroInput, 
@@ -21,7 +22,7 @@ export class ParametroService {
       data: {
         ...dados,
         empresaId,
-      },
+      } as Prisma.ParametroSistemaUncheckedCreateInput,
     });
 
     appLogger.business('criar_parametro', { empresaId, parametroId: parametro.id, chave: dados.chave });

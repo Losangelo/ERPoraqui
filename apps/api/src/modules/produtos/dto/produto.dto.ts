@@ -20,7 +20,7 @@ export const criarProdutoSchema = z.object({
   volume: z.number().optional(),
   ncm: z.string().length(8, 'NCM deve ter 8 dígitos').optional(),
   cest: z.string().optional(),
-  origenMercadoria: z.enum(['NACIONAL', 'ESTRANGEIRA_IMPORTACAO_DIRETA', 'ESTRANGEIRA_NACIONALIZADA']).default('NACIONAL'),
+  origemMercadoria: z.enum(['NACIONAL', 'ESTRANGEIRA_IMPORTACAO_DIRETA', 'ESTRANGEIRA_NACIONALIZADA']).default('NACIONAL'),
   ativo: z.boolean().default(true),
 });
 
@@ -62,7 +62,7 @@ export const produtoResponseSchema = z.object({
   volume: z.number().nullable(),
   ncm: z.string().nullable(),
   cest: z.string().nullable(),
-  origenMercadoria: z.string(),
+  origemMercadoria: z.string(),
   ativo: z.boolean(),
   dataCriacao: z.date(),
   dataAtualizacao: z.date(),

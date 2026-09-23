@@ -1,4 +1,5 @@
 import { prisma } from '@/database/prisma.service';
+import type { Prisma } from '@prisma/client';
 import appLogger from '@/shared/logger/logger';
 import { 
   CriarClienteInput, 
@@ -13,7 +14,7 @@ export class ClientesService {
       data: {
         ...dados,
         empresaId,
-      },
+      } as Prisma.ClienteUncheckedCreateInput,
     });
     appLogger.business('criar_cliente', { empresaId, clienteId: cliente.id, nome: dados.nome });
     return cliente;

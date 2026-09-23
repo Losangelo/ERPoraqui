@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { FinanceiroService } from './financeiro.service';
+import { prisma } from '@/database/prisma.service';
 import { AuthRequest } from '@/shared/middleware/auth.middleware';
 import { 
   criarContaReceberSchema, 
@@ -23,7 +24,7 @@ import {
 } from './dto/financeiro.dto';
 
 export class FinanceiroController {
-  private readonly service = new FinanceiroService();
+  private readonly service = new FinanceiroService(prisma);
 
   criarContaReceber = async (req: AuthRequest, res: Response) => {
     try {

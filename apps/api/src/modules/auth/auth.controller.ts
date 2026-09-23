@@ -25,7 +25,7 @@ export class AuthController {
     try {
       const dados = registerSchema.parse(req.body);
       console.log('Parsed data:', dados);
-      const resultado = await this.service.register(dados);
+      const resultado = await this.service.register(dados as any);
       return res.status(201).json(resultado);
     } catch (error) {
       console.error('Register error:', error);
