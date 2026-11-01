@@ -21,6 +21,7 @@ import ManualPage from '@/pages/ManualPage';
 import ManualTecnicoPage from '@/pages/ManualTecnicoPage';
 import FiliaisPage from '@/pages/FiliaisPage';
 import { LoginPage } from '@/pages/LoginPage';
+import { SsoPage } from '@/pages/SsoPage';
 import OrcamentosPage from '@/pages/OrcamentosPage';
 import BoletosPage from '@/pages/BoletosPage';
 import PdvPage from '@/pages/PdvPage';
@@ -97,6 +98,7 @@ function AppRoutes() {
       {/* Public routes - no auth required */}
       <Route path="/rastreio/:token" element={<RastreioPage />} />
       <Route path="/avaliar/:token" element={<AvaliarPage />} />
+      <Route path="/auth/sso" element={<SsoPage />} />
 
       <Route path="/*" element={
         <ProtectedRoute>
